@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
@@ -67,16 +68,10 @@ class DetailFragment : Fragment() {
     }
 
     private fun setUpActorsRecycler() {
-//        binding.rvMovieList.apply {
-//            setHasFixedSize(true)
-//            layoutManager = GridLayoutManager(view.context, 2)
-//            addItemDecoration(GridSpacingItemDecoration(2, 30, true))
-//            adapter = MovieListAdapter {
-//                navigate {
-//                    target = NavCommand(Screens.DETAIL).setArgs("$it")
-//                }
-//            }
-//        }
+        binding.rvActors.apply {
+            setHasFixedSize(true)
+            adapter = ActorRecyclerAdapter()
+        }
     }
 
     private fun handleSideEffect(effect: DetailViewModel.SideEffects) {
@@ -93,6 +88,8 @@ class DetailFragment : Fragment() {
 
     private fun setUpView(details: MovieDetails?) = binding.apply {
         details ?: return@apply
+
+        (binding.rvActors.adapter as ActorRecyclerAdapter).list = details.actors
 
         ivMainImage.load(details.imageBackdrop) {
             crossfade(true)
@@ -113,10 +110,9 @@ class DetailFragment : Fragment() {
 
         tvRunningTime.text = "${details.runtime} min"
 
-//        ibFavorite.setOnClickListener {
-//            //TODO
-//            ibFavorite.setImageResource(R.drawable.ic_favorite)
-//        }
+        ibFavorite.setOnCheckedChangeListener { compoundButton, bulean ->
+            //TODO
+        }
     }
 
     // set black-white filter

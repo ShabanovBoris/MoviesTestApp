@@ -83,7 +83,7 @@
         app:layout_constraintBottom_toBottomOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/view_holder_actor"
+        tools:listitem="@layout/actor_item"
         android:clipToPadding="false"
         android:clipChildren="false"/>
 

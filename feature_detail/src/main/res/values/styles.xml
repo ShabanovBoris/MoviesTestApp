@@ -4,4 +4,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4%</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize4" parent="">
+        <item name="cornerSize">4dp</item>
+    </style>
 </resources>

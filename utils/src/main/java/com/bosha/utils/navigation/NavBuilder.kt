@@ -1,6 +1,5 @@
 package com.bosha.utils.navigation
 
-import android.util.Log
 import androidx.annotation.IdRes
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
@@ -8,7 +7,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.*
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import com.bosha.utils.R
 
 fun <T : FragmentActivity> T.navigate(
@@ -27,7 +25,7 @@ fun <T : FragmentActivity> T.navigate(@IdRes hostId: Int, navParameters: NavBuil
 }
 
 /**
- * Use parent or application navigation graph
+ * Use application navigation graph
  */
 fun <T : Fragment> T.navigate(navParameters: NavBuilder.() -> Unit) {
     NavBuilder(requireActivity().findNavController(R.id.nav_host_fragment_container))
