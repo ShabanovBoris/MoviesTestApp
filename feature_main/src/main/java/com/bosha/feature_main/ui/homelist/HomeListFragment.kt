@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -38,9 +39,14 @@ class HomeListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpRecycler(view)
 
-        viewModel.data
+        viewModel.dataFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::setList)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.sideEffectFlow
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach(::handleSideEffect)
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -67,8 +73,16 @@ class HomeListFragment : Fragment() {
         (binding.rvMovieList.adapter as MovieListAdapter).submitList(list)
     }
 
-    private fun showErrorToast(error: Throwable) {
-        Toast.makeText(requireContext(), error.message, Toast.LENGTH_LONG).show()
+    private fun handleSideEffect(effect: HomeListViewModel.SideEffects){
+        when(effect){
+            HomeListViewModel.SideEffects.Loading -> binding.progressBar.isVisible = true
+            HomeListViewModel.SideEffects.Loaded -> binding.progressBar.isVisible = false
+            is HomeListViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
+        }
+    }
+
+    private fun showErrorToast(t: Throwable?) {
+        Toast.makeText(requireContext(),"${t?.message}", Toast.LENGTH_LONG).show()
     }
 }
 

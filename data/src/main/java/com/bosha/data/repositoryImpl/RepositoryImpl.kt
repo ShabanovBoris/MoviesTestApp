@@ -1,6 +1,7 @@
 package com.bosha.data.repositoryImpl
 
-import com.bosha.data.remote.RemoteDataSource
+import com.bosha.data.datasource.local.LocalDataSource
+import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.repositories.MovieRepository
 import com.bosha.domain.repositories.MoviesResult
@@ -12,11 +13,21 @@ import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
-    private val remoteDataSource: RemoteDataSource
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
 ) : MovieRepository {
     override fun fetchMovies(): Flow<MoviesResult> {
        return remoteDataSource.fetchMovies()
            .mapToResult()
+    }
+
+    override fun getCachedMovies(): Flow<MoviesResult> {
+       return localDataSource.getMovies()
+           .map { Result.success(it) }
+    }
+
+    override suspend fun insertMovies(list: List<Movie>) {
+        localDataSource.insertMovies(list)
     }
 
     private fun <T> Flow<T>.mapToResult(): Flow<Result<T>> =

@@ -7,4 +7,8 @@ typealias MoviesResult = Result<List<Movie>>
 
 interface MovieRepository {
     fun fetchMovies(): Flow<MoviesResult>
+
+    fun getCachedMovies(): Flow<MoviesResult>
+
+    suspend fun insertMovies(list: List<Movie>)
 }

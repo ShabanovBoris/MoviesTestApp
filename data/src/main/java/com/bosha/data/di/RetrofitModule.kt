@@ -1,7 +1,7 @@
 package com.bosha.data.di
 
 import com.bosha.data.BuildConfig
-import com.bosha.data.remote.MovieNetworkApi
+import com.bosha.data.datasource.remote.MovieNetworkApi
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-class NetworkModule {
+class RetrofitModule {
 
     @Singleton
     @Provides

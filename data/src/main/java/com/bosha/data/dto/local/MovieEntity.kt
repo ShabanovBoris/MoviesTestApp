@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import com.bosha.data.local.DbContract
+import com.bosha.data.datasource.local.DbContract
 
 
 @Entity(
@@ -15,7 +15,7 @@ data class MovieEntity(
 
     @PrimaryKey
     @ColumnInfo(name = DbContract.Movie.COLUMN_ID)
-    val id: Long = 0,
+    val id: Int = 0,
 
     @ColumnInfo(name = DbContract.Movie.TITLE)
     val title: String,

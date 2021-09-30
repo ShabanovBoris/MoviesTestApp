@@ -1,8 +1,8 @@
 package com.bosha.data.mappers
 
 import com.bosha.data.dto.remote.JsonMovie
-import com.bosha.data.remote.impl.MoviesRemoteDataSourceImpl.Companion.baseImageBackdropUrl
-import com.bosha.data.remote.impl.MoviesRemoteDataSourceImpl.Companion.baseImagePosterUrl
+import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource.Companion.baseImageBackdropUrl
+import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource.Companion.baseImagePosterUrl
 import com.bosha.domain.entities.Genre
 import com.bosha.domain.entities.Movie
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.bosha.data.local
+package com.bosha.data.datasource.local
 
 import android.provider.BaseColumns
 

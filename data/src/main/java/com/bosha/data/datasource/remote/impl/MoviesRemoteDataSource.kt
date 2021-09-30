@@ -1,9 +1,9 @@
-package com.bosha.data.remote.impl
+package com.bosha.data.datasource.remote.impl
 
 import com.bosha.data.dto.remote.JsonMovie
 import com.bosha.data.mappers.MovieResponseMapper
-import com.bosha.data.remote.MovieNetworkApi
-import com.bosha.data.remote.RemoteDataSource
+import com.bosha.data.datasource.remote.MovieNetworkApi
+import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.domain.entities.Genre
 import com.bosha.domain.entities.Movie
 import kotlinx.coroutines.CoroutineDispatcher
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class MoviesRemoteDataSourceImpl @Inject constructor(
+class MoviesRemoteDataSource @Inject constructor(
     private val api: MovieNetworkApi,
     private val mapper: MovieResponseMapper,
     private val dispatcher: CoroutineDispatcher? = null

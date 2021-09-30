@@ -1,4 +1,4 @@
-package com.bosha.data.remote
+package com.bosha.data.datasource.remote
 
 
 import com.bosha.data.dto.remote.CreditResponse

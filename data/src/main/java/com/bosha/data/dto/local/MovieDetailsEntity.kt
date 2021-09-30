@@ -3,7 +3,7 @@ package com.bosha.data.dto.local
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.bosha.data.local.DbContract
+import com.bosha.data.datasource.local.DbContract
 
 @Entity(tableName = DbContract.MovieDetails.TABLE_NAME)
 data class MovieDetailsEntity(
