@@ -13,5 +13,5 @@
         android:id="@+id/favoriteFragment"
         android:name="com.bosha.feature_main.ui.favorite.FavoriteFragment"
         android:label="fragment_favorite"
-        tools:layout="@layout/fragment_favorite" />
+        tools:layout="@layout/fragment_home" />
 </navigation>

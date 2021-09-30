@@ -8,12 +8,11 @@ data class Movie(
     val title: String,
     val genres: List<Genre>,
     val reviewCount: Int? = null,
-    val isLiked: Boolean? = null,
+    val isLiked: Boolean = false,
     val rating: Double,
     val imageUrl: String,
     val detailImageUrl: String? = null,
     val storyLine: String? = null,
     val releaseDate:String,
     val popularity:Double
-
 )

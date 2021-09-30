@@ -13,6 +13,12 @@ object DbContract {
         const val RATING = "rating"
         const val IMAGE_URL = "image_url"
         const val RELEASE_DATE = "release_date"
+        const val POPULARITY = "popularity"
+        const val IS_LIKED = "is_liked"
+    }
+
+    object FavoriteMovie{
+        const val TABLE_NAME = "favorite_movie"
     }
 
     object MovieDetails{

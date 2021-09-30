@@ -5,15 +5,12 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.bosha.data.datasource.local.DbContract
-import com.bosha.data.datasource.local.DbContract.Movie.IS_LIKED
-import com.bosha.data.datasource.local.DbContract.Movie.POPULARITY
-
 
 @Entity(
-    tableName = DbContract.Movie.TABLE_NAME,
+    tableName = DbContract.FavoriteMovie.TABLE_NAME,
     indices = [Index(DbContract.Movie.COLUMN_ID)]
 )
-data class MovieEntity(
+class FavoriteMovieEntity (
 
     @PrimaryKey
     @ColumnInfo(name = DbContract.Movie.COLUMN_ID)
@@ -34,9 +31,9 @@ data class MovieEntity(
     @ColumnInfo(name = DbContract.Movie.RELEASE_DATE)
     val releaseDate: String,
 
-    @ColumnInfo(name = POPULARITY)
+    @ColumnInfo(name = DbContract.Movie.POPULARITY)
     val popularity: Double,
 
-    @ColumnInfo(name = IS_LIKED)
+    @ColumnInfo(name = DbContract.Movie.IS_LIKED)
     val isLiked: Boolean
 )

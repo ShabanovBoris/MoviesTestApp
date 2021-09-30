@@ -65,6 +65,7 @@ class HomeListFragment : Fragment() {
             adapter = MovieListAdapter {
                 navigate {
                     target = NavCommand(Screens.DETAIL).setArgs("$it")
+                    options {  }
                 }
             }
         }

@@ -14,8 +14,7 @@
         tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearance="@style/circleImageView" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <!--Just gradient-->
     <View
@@ -34,7 +33,6 @@
         android:background="@android:color/transparent"
         android:buttonTint="?colorSecondary"
         android:button="@drawable/favorite_selector"
-        android:src="@drawable/ic_favorite_empty"
         android:layout_margin="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -83,9 +81,7 @@
         app:layout_constraintBottom_toBottomOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:listitem="@layout/actor_item"
-        android:clipToPadding="false"
-        android:clipChildren="false"/>
+        tools:listitem="@layout/actor_item"/>
 
     <TextView
         android:layout_width="80dp"

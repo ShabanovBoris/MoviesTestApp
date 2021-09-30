@@ -8,4 +8,8 @@ class AddMoviesInteractor(private val repository: MovieRepository) {
     suspend fun insertMovies(list: List<Movie>){
         repository.insertMovies(list)
     }
+
+    suspend fun insertFavoriteMovie(movie: Movie){
+        repository.insertFavoriteMovie(movie)
+    }
 }

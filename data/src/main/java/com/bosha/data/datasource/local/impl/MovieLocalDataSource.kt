@@ -23,7 +23,23 @@ class MovieLocalDataSource @Inject constructor(
         dao.insertMovies(mapper.toMovieEntityList(list))
     }
 
+    override suspend fun insertFavoriteMovie(movie: Movie) {
+        dao.insertFavoriteMovie(mapper.toFavoriteMovie(movie))
+    }
+
+    override suspend fun getMovie(id: String): Movie {
+       return mapper.toMovie(dao.getById(id))
+    }
+
+    override suspend fun deleteFavorite(id: String) {
+        dao.deleteFromFavorite(id)
+    }
+
     override fun getMovies(): Flow<List<Movie>> =
         dao.getMovies().map { mapper.toMovieList(it) }
+            .flowOn(dispatcher ?: Dispatchers.Main.immediate)
+
+    override fun getFavoritesMovies(): Flow<List<Movie>> =
+        dao.getFavoritesMovies().map { it.map { item -> mapper.toMovie(item) } }
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 }

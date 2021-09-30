@@ -6,6 +6,7 @@ import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource
 import com.bosha.data.repositoryImpl.RepositoryImpl
 import com.bosha.domain.interactors.AddMoviesInteractor
+import com.bosha.domain.interactors.DeleteMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
 import com.bosha.domain.repositories.MovieRepository
 import dagger.Binds
@@ -35,5 +36,9 @@ interface DataModule {
         @Provides
         fun provideAddMoviesInteractor(repository: MovieRepository) =
             AddMoviesInteractor(repository)
+
+        @Provides
+        fun provideDeleteMoviesInteractor(repository: MovieRepository) =
+            DeleteMoviesInteractor(repository)
     }
 }

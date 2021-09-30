@@ -27,8 +27,24 @@ class RepositoryImpl @Inject constructor(
            .map { Result.success(it) }
     }
 
+    override fun getFavoritesMovies(): Flow<MoviesResult> {
+        return localDataSource.getFavoritesMovies()
+            .map { Result.success(it) } }
+
     override suspend fun insertMovies(list: List<Movie>) {
         localDataSource.insertMovies(list)
+    }
+
+    override suspend fun insertFavoriteMovie(movie: Movie) {
+        localDataSource.insertFavoriteMovie(movie)
+    }
+
+    override suspend fun getMovie(id: String): Movie {
+       return localDataSource.getMovie(id)
+    }
+
+    override suspend fun deleteFavorite(id: String) {
+        localDataSource.deleteFavorite(id)
     }
 
     override fun getMovieDetails(id: String): Flow<Result<MovieDetails>> {

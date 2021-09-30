@@ -4,21 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.bosha.domain.entities.MovieDetails
+import com.bosha.domain.interactors.AddMoviesInteractor
+import com.bosha.domain.interactors.DeleteMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
 
 class DetailViewModel @AssistedInject constructor(
     @Assisted private val id: String,
-    private val getMoviesInteractor: GetMoviesInteractor
+    private val getMoviesInteractor: GetMoviesInteractor,
+    private val addMoviesInteractor: AddMoviesInteractor,
+    private val deleteMoviesInteractor: DeleteMoviesInteractor
 ) : ViewModel() {
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
@@ -32,6 +34,9 @@ class DetailViewModel @AssistedInject constructor(
         MutableStateFlow(SideEffects.Loading)
     val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
 
+    var movieIsLiked = false
+        private set
+
     @AssistedFactory
     interface Factory {
         fun create(Id: String): DetailViewModel
@@ -42,7 +47,11 @@ class DetailViewModel @AssistedInject constructor(
     }
 
     private fun load() = viewModelScope.launch(handler) {
-        getMoviesInteractor.getDetails(id)
+        getMoviesInteractor.getDetailsById(id)
+            .combine(getMoviesInteractor.getFavoritesMovies()){ detail, favorites ->
+                movieIsLiked = favorites.getOrNull()?.find { it.id.toString() == id }?.isLiked ?: false
+                detail
+            }
             .collect {
                 if (it.isFailure)
                     _sideEffectFlow.value = SideEffects.NetworkError(it.exceptionOrNull())
@@ -51,6 +60,15 @@ class DetailViewModel @AssistedInject constructor(
 
                 _sideEffectFlow.value = SideEffects.Loaded
             }
+    }
+
+    fun addDeleteFavorite(id: String, isLiked: Boolean) = viewModelScope.launch {
+        if (isLiked) {
+            val movie = getMoviesInteractor.getCachedMovieById(id)
+            addMoviesInteractor.insertFavoriteMovie(movie.copy(isLiked = isLiked))
+        } else {
+            deleteMoviesInteractor.deleteFavorite(id)
+        }
     }
 
     companion object {

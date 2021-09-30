@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
@@ -110,8 +109,9 @@ class DetailFragment : Fragment() {
 
         tvRunningTime.text = "${details.runtime} min"
 
-        ibFavorite.setOnCheckedChangeListener { compoundButton, bulean ->
-            //TODO
+        ibFavorite.isChecked = viewModel.movieIsLiked
+        ibFavorite.setOnCheckedChangeListener { _, boolean ->
+                viewModel.addDeleteFavorite(details.id.toString(), boolean)
         }
     }
 

@@ -11,7 +11,15 @@ interface MovieRepository {
 
     fun getCachedMovies(): Flow<MoviesResult>
 
+    fun getFavoritesMovies(): Flow<MoviesResult>
+
     suspend fun insertMovies(list: List<Movie>)
+
+    suspend fun insertFavoriteMovie(movie: Movie)
+
+    suspend fun getMovie(id: String): Movie
+
+    suspend fun deleteFavorite(id: String)
 
     fun getMovieDetails(id: String): Flow<Result<MovieDetails>>
 }

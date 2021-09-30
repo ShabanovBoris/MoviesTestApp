@@ -84,10 +84,10 @@ class NavBuilder(
     fun options(optionsBuilder: NavOptionsBuilder.() -> Unit) {
         options = navOptions {
             anim {
-                enter = R.anim.slide_in_left
+                enter = R.anim.slide_in_right
                 exit = R.anim.slide_out_left
-                popEnter = R.anim.slide_in_left
-                popExit = R.anim.slide_out_right
+                popEnter = android.R.anim.slide_in_left
+                popExit = android.R.anim.slide_out_right
             }
             optionsBuilder()
         }
