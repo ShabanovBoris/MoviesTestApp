@@ -1,0 +1,26 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MoviesDemo" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/dark_light</item>
+        <item name="colorPrimaryVariant">@color/dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/accent_bright_color</item>
+        <item name="colorSecondaryVariant">@color/white_alpha_0.5</item>
+        <item name="colorOnSecondary">@color/blue_link_color</item>
+        <!-- Status bar color. -->
+        <item name="statusBarBackground">@android:color/transparent</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="android:navigationBarColor">?colorPrimary</item>
+
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">?colorPrimaryVariant</item>
+    </style>
+
+    <style name="Theme.MoviesDemo.MySplash" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground" tools:ignore="NewApi">?colorPrimary</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
+        <item name="postSplashScreenTheme">@style/Theme.MoviesDemo</item>
+    </style>
+</resources>

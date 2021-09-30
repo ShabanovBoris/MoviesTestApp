@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_application"
+    app:startDestination="@id/hiFragment">
+
+
+
+
+
+    <include app:graph="@navigation/graph_main_host"/>
+
+    <include app:graph="@navigation/graph_search"/>
+    <fragment
+        android:id="@+id/hiFragment"
+        android:name="com.bosha.moviesdemo.ui.welcome.WelcomeFragment"
+        android:label="hiFragment" />
+</navigation>

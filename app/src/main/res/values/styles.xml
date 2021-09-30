@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <style name="Widget.MoviesDemo.TabLayout" parent="Widget.MaterialComponents.TabLayout.Colored">
+        <!-- The main color is ColorOnPrimary -->
+        <item name="tabIndicator">@drawable/tab_oval</item>
+        <item name="tabIndicatorAnimationMode">elastic</item>
+        <item name="tabIndicatorGravity">center</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="tabIndicatorFullWidth">false</item>
+    </style>
+</resources>
