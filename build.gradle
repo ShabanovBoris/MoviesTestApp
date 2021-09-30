@@ -14,9 +14,3 @@ buildscript {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-// TODO SAMPLE
-task testScript() {
-    doLast {
-        TestScript.printSome()
-    }
-}

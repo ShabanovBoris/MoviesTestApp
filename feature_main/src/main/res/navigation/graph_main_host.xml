@@ -10,7 +10,7 @@
         android:id="@+id/mainFragment"
         android:name="com.bosha.feature_main.ui.HostMenuFragment"
         android:label="fragment_main"
-        tools:layout="@layout/fragment_main"
+        tools:layout="@layout/fragment_main_host"
         >
         <deepLink app:uri="moviesdemo://main" />
     </fragment>

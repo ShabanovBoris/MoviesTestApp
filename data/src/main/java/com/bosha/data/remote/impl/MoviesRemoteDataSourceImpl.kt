@@ -28,7 +28,7 @@ class MoviesRemoteDataSourceImpl @Inject constructor(
 
     override fun fetchMovies(): Flow<List<Movie>> =
         flow {
-            getMoviesByPage(1..5){
+            getMoviesByPage(1..1){
                 emit(it)
             }
         }
