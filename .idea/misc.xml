@@ -18,18 +18,25 @@
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/menu/search_menu.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/black_gradient.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/ic_favorite.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/ic_favorite_empty.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/fragment_detail.xml" value="0.2713541666666667" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/view_holder_actor.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_favorite/src/main/res/layout/fragment_favorite.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/black_gradient_with_stroke.xml" value="0.2875" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/ic_favorite.xml" value="0.27685185185185185" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/ic_favorite_empty.xml" value="0.2875" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/ic_search.xml" value="0.2722222222222222" />
+        <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/toolbar_background.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/layout/fragment_favorite.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/layout/fragment_home.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/layout/fragment_main.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/layout/fragment_main_host.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/layout/fragment_main_list.xml" value="0.2" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/layout/movie_item.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/menu/bottom_menu.xml" value="0.2671794871794872" />
+        <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/menu/search_menu.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_schedule/src/main/res/layout/fragment_schedule.xml" value="0.25729166666666664" />
         <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/layout/fragment_search.xml" value="0.25729166666666664" />
       </map>

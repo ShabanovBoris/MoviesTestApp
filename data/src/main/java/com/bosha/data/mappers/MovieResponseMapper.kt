@@ -3,8 +3,12 @@ package com.bosha.data.mappers
 import com.bosha.data.dto.remote.JsonMovie
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource.Companion.baseImageBackdropUrl
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource.Companion.baseImagePosterUrl
+import com.bosha.data.dto.remote.JsonActor
+import com.bosha.data.dto.remote.JsonMovieDetails
+import com.bosha.domain.entities.Actor
 import com.bosha.domain.entities.Genre
 import com.bosha.domain.entities.Movie
+import com.bosha.domain.entities.MovieDetails
 import javax.inject.Inject
 
 class MovieResponseMapper @Inject constructor() {
@@ -33,5 +37,26 @@ class MovieResponseMapper @Inject constructor() {
             }
         }
         return listOfGenres.toList()
+    }
+
+    fun toMovieDetails(jsonMovieDetails: JsonMovieDetails, actorList: List<Actor>): MovieDetails {
+        return jsonMovieDetails.let {
+            MovieDetails(
+                id = it.id,
+                title = it.title,
+                overview = it.overview ?: "",
+                runtime = it.runtime ?: 0,
+                imageBackdrop = baseImageBackdropUrl + it.backdropPath,
+                genres = it.genres.map { genre -> Genre(genre.name) },
+                actors = actorList,
+                votes = it.votes
+            )
+        }
+    }
+
+    fun toActorList(jsonActor: List<JsonActor>): List<Actor>{
+        return jsonActor.map {
+            Actor(id = it.id, name = it.name, imageUrl = baseImageBackdropUrl + it.profilePicture)
+        }
     }
 }

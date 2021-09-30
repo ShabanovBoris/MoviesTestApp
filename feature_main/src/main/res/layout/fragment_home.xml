@@ -4,10 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.homelist.HomeListFragment"
-    android:paddingTop="?android:actionBarSize"
-    android:clipToPadding="false"
-    android:clipChildren="false">
+    tools:context=".ui.homelist.HomeListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_movie_list"
@@ -17,7 +14,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/movie_item" />
+        tools:listitem="@layout/movie_item"
+        android:paddingTop="?android:actionBarSize"
+        android:clipToPadding="false"
+        android:clipChildren="false"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -30,5 +30,21 @@
         app:layout_constraintTop_toTopOf="@+id/rv_movie_list"
         android:visibility="gone"
         tools:visibility="visible"/>
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/tb_search"
+        android:layout_width="0dp"
+        android:layout_height="?android:actionBarSize"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/toolbar_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/search_menu"
+        app:title="@string/app_title"
+        app:titleTextColor="?colorSecondaryVariant" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

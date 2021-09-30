@@ -1,4 +1,4 @@
-package com.bosha.feature_main.ui.homelist
+package com.bosha.feature_main.util
 
 import android.graphics.Rect
 import android.view.View

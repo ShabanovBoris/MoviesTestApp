@@ -31,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures{
+        viewBinding true
+    }
 }
 dependencies {
     implementation(project(':utils'))
@@ -51,6 +54,8 @@ dependencies {
     //hilt
     implementation Libs.hilt
     kapt Libs.hiltCompiler
+    //coil
+    implementation Libs.coil
 
     testImplementation Libs.junit
 }

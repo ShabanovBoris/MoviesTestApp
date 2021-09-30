@@ -3,6 +3,7 @@ package com.bosha.data.repositoryImpl
 import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.domain.entities.Movie
+import com.bosha.domain.entities.MovieDetails
 import com.bosha.domain.repositories.MovieRepository
 import com.bosha.domain.repositories.MoviesResult
 import kotlinx.coroutines.flow.Flow
@@ -28,6 +29,11 @@ class RepositoryImpl @Inject constructor(
 
     override suspend fun insertMovies(list: List<Movie>) {
         localDataSource.insertMovies(list)
+    }
+
+    override fun getMovieDetails(id: String): Flow<Result<MovieDetails>> {
+        return remoteDataSource.getDetails(id)
+            .mapToResult()
     }
 
     private fun <T> Flow<T>.mapToResult(): Flow<Result<T>> =

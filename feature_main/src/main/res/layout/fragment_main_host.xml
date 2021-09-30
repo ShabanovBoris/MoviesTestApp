@@ -26,4 +26,5 @@
         app:itemTextColor="@color/menu_color_selector"
         app:backgroundTint="?colorPrimary"
         android:elevation="8dp"/>
+
 </androidx.appcompat.widget.LinearLayoutCompat>

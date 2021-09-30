@@ -20,20 +20,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/nav_graph_application" />
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/tb_search"
-        android:layout_width="0dp"
-        android:layout_height="?android:actionBarSize"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/toolbar_background"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/search_menu"
-        app:title="@string/app_title"
-        app:titleTextColor="?colorSecondaryVariant" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

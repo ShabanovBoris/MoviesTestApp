@@ -1,6 +1,5 @@
 package com.bosha.data.datasource.remote
 
-
 import com.bosha.data.dto.remote.CreditResponse
 import com.bosha.data.dto.remote.JsonGenres
 import com.bosha.data.dto.remote.JsonMovieDetails
@@ -9,13 +8,6 @@ import kotlinx.coroutines.*
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-
-/**
- * 	[TheMovieDb] API
- *
- *
- */
-
 
 interface MovieNetworkApi {
     @GET("movie/now_playing")
@@ -26,12 +18,12 @@ interface MovieNetworkApi {
     @GET("genre/movie/list?")
     suspend fun getGenres(): JsonGenres
 
-    @GET("movie/{movie_id}")
+    @GET("movie/{movie_id}?")
     suspend fun getDetails(
         @Path("movie_id") movieId: String
     ): JsonMovieDetails
 
-    @GET("movie/{movie_id}/credits")
+    @GET("movie/{movie_id}/credits?")
     suspend fun getCredits(
         @Path("movie_id") movieId: String
     ): CreditResponse

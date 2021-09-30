@@ -30,7 +30,7 @@ fun <T : FragmentActivity> T.navigate(@IdRes hostId: Int, navParameters: NavBuil
  * Use parent or application navigation graph
  */
 fun <T : Fragment> T.navigate(navParameters: NavBuilder.() -> Unit) {
-    NavBuilder(findNavController())
+    NavBuilder(requireActivity().findNavController(R.id.nav_host_fragment_container))
         .apply(navParameters)
         .navigate()
 }

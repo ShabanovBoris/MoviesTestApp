@@ -1,13 +1,184 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.DetailFragment">
+    android:layout_height="match_parent">
+
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_main_image"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:scaleType="centerCrop"
+        tools:src="@tools:sample/avatars"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/circleImageView" />
+
+    <!--Just gradient-->
+    <View
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:foreground="@drawable/primary_gradient"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <CheckBox
+        android:id="@+id/ib_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:buttonTint="?colorSecondary"
+        android:button="@drawable/favorite_selector"
+        android:src="@drawable/ic_favorite_empty"
+        android:layout_margin="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="DETAILS" />
+        android:id="@+id/tv_main_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:gravity="start"
+        tools:text="Avengers: End Game"
+        android:textColor="?colorOnPrimary"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/rb_rating"
+        app:layout_constraintStart_toStartOf="@id/rb_rating"
+        app:layout_constraintEnd_toEndOf="@id/rv_actors"/>
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/tv_running_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="?colorOnPrimary"
+        android:textStyle="bold"
+        tools:text="time"
+        android:layout_marginBottom="2dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_main_title"
+        app:layout_constraintStart_toStartOf="@id/rb_rating"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.9" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_actors"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="@id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:listitem="@layout/view_holder_actor"
+        android:clipToPadding="false"
+        android:clipChildren="false"/>
+
+    <TextView
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:maxWidth="32dp"
+        android:text="@string/cast"
+        android:textColor="?colorOnPrimary"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/rv_actors"
+        app:layout_constraintStart_toStartOf="@id/rv_actors" />
+
+    <TextView
+        android:id="@+id/tv_story"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="55dp"
+        android:alpha="0.75"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="4sp"
+        android:maxWidth="32dp"
+        tools:text="After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe."
+        android:textColor="?colorOnPrimary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/rv_actors"
+        app:layout_constraintEnd_toEndOf="@id/rv_actors"
+        app:layout_constraintStart_toStartOf="@id/rv_actors" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="159dp"
+        android:textStyle="bold"
+        android:gravity="center_vertical"
+        android:lineSpacingExtra="4sp"
+        android:maxWidth="32dp"
+        android:text="@string/storyline"
+        android:textColor="?colorOnPrimary"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/rv_actors"
+        app:layout_constraintEnd_toEndOf="@id/rv_actors"
+        app:layout_constraintStart_toStartOf="@id/rv_actors" />
+
+    <RatingBar
+        android:id="@+id/rb_rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="28dp"
+        android:max="5"
+        android:progressBackgroundTint="#6D6D80"
+        android:progressTint="#FF3365"
+        android:rating="4"
+        app:layout_constraintBottom_toTopOf="@id/name"
+        app:layout_constraintStart_toStartOf="@id/rv_actors" />
+
+    <TextView
+        android:id="@+id/tv_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginBottom="28dp"
+        android:layout_marginStart="9dp"
+        android:gravity="center_horizontal|center_vertical"
+        tools:text="125 Reviews"
+        android:textColor="?colorSecondaryVariant"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/name"
+        app:layout_constraintStart_toEndOf="@id/rb_rating" />
+
+    <TextView
+        android:id="@+id/tv_genres"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text=""
+        android:textColor="#FF3466"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@id/rb_rating"
+        app:layout_constraintStart_toStartOf="@id/rb_rating"
+        tools:text="bla bla bla horror" />
+
+    <ProgressBar
+        android:id="@+id/pb_details_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/tv_main_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_main_image"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
