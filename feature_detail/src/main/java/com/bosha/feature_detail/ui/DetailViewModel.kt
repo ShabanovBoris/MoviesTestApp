@@ -37,11 +37,6 @@ class DetailViewModel @AssistedInject constructor(
     var movieIsLiked = false
         private set
 
-    @AssistedFactory
-    interface Factory {
-        fun create(Id: String): DetailViewModel
-    }
-
     init {
         load()
     }
@@ -69,6 +64,11 @@ class DetailViewModel @AssistedInject constructor(
         } else {
             deleteMoviesInteractor.deleteFavorite(id)
         }
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(Id: String): DetailViewModel
     }
 
     companion object {

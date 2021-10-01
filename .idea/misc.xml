@@ -26,6 +26,7 @@
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/fragment_detail.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/view_holder_actor.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_favorite/src/main/res/layout/fragment_favorite.xml" value="0.2713541666666667" />
+        <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/black_gradient.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/black_gradient_with_stroke.xml" value="0.2875" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/favorite_selector.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/ic_favorite.xml" value="0.27685185185185185" />
@@ -41,7 +42,13 @@
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/menu/bottom_menu.xml" value="0.2671794871794872" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/menu/search_menu.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_schedule/src/main/res/layout/fragment_schedule.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/drawable/black_gradient.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/drawable/black_gradient_with_stroke.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/drawable/ic_edittext_back.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/drawable/ic_loading_image.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/drawable/ic_search.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/layout/fragment_search.xml" value="0.25729166666666664" />
+        <entry key="..\:/Project/MoviesDemo/feature_search/src/main/res/layout/movie_item.xml" value="0.2713541666666667" />
       </map>
     </option>
   </component>

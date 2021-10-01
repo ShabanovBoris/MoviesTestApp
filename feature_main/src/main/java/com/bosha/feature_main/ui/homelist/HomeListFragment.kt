@@ -40,6 +40,7 @@ class HomeListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpRecycler(view)
+        initSearchNavigation()
 
         viewModel.dataFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -50,6 +51,14 @@ class HomeListFragment : Fragment() {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::handleSideEffect)
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun initSearchNavigation() {
+        binding.tbSearch.setOnClickListener {
+            navigate {
+                target = NavCommand(Screens.SEARCH)
+            }
+        }
     }
 
     override fun onDestroyView() {

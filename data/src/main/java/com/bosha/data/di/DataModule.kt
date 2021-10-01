@@ -8,6 +8,7 @@ import com.bosha.data.repositoryImpl.RepositoryImpl
 import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.DeleteMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
+import com.bosha.domain.interactors.SearchMoviesInteractor
 import com.bosha.domain.repositories.MovieRepository
 import dagger.Binds
 import dagger.Module
@@ -40,5 +41,9 @@ interface DataModule {
         @Provides
         fun provideDeleteMoviesInteractor(repository: MovieRepository) =
             DeleteMoviesInteractor(repository)
+
+        @Provides
+        fun provideSearchMoviesInteractor(repository: MovieRepository) =
+            SearchMoviesInteractor(repository)
     }
 }

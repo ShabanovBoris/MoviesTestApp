@@ -50,6 +50,9 @@ class MoviesRemoteDataSource @Inject constructor(
         flow { emit(api.getCredits(id).cast) }
             .map { mapper.toActorList(it) }
 
+    override fun searchByTitle(title: String): Flow<List<Movie>> =
+        flow { emit(api.getMovieBySearch(title).results) }
+            .map { mapper.toMovieList(it, genresMap) }
 
     private suspend fun getGenresMap() {
         val mutableMap: MutableMap<Int, Genre> = mutableMapOf()

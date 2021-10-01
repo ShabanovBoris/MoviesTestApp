@@ -22,4 +22,6 @@ interface MovieRepository {
     suspend fun deleteFavorite(id: String)
 
     fun getMovieDetails(id: String): Flow<Result<MovieDetails>>
+
+    fun searchByTitle(title: String): Flow<MoviesResult>
 }

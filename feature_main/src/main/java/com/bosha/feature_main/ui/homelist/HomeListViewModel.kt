@@ -39,7 +39,7 @@ class HomeListViewModel @Inject constructor(
         updateCache()
     }
 
-    private fun cacheLoad() = viewModelScope.launch {
+    private fun cacheLoad() = viewModelScope.launch(handler) {
         getMoviesInteractor.getCachedMovies()
             .onEach {
                 _dataFlow.value = it.getOrNull()

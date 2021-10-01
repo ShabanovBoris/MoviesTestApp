@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -29,11 +31,32 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
+    implementation project(':domain')
     implementation(project(':utils'))
+    implementation(project(':data'))
+}
+dependencies {
+    implementation Libs.kotlinStdLib
+    implementation Libs.corektx
+    implementation Libs.appcompat
+    implementation Libs.material
+    implementation Libs.constraint
+    //coroutines
+    implementation Libs.coroutines
+    //lifecycle
+    implementation Libs.lifecycleRuntimektx
+    implementation Libs.lifecycleViewModelktx
+    //hilt
+    implementation Libs.hilt
+    kapt Libs.hiltCompiler
+    //coil
+    implementation Libs.coil
 
-
-   testImplementation Libs.junit
+    testImplementation Libs.junit
 }

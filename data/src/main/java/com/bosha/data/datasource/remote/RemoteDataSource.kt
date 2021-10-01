@@ -11,4 +11,6 @@ interface RemoteDataSource {
     fun getDetails(id: String): Flow<MovieDetails>
 
     fun getCredits(id: String): Flow<List<Actor>>
+
+    fun searchByTitle(title: String): Flow<List<Movie>>
 }

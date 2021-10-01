@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.MoviesDemo.SearchETStyle" parent="Widget.AppCompat.EditText">
+        <item name="android:background">@drawable/ic_edittext_back</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:textColorHint">?colorSecondaryVariant</item>
+        <item name="android:hint">Search</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">?colorSecondary</item>
+        <item name="android:gravity">center|start</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="drawableTint">?colorOnPrimary</item>
+        <item name="drawableEndCompat">@drawable/ic_search</item>
+    </style>
+</resources>
