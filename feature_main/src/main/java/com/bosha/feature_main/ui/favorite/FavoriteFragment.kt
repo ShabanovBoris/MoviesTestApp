@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -38,6 +40,8 @@ class FavoriteFragment : Fragment()  {
         savedInstanceState: Bundle?
     ): View = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
+        it.tbSearch.isGone = true
+        it.rvMovieList.setPadding(0,0,0,0)
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
