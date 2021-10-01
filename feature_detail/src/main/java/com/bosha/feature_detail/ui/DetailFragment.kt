@@ -111,7 +111,7 @@ class DetailFragment : Fragment() {
 
         ibFavorite.isChecked = viewModel.movieIsLiked
         ibFavorite.setOnCheckedChangeListener { _, boolean ->
-                viewModel.addDeleteFavorite(details.id.toString(), boolean)
+                viewModel.addDeleteFavorite(details.id.toString(), details.title, boolean)
         }
     }
 

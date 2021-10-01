@@ -14,12 +14,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 interface DataModule {
 
     @Binds
@@ -32,22 +31,22 @@ interface DataModule {
     fun bindLocalDataSource(localDataSource: MovieLocalDataSource): LocalDataSource
 
     companion object{
-        @ViewModelScoped
+        @Singleton
         @Provides
         fun provideGetMoviesInteractor(repository: MovieRepository) =
             GetMoviesInteractor(repository)
 
-        @ViewModelScoped
+        @Singleton
         @Provides
         fun provideAddMoviesInteractor(repository: MovieRepository) =
             AddMoviesInteractor(repository)
 
-        @ViewModelScoped
+        @Singleton
         @Provides
         fun provideDeleteMoviesInteractor(repository: MovieRepository) =
             DeleteMoviesInteractor(repository)
 
-        @ViewModelScoped
+        @Singleton
         @Provides
         fun provideSearchMoviesInteractor(repository: MovieRepository) =
             SearchMoviesInteractor(repository)
