@@ -24,4 +24,6 @@ interface MovieRepository {
     fun getMovieDetails(id: String): Flow<Result<MovieDetails>>
 
     fun searchByTitle(title: String): Flow<MoviesResult>
+
+    fun searchByTitleFromCache(title: String): Flow<MoviesResult>
 }

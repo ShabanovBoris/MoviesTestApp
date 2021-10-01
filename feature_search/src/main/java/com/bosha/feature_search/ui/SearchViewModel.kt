@@ -30,11 +30,21 @@ class SearchViewModel @Inject constructor(
     private val _sideEffectFlow: MutableStateFlow<SideEffects?> = MutableStateFlow(null)
     val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
 
+    /**
+     * Search from local storage when remote returns error
+     */
     fun searchMovies(title: String) = viewModelScope.launch(handler){
         _sideEffectFlow.value = SideEffects.Loading
+
         searchMoviesInteractor.searchByTitle(title)
+            .combine(searchMoviesInteractor.searchByTitleFromCache(title)){ t1, t2 ->
+                if (t1.isFailure) {
+                    _sideEffectFlow.value = SideEffects.NetworkError(t1.exceptionOrNull())
+                    t2
+                }
+                else t1
+            }
             .onEach {
-                if (it.isFailure) _sideEffectFlow.value = SideEffects.NetworkError(it.exceptionOrNull())
 
                 _dataFlow.value = it.getOrNull()
 

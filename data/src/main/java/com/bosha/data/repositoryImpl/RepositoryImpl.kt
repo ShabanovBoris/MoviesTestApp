@@ -57,6 +57,11 @@ class RepositoryImpl @Inject constructor(
            .mapToResult()
     }
 
+    override fun searchByTitleFromCache(title: String): Flow<MoviesResult> {
+        return localDataSource.searchByTitleFromCache(title)
+            .map { Result.success(it) }
+    }
+
     private fun <T> Flow<T>.mapToResult(): Flow<Result<T>> =
         map { Result.success(it) }
             .catch { cause ->

@@ -23,6 +23,9 @@ interface MovieDao {
     @Query("SELECT * FROM ${DbContract.Movie.TABLE_NAME} WHERE ${DbContract.Movie.COLUMN_ID} = :id")
     suspend fun getById(id: String): MovieEntity
 
+    @Query("SELECT * FROM ${DbContract.Movie.TABLE_NAME} WHERE ${DbContract.Movie.TITLE} LIKE '%' || :title || '%'")
+    fun getByTitle(title: String): Flow<List<MovieEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFavoriteMovie(movie: FavoriteMovieEntity)
 

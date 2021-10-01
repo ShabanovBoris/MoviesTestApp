@@ -8,6 +8,8 @@ interface LocalDataSource {
 
     fun getFavoritesMovies(): Flow<List<Movie>>
 
+    fun searchByTitleFromCache(title: String): Flow<List<Movie>>
+
     suspend fun insertMovies(list: List<Movie>)
 
     suspend fun insertFavoriteMovie(movie: Movie)

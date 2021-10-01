@@ -42,4 +42,9 @@ class MovieLocalDataSource @Inject constructor(
     override fun getFavoritesMovies(): Flow<List<Movie>> =
         dao.getFavoritesMovies().map { it.map { item -> mapper.toMovie(item) } }
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
+
+    override fun searchByTitleFromCache(title: String): Flow<List<Movie>> =
+        dao.getByTitle(title).map { mapper.toMovieList(it) }
+            .flowOn(dispatcher ?: Dispatchers.Main.immediate)
+
 }
