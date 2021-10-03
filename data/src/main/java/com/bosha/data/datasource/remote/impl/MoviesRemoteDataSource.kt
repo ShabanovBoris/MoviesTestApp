@@ -2,8 +2,12 @@ package com.bosha.data.datasource.remote.impl
 
 import com.bosha.data.datasource.remote.MovieNetworkApi
 import com.bosha.data.datasource.remote.RemoteDataSource
+import com.bosha.data.dto.remote.JsonActor
 import com.bosha.data.dto.remote.JsonMovie
-import com.bosha.data.mappers.MovieResponseMapper
+import com.bosha.data.dto.remote.JsonMovieDetails
+import com.bosha.data.mappers.DetailsNetworkMapper
+import com.bosha.data.mappers.Mapper
+import com.bosha.data.mappers.MovieNetworkMapper
 import com.bosha.domain.entities.Actor
 import com.bosha.domain.entities.Genre
 import com.bosha.domain.entities.Movie
@@ -18,15 +22,21 @@ import javax.inject.Singleton
 @Singleton
 class MoviesRemoteDataSource @Inject constructor(
     private val api: MovieNetworkApi,
-    private val mapper: MovieResponseMapper,
-    private val dispatcher: CoroutineDispatcher? = null
-) : RemoteDataSource {
+    private val dispatcher: CoroutineDispatcher? = null,
+    private val actorMapper: Mapper<JsonActor, Actor>,
+    private val movieMapper: Mapper<JsonMovie, Movie>,
+    private val detailsMapper: Mapper<JsonMovieDetails, MovieDetails>
+    ) : RemoteDataSource {
     companion object {
         const val baseImagePosterUrl = "https://image.tmdb.org/t/p/w500"
         const val baseImageBackdropUrl = "https://image.tmdb.org/t/p/w780"
     }
 
-    private var genresMap = emptyMap<Int, Genre>()
+    private var genresMap
+    get() = (movieMapper as MovieNetworkMapper).genresMap
+    set(value) {
+        (movieMapper as MovieNetworkMapper).genresMap = value
+    }
 
     override fun fetchMovies(): Flow<List<Movie>> =
         flow {
@@ -35,24 +45,25 @@ class MoviesRemoteDataSource @Inject constructor(
                 emit(it)
             }
         }
-            .onStart { if (genresMap.isEmpty()) getGenresMap() }
-            .map { mapper.toMovieList(it, genresMap) }
+            .onStart { genresMap ?: getGenresMap() }
+            .map(movieMapper::toDomainEntityList)
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 
     override fun getDetails(id: String): Flow<MovieDetails> =
         flow { emit(api.getDetails(id)) }
-            .zip(getCredits(id)) { flow1, flow2 ->
-                mapper.toMovieDetails(flow1, flow2)
+            .zip(getCredits(id)) { details, actors ->
+                (detailsMapper as DetailsNetworkMapper).actors = actors
+                detailsMapper.toDomainEntity(details)
             }
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 
-    override fun getCredits(id: String): Flow<List<Actor>> =
+    private fun getCredits(id: String): Flow<List<Actor>> =
         flow { emit(api.getCredits(id).cast) }
-            .map { mapper.toActorList(it) }
+            .map(actorMapper::toDomainEntityList)
 
     override fun searchByTitle(title: String): Flow<List<Movie>> =
         flow { emit(api.getMovieBySearch(title).results) }
-            .map { mapper.toMovieList(it, genresMap) }
+            .map(movieMapper::toDomainEntityList)
 
     private suspend fun getGenresMap() {
         val mutableMap: MutableMap<Int, Genre> = mutableMapOf()

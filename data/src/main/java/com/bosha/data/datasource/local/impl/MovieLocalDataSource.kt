@@ -2,9 +2,9 @@ package com.bosha.data.datasource.local.impl
 
 import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.local.MovieDao
-import com.bosha.data.datasource.remote.MovieNetworkApi
-import com.bosha.data.mappers.MovieDBEntityMapper
-import com.bosha.data.mappers.MovieResponseMapper
+import com.bosha.data.dto.local.FavoriteMovieEntity
+import com.bosha.data.dto.local.MovieEntity
+import com.bosha.data.mappers.Mapper
 import com.bosha.domain.entities.Movie
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -15,20 +15,21 @@ import javax.inject.Inject
 
 class MovieLocalDataSource @Inject constructor(
     private val dao: MovieDao,
-    private val mapper: MovieDBEntityMapper,
-    private val dispatcher: CoroutineDispatcher? = null
+    private val dispatcher: CoroutineDispatcher? = null,
+    private val movieMapper: Mapper<MovieEntity, Movie>,
+    private val favoriteMapper: Mapper<FavoriteMovieEntity, Movie>,
 ): LocalDataSource {
 
     override suspend fun insertMovies(list: List<Movie>) {
-        dao.insertMovies(mapper.toMovieEntityList(list))
+        dao.insertMovies(movieMapper.toDataEntityList(list))
     }
 
     override suspend fun insertFavoriteMovie(movie: Movie) {
-        dao.insertFavoriteMovie(mapper.toFavoriteMovie(movie))
+        dao.insertFavoriteMovie(favoriteMapper.toDataEntity(movie))
     }
 
     override suspend fun getMovie(id: String): Movie {
-       return mapper.toMovie(dao.getById(id))
+       return movieMapper.toDomainEntity(dao.getById(id))
     }
 
     override suspend fun deleteFavorite(id: String) {
@@ -36,15 +37,15 @@ class MovieLocalDataSource @Inject constructor(
     }
 
     override fun getMovies(): Flow<List<Movie>> =
-        dao.getMovies().map { mapper.toMovieList(it) }
+        dao.getMovies().map(movieMapper::toDomainEntityList)
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 
     override fun getFavoritesMovies(): Flow<List<Movie>> =
-        dao.getFavoritesMovies().map { it.map { item -> mapper.toMovie(item) } }
+        dao.getFavoritesMovies().map(favoriteMapper::toDomainEntityList)
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 
     override fun searchByTitleFromCache(title: String): Flow<List<Movie>> =
-        dao.getByTitle(title).map { mapper.toMovieList(it) }
+        dao.getByTitle(title).map(movieMapper::toDomainEntityList)
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 
 }
