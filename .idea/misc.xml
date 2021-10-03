@@ -4,8 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2794871794871795" />
+        <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/ic_favorite.xml" value="0.27685185185185185" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2794871794871795" />
+        <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/ic_outline_movie.xml" value="0.27685185185185185" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/ic_point.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/ic_schedule_24.xml" value="0.27685185185185185" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/oval.xml" value="0.2794871794871795" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/selected_tab.xml" value="0.2794871794871795" />
         <entry key="..\:/Project/MoviesDemo/app/src/main/res/drawable/toolbar_background.xml" value="0.2722222222222222" />
