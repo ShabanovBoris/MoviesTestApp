@@ -1,9 +1,9 @@
 package com.bosha.data.mappers
 
-import com.bosha.data.dto.remote.JsonMovie
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource.Companion.baseImageBackdropUrl
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource.Companion.baseImagePosterUrl
 import com.bosha.data.dto.remote.JsonActor
+import com.bosha.data.dto.remote.JsonMovie
 import com.bosha.data.dto.remote.JsonMovieDetails
 import com.bosha.domain.entities.Actor
 import com.bosha.domain.entities.Genre
@@ -49,7 +49,7 @@ class MovieResponseMapper @Inject constructor() {
                 imageBackdrop = baseImageBackdropUrl + it.backdropPath,
                 genres = it.genres.map { genre -> Genre(genre.name) },
                 actors = actorList,
-                votes = it.votes
+                votes = it.votes / 2
             )
         }
     }
