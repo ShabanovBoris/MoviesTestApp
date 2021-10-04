@@ -2,5 +2,5 @@
 
 ## Preview
 <p align="left">
-<img src="img/movieDemo.gif" width="32%"/>
+<img src="img/movieDemo2.gif" width="32%"/>
 </p>
