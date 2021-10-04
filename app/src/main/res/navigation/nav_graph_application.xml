@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph_application"
-    app:startDestination="@id/graph_main">
+    app:startDestination="@id/onboardingFragment">
 
 
 
@@ -13,5 +13,10 @@
     <include app:graph="@navigation/graph_search"/>
 
     <include app:graph="@navigation/graph_detail"/>
+
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.bosha.moviesdemo.ui.onboarding.OnboardingFragment"
+        android:label="OnboardingFragment" />
 
 </navigation>

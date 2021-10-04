@@ -3,4 +3,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="app_title">Movies@test</string>
+    <string name="ok">Ok</string>
+    <string name="search_spalsh_text">Search your favorite movies</string>
+    <string name="favorites_spalsh_text">Add to favorites</string>
+    <string name="schedule_splash_text">Schedule for the future</string>
 </resources>

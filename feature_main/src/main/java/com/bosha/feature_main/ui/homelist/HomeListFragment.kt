@@ -12,7 +12,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
-import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.navigation.NavCommand
@@ -57,6 +56,7 @@ class HomeListFragment : Fragment() {
         binding.tbSearch.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.SEARCH)
+                options {  }
             }
         }
     }
