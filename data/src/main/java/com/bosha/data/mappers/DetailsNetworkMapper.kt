@@ -19,7 +19,7 @@ class DetailsNetworkMapper @Inject constructor(): Mapper<JsonMovieDetails, Movie
     imageBackdrop = baseImageBackdropUrl + data.backdropPath,
     genres = data.genres.map { genre -> Genre(genre.name) },
     actors = requireNotNull(actors),
-    votes = data.votes
+    votes = data.votes / 2
     )
 
     override fun toDataEntity(domain: MovieDetails): JsonMovieDetails {
