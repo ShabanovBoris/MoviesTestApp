@@ -17,6 +17,7 @@ import coil.load
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
+import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -44,6 +45,9 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentDetailBinding.inflate(inflater, container, false).also {
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            duration = 1000
+        }
         _binding = it
     }.root
 

@@ -1,8 +1,8 @@
 package com.bosha.feature_main.ui.homelist
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +12,7 @@ import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.MovieItemBinding
 
 
-class MovieListAdapter(private val onClick: (Int) -> Unit) :
+class MovieListAdapter(private val onClick: (View) -> Unit) :
     ListAdapter<Movie, MovieListAdapter.ViewHolderMovie>(DiffCallback()) {
 
 
@@ -20,9 +20,7 @@ class MovieListAdapter(private val onClick: (Int) -> Unit) :
         val view = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolderMovie(view).apply {
-            binding.root.setOnClickListener {
-                onClick(getItem(adapterPosition).id)
-            }
+            binding.movieCard.setOnClickListener(onClick)
         }
     }
 
@@ -35,6 +33,7 @@ class MovieListAdapter(private val onClick: (Int) -> Unit) :
 
         fun bindData(movie: Movie) = binding.apply {
 
+            movieCard.transitionName = movie.id.toString()
             ivImage.load(movie.imageUrl) {
                 allowHardware(false)
                 crossfade(true)

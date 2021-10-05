@@ -56,7 +56,10 @@ class HomeListFragment : Fragment() {
         binding.tbSearch.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.SEARCH)
-                options {  }
+                extras {
+                    binding.tbSearch.transitionName = "some_unique_name"
+                    addSharedElement(binding.tbSearch, "search_list")
+                }
             }
         }
     }
@@ -73,8 +76,10 @@ class HomeListFragment : Fragment() {
             addItemDecoration(GridSpacingItemDecoration(2, 30, true))
             adapter = MovieListAdapter {
                 navigate {
-                    target = NavCommand(Screens.DETAIL).setArgs("$it")
-                    options {  }
+                    target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
+                    extras {
+                        addSharedElement(it, "transition_name")
+                    }
                 }
             }
         }
@@ -85,8 +90,8 @@ class HomeListFragment : Fragment() {
         (binding.rvMovieList.adapter as MovieListAdapter).submitList(list)
     }
 
-    private fun handleSideEffect(effect: HomeListViewModel.SideEffects){
-        when(effect){
+    private fun handleSideEffect(effect: HomeListViewModel.SideEffects) {
+        when (effect) {
             HomeListViewModel.SideEffects.Loading -> binding.progressBar.isVisible = true
             HomeListViewModel.SideEffects.Loaded -> binding.progressBar.isVisible = false
             is HomeListViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
@@ -94,7 +99,7 @@ class HomeListFragment : Fragment() {
     }
 
     private fun showErrorToast(t: Throwable?) {
-        Toast.makeText(requireContext(),"${t?.message}", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
 }
 

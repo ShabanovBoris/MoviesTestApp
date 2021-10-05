@@ -2,4 +2,5 @@
 <resources>
     <string name="cast">Cast</string>
     <string name="storyline">Story line</string>
+    <string name="transition_name">transition_name</string>
 </resources>

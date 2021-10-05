@@ -17,7 +17,8 @@
         tools:listitem="@layout/movie_item"
         android:paddingTop="?android:actionBarSize"
         android:clipToPadding="false"
-        android:clipChildren="false"/>
+        android:clipChildren="false"
+        android:transitionGroup="true"/>
 
     <ProgressBar
         android:id="@+id/progressBar"
