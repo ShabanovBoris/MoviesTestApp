@@ -8,9 +8,9 @@ class GetMoviesInteractor(private val repository: MovieRepository) {
 
     fun getCachedMovies() = repository.getCachedMovies()
 
-    fun getDetailsById(id: String) = repository.getMovieDetails(id)
+    fun getDetailsById(id: String) = repository.fetchMovieDetails(id)
 
-    suspend fun getCachedMovieById(id: String) = repository.getMovie(id)
+    suspend fun getCachedMovieById(id: String) = repository.getCachedMovie(id)
 
     fun getFavoritesMovies() = repository.getFavoritesMovies()
 }

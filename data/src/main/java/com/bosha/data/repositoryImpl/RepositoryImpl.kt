@@ -31,7 +31,7 @@ class RepositoryImpl @Inject constructor(
         return localDataSource.getFavoritesMovies()
             .map { Result.success(it) } }
 
-    override suspend fun insertMovies(list: List<Movie>) {
+    override suspend fun insertCachedMovies(list: List<Movie>) {
         localDataSource.insertMovies(list)
     }
 
@@ -39,7 +39,7 @@ class RepositoryImpl @Inject constructor(
         localDataSource.insertFavoriteMovie(movie)
     }
 
-    override suspend fun getMovie(id: String): Movie {
+    override suspend fun getCachedMovie(id: String): Movie {
        return localDataSource.getMovie(id)
     }
 
@@ -47,7 +47,7 @@ class RepositoryImpl @Inject constructor(
         localDataSource.deleteFavorite(id)
     }
 
-    override fun getMovieDetails(id: String): Flow<Result<MovieDetails>> {
+    override fun fetchMovieDetails(id: String): Flow<Result<MovieDetails>> {
         return remoteDataSource.getDetails(id)
             .mapToResult()
     }

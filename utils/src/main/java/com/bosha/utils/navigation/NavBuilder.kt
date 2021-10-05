@@ -81,6 +81,9 @@ class NavBuilder(
             .build()
     }
 
+      /**
+       * Set the empty setter options{} for get animation by default
+       */
     fun options(optionsBuilder: NavOptionsBuilder.() -> Unit) {
         options = navOptions {
             anim {

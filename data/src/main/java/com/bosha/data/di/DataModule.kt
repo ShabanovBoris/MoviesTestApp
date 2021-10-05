@@ -21,12 +21,15 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface DataModule {
 
+    @Singleton
     @Binds
     fun bindRepository(repositoryImpl: RepositoryImpl): MovieRepository
 
+    @Singleton
     @Binds
     fun bindRemoteDataSource(remoteDataSource: MoviesRemoteDataSource): RemoteDataSource
 
+    @Singleton
     @Binds
     fun bindLocalDataSource(localDataSource: MovieLocalDataSource): LocalDataSource
 

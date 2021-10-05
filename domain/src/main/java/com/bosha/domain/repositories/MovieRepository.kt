@@ -7,23 +7,29 @@ import kotlinx.coroutines.flow.Flow
 typealias MoviesResult = Result<List<Movie>>
 
 interface MovieRepository {
+    /**
+     * Remote
+     */
     fun fetchMovies(): Flow<MoviesResult>
 
-    fun getCachedMovies(): Flow<MoviesResult>
-
-    fun getFavoritesMovies(): Flow<MoviesResult>
-
-    suspend fun insertMovies(list: List<Movie>)
-
-    suspend fun insertFavoriteMovie(movie: Movie)
-
-    suspend fun getMovie(id: String): Movie
-
-    suspend fun deleteFavorite(id: String)
-
-    fun getMovieDetails(id: String): Flow<Result<MovieDetails>>
+    fun fetchMovieDetails(id: String): Flow<Result<MovieDetails>>
 
     fun searchByTitle(title: String): Flow<MoviesResult>
 
+    /**
+     * Local
+     */
+    fun getCachedMovies(): Flow<MoviesResult>
+
+    suspend fun insertCachedMovies(list: List<Movie>)
+
+    suspend fun getCachedMovie(id: String): Movie
+
     fun searchByTitleFromCache(title: String): Flow<MoviesResult>
+
+    fun getFavoritesMovies(): Flow<MoviesResult>
+
+    suspend fun insertFavoriteMovie(movie: Movie)
+
+    suspend fun deleteFavorite(id: String)
 }

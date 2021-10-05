@@ -6,7 +6,7 @@ import com.bosha.domain.repositories.MovieRepository
 class AddMoviesInteractor(private val repository: MovieRepository) {
 
     suspend fun insertMovies(list: List<Movie>){
-        repository.insertMovies(list)
+        repository.insertCachedMovies(list)
     }
 
     suspend fun insertFavoriteMovie(movie: Movie){
