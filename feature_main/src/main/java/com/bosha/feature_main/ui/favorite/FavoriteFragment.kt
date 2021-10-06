@@ -1,21 +1,16 @@
 package com.bosha.feature_main.ui.favorite
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import androidx.core.view.setPadding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
-import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.ui.homelist.MovieListAdapter
 import com.bosha.feature_main.util.GridSpacingItemDecoration
@@ -65,8 +60,8 @@ class FavoriteFragment : Fragment()  {
             addItemDecoration(GridSpacingItemDecoration(2, 30, true))
             adapter = MovieListAdapter {
                 navigate {
-                    target = NavCommand(Screens.DETAIL).setArgs("$it")
-                    options {  }
+                    target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
+                    extras { addSharedElement(it, Screens.DETAIL.name) }
                 }
             }
         }

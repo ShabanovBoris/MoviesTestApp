@@ -15,8 +15,7 @@
         tools:src="@tools:sample/avatars"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:transitionName="@string/transition_name"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <!--Just gradient-->
     <View
@@ -136,9 +135,9 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
         android:max="5"
-        android:progressBackgroundTint="#6D6D80"
-        android:progressTint="#FF3365"
-        android:rating="4"
+        android:progressBackgroundTint="?colorPrimary"
+        android:progressTint="?colorSecondary"
+        tools:rating="4"
         app:layout_constraintBottom_toTopOf="@id/name"
         app:layout_constraintStart_toStartOf="@id/rv_actors" />
 
@@ -161,8 +160,7 @@
         android:layout_height="20dp"
         android:layout_marginBottom="4dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text=""
-        android:textColor="#FF3466"
+        android:textColor="?colorSecondary"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/rb_rating"
         app:layout_constraintStart_toStartOf="@id/rb_rating"

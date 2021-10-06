@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bosha.feature_main.R
+import com.bosha.utils.extensions.waitPreDraw
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HostMenuFragment : Fragment(R.layout.fragment_main_host) {
@@ -17,6 +18,7 @@ class HostMenuFragment : Fragment(R.layout.fragment_main_host) {
             (childFragmentManager.findFragmentById(R.id.nav_host_fragment_main) as NavHostFragment)
                 .navController
         )
+        waitPreDraw()
     }
 
 }

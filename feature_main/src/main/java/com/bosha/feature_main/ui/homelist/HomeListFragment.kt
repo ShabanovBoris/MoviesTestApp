@@ -35,10 +35,11 @@ class HomeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
+
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpRecycler(view)
+        setUpRecycler()
         initSearchNavigation()
 
         viewModel.dataFlow
@@ -56,10 +57,7 @@ class HomeListFragment : Fragment() {
         binding.tbSearch.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.SEARCH)
-                extras {
-                    binding.tbSearch.transitionName = "some_unique_name"
-                    addSharedElement(binding.tbSearch, "search_list")
-                }
+                options {}
             }
         }
     }
@@ -69,18 +67,17 @@ class HomeListFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun setUpRecycler(view: View) {
+    private fun setUpRecycler() {
         binding.rvMovieList.apply {
             setHasFixedSize(true)
-            layoutManager = GridLayoutManager(view.context, 2)
+            layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(GridSpacingItemDecoration(2, 30, true))
             adapter = MovieListAdapter {
                 navigate {
                     target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
-                    extras {
-                        addSharedElement(it, "transition_name")
-                    }
+                    extras { addSharedElement(it, Screens.DETAIL.name) }
                 }
+                binding.progressBar.isVisible = true
             }
         }
     }

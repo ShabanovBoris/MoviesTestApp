@@ -3,6 +3,7 @@ package com.bosha.feature_detail.ui
 import android.graphics.ColorMatrix
 import android.graphics.ColorMatrixColorFilter
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,10 +14,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import coil.load
+import coil.imageLoader
+import coil.request.ImageRequest
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
+import com.bosha.utils.navigation.Screens
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -45,10 +48,8 @@ class DetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentDetailBinding.inflate(inflater, container, false).also {
-        sharedElementEnterTransition = MaterialContainerTransform().apply {
-            duration = 1000
-        }
         _binding = it
+        setUpTransitionAnim()
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,13 +93,10 @@ class DetailFragment : Fragment() {
     private fun setUpView(details: MovieDetails?) = binding.apply {
         details ?: return@apply
 
+        waitImageLoading(details.imageBackdrop)
+
         (binding.rvActors.adapter as ActorRecyclerAdapter).list = details.actors
 
-        ivMainImage.load(details.imageBackdrop) {
-            crossfade(true)
-            error(R.drawable.primary_gradient)
-        }
-        setFilter(ivMainImage)
         tvMainTitle.text = details.title
 
         /** genres*/
@@ -115,8 +113,21 @@ class DetailFragment : Fragment() {
 
         ibFavorite.isChecked = viewModel.movieIsLiked
         ibFavorite.setOnCheckedChangeListener { _, boolean ->
-                viewModel.addDeleteFavorite(details.id.toString(), details.title, boolean)
+            viewModel.addDeleteFavorite(details.id.toString(), details.title, boolean)
         }
+    }
+
+    private fun waitImageLoading(dataUrl: String) = binding.apply {
+        val request = ImageRequest.Builder(requireContext())
+            .data(dataUrl)
+            .target {
+                ivMainImage.setImageDrawable(it)
+                setFilter(ivMainImage)
+                //resume
+                startPostponedEnterTransition()
+            }
+            .build()
+        requireContext().imageLoader.enqueue(request)
     }
 
     // set black-white filter
@@ -132,6 +143,21 @@ class DetailFragment : Fragment() {
             )
         }
         image.colorFilter = ColorMatrixColorFilter(matrix)
+    }
+
+    private fun setUpTransitionAnim() {
+        sharedElementEnterTransition = MaterialContainerTransform().apply {
+            duration = 500
+            endContainerColor = TypedValue().also {
+                requireContext().theme.resolveAttribute(
+                    R.attr.colorPrimaryVariant,
+                    it, true
+                )
+            }.data
+        }
+        binding.detailContainer.transitionName = Screens.DETAIL.name
+        //wait
+        postponeEnterTransition()
     }
 }
 

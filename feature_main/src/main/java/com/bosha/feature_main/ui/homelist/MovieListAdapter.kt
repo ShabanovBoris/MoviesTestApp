@@ -20,7 +20,7 @@ class MovieListAdapter(private val onClick: (View) -> Unit) :
         val view = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolderMovie(view).apply {
-            binding.movieCard.setOnClickListener(onClick)
+            binding.ivImage.setOnClickListener(onClick)
         }
     }
 
@@ -33,7 +33,7 @@ class MovieListAdapter(private val onClick: (View) -> Unit) :
 
         fun bindData(movie: Movie) = binding.apply {
 
-            movieCard.transitionName = movie.id.toString()
+            ivImage.transitionName = movie.id.toString()
             ivImage.load(movie.imageUrl) {
                 allowHardware(false)
                 crossfade(true)
