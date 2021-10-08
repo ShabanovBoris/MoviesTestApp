@@ -8,6 +8,7 @@ import androidx.navigation.ui.NavigationUI
 import com.bosha.feature_main.R
 import com.bosha.utils.extensions.waitPreDraw
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.transition.MaterialElevationScale
 
 class HostMenuFragment : Fragment(R.layout.fragment_main_host) {
 
@@ -19,6 +20,8 @@ class HostMenuFragment : Fragment(R.layout.fragment_main_host) {
                 .navController
         )
         waitPreDraw()
+        enterTransition = MaterialElevationScale(true).apply { duration = 500 }
+        reenterTransition = MaterialElevationScale(false).apply { duration = 500 }
     }
 
 }

@@ -83,7 +83,7 @@ class SearchFragment : Fragment(){
             adapter = MovieListAdapter {
                 navigate {
                     target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
-                    extras { addSharedElement(it, Screens.DETAIL.name) }
+                    extras { addSharedElement(it, Screens.DETAIL.value) }
                 }
             }
         }

@@ -19,6 +19,7 @@
 
     <!--Just gradient-->
     <View
+        android:id="@+id/gradient"
         android:layout_width="0dp"
         android:layout_height="300dp"
         android:foreground="@drawable/primary_gradient"

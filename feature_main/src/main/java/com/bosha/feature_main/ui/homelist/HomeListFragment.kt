@@ -75,7 +75,7 @@ class HomeListFragment : Fragment() {
             adapter = MovieListAdapter {
                 navigate {
                     target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
-                    extras { addSharedElement(it, Screens.DETAIL.name) }
+                    extras { addSharedElement(it, Screens.DETAIL.value) }
                 }
                 binding.progressBar.isVisible = true
             }

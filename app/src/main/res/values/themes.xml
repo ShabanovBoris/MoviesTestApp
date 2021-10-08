@@ -16,11 +16,16 @@
 
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">?colorPrimaryVariant</item>
+        <item name="android:textViewStyle">@style/Widget.MoviesDemo.TextView.Casual</item>
     </style>
 
     <style name="Theme.MoviesDemo.MySplash" parent="Theme.SplashScreen">
         <item name="android:windowSplashScreenBackground" tools:ignore="NewApi">?colorPrimary</item>
         <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_round</item>
         <item name="postSplashScreenTheme">@style/Theme.MoviesDemo</item>
+    </style>
+
+    <style name="Widget.MoviesDemo.TextView.Casual" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">casual</item>
     </style>
 </resources>

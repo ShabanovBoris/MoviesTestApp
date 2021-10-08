@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class FavoriteFragment : Fragment()  {
+class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = checkNotNull(_binding)
@@ -36,7 +36,7 @@ class FavoriteFragment : Fragment()  {
     ): View = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
         it.tbSearch.isGone = true
-        it.rvMovieList.setPadding(0,0,0,0)
+        it.rvMovieList.setPadding(0, 0, 0, 0)
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,11 +61,12 @@ class FavoriteFragment : Fragment()  {
             adapter = MovieListAdapter {
                 navigate {
                     target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
-                    extras { addSharedElement(it, Screens.DETAIL.name) }
+                    extras { addSharedElement(it, Screens.DETAIL.value) }
                 }
             }
         }
     }
+
 
     private fun setList(list: List<Movie>?) {
         list ?: return

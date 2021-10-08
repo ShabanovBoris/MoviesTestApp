@@ -12,7 +12,7 @@ import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.MovieItemBinding
 
 
-class MovieListAdapter(private val onClick: (View) -> Unit) :
+class MovieListAdapter(private val onClick: (card: View) -> Unit) :
     ListAdapter<Movie, MovieListAdapter.ViewHolderMovie>(DiffCallback()) {
 
 
@@ -20,7 +20,7 @@ class MovieListAdapter(private val onClick: (View) -> Unit) :
         val view = MovieItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolderMovie(view).apply {
-            binding.ivImage.setOnClickListener(onClick)
+            binding.movieCard.setOnClickListener(onClick)
         }
     }
 
@@ -33,7 +33,7 @@ class MovieListAdapter(private val onClick: (View) -> Unit) :
 
         fun bindData(movie: Movie) = binding.apply {
 
-            ivImage.transitionName = movie.id.toString()
+            movieCard.transitionName = movie.id.toString()
             ivImage.load(movie.imageUrl) {
                 allowHardware(false)
                 crossfade(true)

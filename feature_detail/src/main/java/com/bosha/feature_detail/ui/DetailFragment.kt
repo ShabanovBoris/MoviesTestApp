@@ -19,6 +19,7 @@ import coil.request.ImageRequest
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
+import com.bosha.utils.extensions.doOnEndTransition
 import com.bosha.utils.navigation.Screens
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +34,7 @@ class DetailFragment : Fragment() {
     private val binding get() = checkNotNull(_binding)
 
     private val movieId: String by lazy {
-        requireNotNull(arguments?.getString("id"))
+        requireNotNull(requireArguments().getString("id"))
     }
 
     @Inject
@@ -154,10 +155,29 @@ class DetailFragment : Fragment() {
                     it, true
                 )
             }.data
+            doOnEndTransition {
+                getAnimGroup().forEach {
+                    it.animate().alpha(1F).setDuration(500).start()
+                }
+            }
         }
-        binding.detailContainer.transitionName = Screens.DETAIL.name
+        getAnimGroup().forEach { it.alpha = 0f }
+        binding.ivMainImage.transitionName = Screens.DETAIL.value
         //wait
         postponeEnterTransition()
+    }
+
+    private fun getAnimGroup() = binding.run {
+        listOf(
+            tvMainTitle,
+            rbRating,
+            tvRating,
+            tvRunningTime,
+            tvRunningTime,
+            ibFavorite,
+            gradient,
+            tvGenres
+        )
     }
 }
 
