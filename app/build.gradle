@@ -41,6 +41,7 @@ dependencies {
     implementation(project(':feature_detail'))
 
     implementation(project(':utils'))
+    implementation project(':workers')
     implementation(project(':data'))
     implementation(project(':domain'))
 }
@@ -59,6 +60,7 @@ dependencies {
     //hilt
     implementation Libs.hilt
     kapt Libs.hiltCompiler
+    kapt Libs.androidxHiltCompiler
     //splash
     implementation Libs.splashScreen
     //room
@@ -72,6 +74,9 @@ dependencies {
     implementation Libs.okHttp
     implementation Libs.retrofit
     implementation Libs.logInterceptor
+
+    //app start up
+    implementation("androidx.startup:startup-runtime:1.1.0")
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

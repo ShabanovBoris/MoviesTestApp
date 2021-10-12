@@ -4,7 +4,7 @@ import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.local.impl.MovieLocalDataSource
 import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource
-import com.bosha.data.repositoryImpl.RepositoryImpl
+import com.bosha.data.repositories.RepositoryMovieImpl
 import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.DeleteMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
@@ -23,7 +23,7 @@ interface DataModule {
 
     @Singleton
     @Binds
-    fun bindRepository(repositoryImpl: RepositoryImpl): MovieRepository
+    fun bindRepository(repositoryImpl: RepositoryMovieImpl): MovieRepository
 
     @Singleton
     @Binds

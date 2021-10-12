@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import coil.imageLoader
 import coil.request.ImageRequest
 import com.bosha.domain.entities.MovieDetails
+import com.bosha.domain.utils.TaskScheduler
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.utils.extensions.doOnEndTransition
@@ -25,6 +26,7 @@ import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.time.Duration
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -39,6 +41,10 @@ class DetailFragment : Fragment() {
 
     @Inject
     lateinit var viewModelAssistedFactory: DetailViewModel.Factory
+
+    //delete
+    @Inject
+    lateinit var scheduler: TaskScheduler
 
     private val viewModel by viewModels<DetailViewModel> {
         DetailViewModel.provideFactory(viewModelAssistedFactory, movieId)
@@ -109,6 +115,12 @@ class DetailFragment : Fragment() {
         tvRating.text = details.votes.toString()
 
         tvStory.text = details.overview
+        ////test
+        tvStory.setOnClickListener {
+            scheduler.scheduleNotification(details.id.toString(), Duration.ofSeconds(10))
+        }
+        ////
+
 
         tvRunningTime.text = "${details.runtime} min"
 

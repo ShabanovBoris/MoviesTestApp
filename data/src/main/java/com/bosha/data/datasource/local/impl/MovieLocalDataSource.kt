@@ -4,8 +4,8 @@ import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.local.MovieDao
 import com.bosha.data.dto.local.FavoriteMovieEntity
 import com.bosha.data.dto.local.MovieEntity
-import com.bosha.data.mappers.Mapper
 import com.bosha.domain.entities.Movie
+import com.bosha.domain.utils.Mapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

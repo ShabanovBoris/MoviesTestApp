@@ -31,8 +31,12 @@ android {
     }
 }
 dependencies {
+    //navigation
     api Libs.navFragment
     api Libs.navUi
     //github.com/square/logcat
     api Libs.logcat
+
+    //lifecycle
+    implementation Libs.lifecycleRuntimektx
 }

@@ -31,15 +31,14 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding true
     }
 }
 dependencies {
-    implementation(project(':utils'))
-    implementation(project(':workers'))
-    implementation(project(':data'))
-    implementation(project(':domain'))
+    implementation project(':domain')
+    implementation project(':utils')
+    implementation project(':data')
 }
 dependencies {
     implementation Libs.kotlinStdLib
@@ -49,12 +48,13 @@ dependencies {
     implementation Libs.constraint
     //coroutines
     implementation Libs.coroutines
-    //lifecycle
-    implementation Libs.lifecycleRuntimektx
-    implementation Libs.lifecycleViewModelktx
     //hilt
     implementation Libs.hilt
     kapt Libs.hiltCompiler
+    //work manager
+    api Libs.workManager
+    api Libs.hiltWork
+    kapt Libs.androidxHiltCompiler
     //coil
     implementation Libs.coil
 

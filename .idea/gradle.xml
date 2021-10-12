@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/feature_main" />
             <option value="$PROJECT_DIR$/feature_search" />
             <option value="$PROJECT_DIR$/utils" />
+            <option value="$PROJECT_DIR$/workers" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

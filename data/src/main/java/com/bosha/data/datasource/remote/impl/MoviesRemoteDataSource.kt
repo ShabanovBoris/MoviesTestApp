@@ -6,12 +6,12 @@ import com.bosha.data.dto.remote.JsonActor
 import com.bosha.data.dto.remote.JsonMovie
 import com.bosha.data.dto.remote.JsonMovieDetails
 import com.bosha.data.mappers.DetailsNetworkMapper
-import com.bosha.data.mappers.Mapper
 import com.bosha.data.mappers.MovieNetworkMapper
 import com.bosha.domain.entities.Actor
 import com.bosha.domain.entities.Genre
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.entities.MovieDetails
+import com.bosha.domain.utils.Mapper
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

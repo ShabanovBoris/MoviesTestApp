@@ -1,4 +1,4 @@
-package com.bosha.data.repositoryImpl
+package com.bosha.data.repositories
 
 import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.remote.RemoteDataSource
@@ -13,7 +13,7 @@ import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
 
-class RepositoryImpl @Inject constructor(
+class RepositoryMovieImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : MovieRepository {

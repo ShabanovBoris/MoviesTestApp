@@ -40,5 +40,9 @@ public class Libs {
     static String retrofit = "com.squareup.retrofit2:retrofit:" + Versions.retrofit_version;
     static String logInterceptor = "com.squareup.okhttp3:logging-interceptor:" + Versions.okhttp_version;
     //coil
-    static String coil = "io.coil-kt:coil:1.3.2";
+    static String coil = "io.coil-kt:coil:1.4.0";
+    //WorkManager
+    static String workManager = "androidx.work:work-runtime-ktx:2.7.0-alpha03";
+    static String hiltWork = "androidx.hilt:hilt-work:1.0.0";
+    static String androidxHiltCompiler = "androidx.hilt:hilt-compiler:1.0.0";
 }

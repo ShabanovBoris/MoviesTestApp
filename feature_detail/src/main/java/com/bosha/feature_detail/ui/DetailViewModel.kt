@@ -47,12 +47,15 @@ class DetailViewModel @AssistedInject constructor(
     }
 
     private fun load() = viewModelScope.launch(handler) {
-        getMoviesInteractor.getDetailsById(id)
-            .combine(getMoviesInteractor.getFavoritesMovies()) { detail, favorites ->
-                movieIsLiked =
-                    favorites.getOrNull()?.find { it.id.toString() == id }?.isLiked ?: false
-                detail
-            }
+
+        combine(
+            getMoviesInteractor.getDetailsById(id),
+            getMoviesInteractor.getFavoritesMovies()
+        ) { detail, favorites ->
+            movieIsLiked =
+                favorites.getOrNull()?.find { it.id.toString() == id }?.isLiked ?: false
+            detail
+        }
             .collect {
                 if (it.isFailure)
                     _sideEffectFlow.value = SideEffects.NetworkError(it.exceptionOrNull())

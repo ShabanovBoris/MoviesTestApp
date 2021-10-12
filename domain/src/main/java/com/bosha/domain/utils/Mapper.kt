@@ -1,4 +1,4 @@
-package com.bosha.data.mappers
+package com.bosha.domain.utils
 
 
 interface Mapper<DATA, DOMAIN> {

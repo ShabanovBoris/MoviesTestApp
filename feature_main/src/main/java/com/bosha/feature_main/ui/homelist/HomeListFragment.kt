@@ -8,12 +8,12 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
+import com.bosha.utils.extensions.onViewLifecycleWhenStarted
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
@@ -42,15 +42,15 @@ class HomeListFragment : Fragment() {
         setUpRecycler()
         initSearchNavigation()
 
-        viewModel.dataFlow
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach(::setList)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        onViewLifecycleWhenStarted {
+            viewModel.dataFlow
+                .onEach(::setList)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.sideEffectFlow
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach(::handleSideEffect)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+            viewModel.sideEffectFlow
+                .onEach(::handleSideEffect)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 
     private fun initSearchNavigation() {
