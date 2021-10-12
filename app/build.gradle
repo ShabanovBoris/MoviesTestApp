@@ -36,14 +36,14 @@ android {
     }
 }
 dependencies {
-    implementation(project(':feature_main'))
-    implementation(project(':feature_search'))
-    implementation(project(':feature_detail'))
+    implementation project(':feature_main')
+    implementation project(':feature_search')
+    implementation project(':feature_detail')
 
-    implementation(project(':utils'))
-    implementation project(':workers')
-    implementation(project(':data'))
-    implementation(project(':domain'))
+    implementation project(':utils')
+    implementation project(':tasks')
+    implementation project(':data')
+    implementation project(':domain')
 }
 
 dependencies {

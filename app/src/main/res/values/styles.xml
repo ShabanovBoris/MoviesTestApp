@@ -10,4 +10,34 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="tabIndicatorFullWidth">false</item>
     </style>
+
+    <style name="Widget.MoviesDemo.DatePickerStyle" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorAccent">@color/dark</item>
+        <item name="android:windowBackground">@color/dark_light</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/AppTheme.Alert.Button.Positive</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/AppTheme.Alert.Button.Negative</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/AppTheme.Alert.Button.Neutral</item>
+    </style>
+
+    <style name="Widget.MoviesDemo.TimePickerStyle" parent="Theme.MaterialComponents.DayNight.Dialog">
+        <item name="colorAccent">@color/dark</item>
+        <item name="android:colorPrimary">@color/dark_light</item>
+        <item name="android:colorPrimaryDark">@color/dark_light</item>
+        <item name="android:windowBackground">@color/dark_light</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/AppTheme.Alert.Button.Positive</item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/AppTheme.Alert.Button.Negative</item>
+        <item name="android:buttonBarNeutralButtonStyle">@style/AppTheme.Alert.Button.Neutral</item>
+    </style>
+
+    <style name="AppTheme.Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/blue_link_color</item>
+    </style>
+
+    <style name="AppTheme.Alert.Button.Negative" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/blue_link_color</item>
+    </style>
+
+    <style name="AppTheme.Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/blue_link_color</item>
+    </style>
 </resources>

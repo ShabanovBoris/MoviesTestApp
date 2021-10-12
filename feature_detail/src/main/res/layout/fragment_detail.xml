@@ -39,6 +39,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/ib_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_schedule"
+        app:layout_constraintEnd_toEndOf="@+id/tv_schedule"
+        app:layout_constraintStart_toStartOf="@+id/tv_schedule"
+        app:layout_constraintTop_toBottomOf="@+id/tv_schedule"
+        app:tint="?colorOnSecondary" />
+
+    <TextView
+        android:id="@+id/tv_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:text="@string/schedule_movie"
+        android:layout_marginTop="4dp"
+        android:textColor="?colorOnSecondary"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/tv_main_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_main_title" />
+
     <TextView
         android:id="@+id/tv_main_title"
         android:layout_width="0dp"
@@ -157,13 +178,14 @@
 
     <TextView
         android:id="@+id/tv_genres"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginBottom="4dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:gravity="start"
         android:textColor="?colorSecondary"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@id/rb_rating"
+        app:layout_constraintEnd_toStartOf="@+id/tv_schedule"
         app:layout_constraintStart_toStartOf="@id/rb_rating"
         tools:text="bla bla bla horror" />
 

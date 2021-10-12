@@ -37,7 +37,7 @@ android {
 }
 dependencies {
     implementation(project(':utils'))
-    implementation(project(':workers'))
+    implementation(project(':tasks'))
     implementation(project(':data'))
     implementation(project(':domain'))
 }

@@ -8,6 +8,7 @@ import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.DeleteMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
 import com.bosha.domain.interactors.SearchMoviesInteractor
+import com.bosha.domain.utils.TaskScheduler
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -19,13 +20,15 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
+import java.time.Duration
 
 class DetailViewModel @AssistedInject constructor(
     @Assisted private val id: String,
     private val getMoviesInteractor: GetMoviesInteractor,
     private val addMoviesInteractor: AddMoviesInteractor,
     private val deleteMoviesInteractor: DeleteMoviesInteractor,
-    private val searchMoviesInteractor: SearchMoviesInteractor
+    private val searchMoviesInteractor: SearchMoviesInteractor,
+    private val taskScheduler: TaskScheduler
 ) : ViewModel() {
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
@@ -83,6 +86,10 @@ class DetailViewModel @AssistedInject constructor(
         } else {
             deleteMoviesInteractor.deleteFavorite(id)
         }
+    }
+
+    fun scheduleMovie(id: String, duration: Duration) {
+        taskScheduler.scheduleNotification(id, duration)
     }
 
     @AssistedFactory
