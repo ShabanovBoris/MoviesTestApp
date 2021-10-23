@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -52,6 +53,7 @@ class DetailFragment : Fragment() {
     ): View = FragmentDetailBinding.inflate(inflater, container, false).also {
         _binding = it
         setUpTransitionAnim()
+        NotificationManagerCompat.from(requireContext()).cancelAll()
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,6 +68,19 @@ class DetailFragment : Fragment() {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::handleSideEffect)
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        /**
+         * if [setUpTransitionAnim] did not call callback from [setSharedElementEnterTransition],
+         * ie when fragment opened from deeplink from outside
+         * animate manually
+         */
+        getAnimGroup().forEach {
+            it.animate().alpha(1F).setDuration(500).start()
+        }
     }
 
     override fun onDestroyView() {

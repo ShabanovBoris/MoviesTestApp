@@ -17,6 +17,7 @@
         <activity
             android:name=".ui.Activity"
             android:exported="true">
+            <nav-graph android:value="@navigation/graph_detail"/>
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

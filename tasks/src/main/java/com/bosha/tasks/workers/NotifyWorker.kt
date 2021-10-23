@@ -9,8 +9,6 @@ import coil.request.ImageRequest
 import com.bosha.tasks.NotificationSender
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 
 @HiltWorker
 class NotifyWorker @AssistedInject constructor(
@@ -21,17 +19,14 @@ class NotifyWorker @AssistedInject constructor(
     private val args = checkNotNull(inputData.getStringArray(LoadMovieWorker.KEY_OUTPUT_ARG))
 
     override suspend fun doWork(): Result {
-        val image = coroutineScope {
-            async {
-                Coil.imageLoader(appContext).execute(
-                    getImageRequest()
-                ).drawable
-            }
-        }
 
-        image.await()?.let {
-            NotificationSender(appContext).show(args[0], args[1], it)
-        }
+        Coil.imageLoader(appContext)
+            .execute(
+                getImageRequest()
+            )
+            .drawable?.also {
+                NotificationSender(appContext).show(args[0], args[1], it, args[3])
+            }
 
         return Result.success()
     }

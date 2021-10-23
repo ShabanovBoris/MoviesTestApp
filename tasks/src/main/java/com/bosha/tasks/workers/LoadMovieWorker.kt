@@ -43,7 +43,8 @@ class LoadMovieWorker @AssistedInject constructor(
             successResult(
                 result.getOrNull()?.title,
                 result.getOrNull()?.overview,
-                result.getOrNull()?.imageBackdrop
+                result.getOrNull()?.imageBackdrop,
+                result.getOrNull()?.id.toString(),
             )
 
         } else {

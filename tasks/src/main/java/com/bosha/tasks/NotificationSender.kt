@@ -1,12 +1,15 @@
 package com.bosha.tasks
 
 import android.app.Application
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import com.bosha.feature_schedule.R
 import java.util.*
 
@@ -27,7 +30,6 @@ class NotificationSender(private val appContext: Context) {
             .setWhen(Date().time)
             .setDefaults(NotificationCompat.DEFAULT_ALL)
             .setPriority(NotificationCompat.PRIORITY_MAX)
-//            .setContentIntent(getStartActivityPendingIntent())
 //            .setSilent(true)
 //            .setLargeIcon(
 //                BitmapFactory.decodeResource(application.resources,
@@ -36,9 +38,10 @@ class NotificationSender(private val appContext: Context) {
 //            .addAction(NotificationCompat.Action(null, "Close", getStopPendingIntent()))
     }
 
-    private fun getNotification(title: String, text: String, image: Drawable) =
+    private fun getNotification(title: String, text: String, image: Drawable, id: String) =
         builder
             .setContentText(text)
+            .setContentIntent(newActivityPendingIntent(id))
             .setStyle(
                 NotificationCompat.BigPictureStyle()
                     .bigPicture(image.toBitmap())
@@ -62,16 +65,28 @@ class NotificationSender(private val appContext: Context) {
         }
     }
 
+    private fun newActivityPendingIntent(id: String) =
+        Intent(null,"moviesdemo://detail/${id}".toUri())
+            .let {
+                PendingIntent.getActivity(
+                    appContext,
+                    REQUEST_CODE_PENDING_INTENT,
+                    it,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                )
+            }
 
-    fun show(title: String, text: String, image: Drawable) {
+
+    fun show(title: String, text: String, image: Drawable, id: String) {
         notificationManager?.notify(
             NOTIFICATION_ID,
-            getNotification(title, text, image)
+            getNotification(title, text, image, id)
         )
     }
 
     private companion object {
         private const val CHANNEL_ID = "Channel_ID"
         private const val NOTIFICATION_ID = 111 + 222 + 333
+        private const val REQUEST_CODE_PENDING_INTENT = 777
     }
 }
