@@ -4,6 +4,7 @@ import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource
 import com.bosha.data.dto.remote.JsonMovie
 import com.bosha.domain.entities.Genre
 import com.bosha.domain.entities.Movie
+import com.bosha.domain.utils.Mapper
 import javax.inject.Inject
 
 class MovieNetworkMapper @Inject constructor(): Mapper<JsonMovie, Movie> {

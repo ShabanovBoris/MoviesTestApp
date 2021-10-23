@@ -9,11 +9,11 @@ import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
 import com.bosha.feature_search.databinding.FragmentSearchBinding
+import com.bosha.utils.extensions.onViewLifecycleWhenStarted
 import com.bosha.utils.extensions.waitPreDraw
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
@@ -21,10 +21,9 @@ import com.bosha.utils.navigation.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.flow.debounce
 
 @AndroidEntryPoint
-class SearchFragment : Fragment(){
+class SearchFragment : Fragment() {
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = checkNotNull(_binding)
@@ -45,28 +44,28 @@ class SearchFragment : Fragment(){
         setUpRecycler(view)
         initSearchListener()
 
-        viewModel.dataFlow
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach(::setList)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        onViewLifecycleWhenStarted {
+            viewModel.dataFlow
+                .onEach(::setList)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.sideEffectFlow
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach(::handleSideEffect)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+            viewModel.sideEffectFlow
+                .onEach(::handleSideEffect)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 
     private fun initSearchListener() {
-       callbackFlow {
-           binding.etSearching.doAfterTextChanged {
-               trySend(it.toString())
-           }
-           awaitClose()
-       }
-           .debounce(400)
-           .distinctUntilChanged()
-           .onEach { viewModel.searchMovies(it) }
-           .launchIn(viewLifecycleOwner.lifecycleScope)
+        callbackFlow {
+            binding.etSearching.doAfterTextChanged {
+                trySend(it.toString())
+            }
+            awaitClose()
+        }
+            .debounce(400)
+            .distinctUntilChanged()
+            .onEach { viewModel.searchMovies(it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
     }
 
@@ -94,9 +93,9 @@ class SearchFragment : Fragment(){
         (binding.rvSearchList.adapter as MovieListAdapter).submitList(list)
     }
 
-    private fun handleSideEffect(effect: SearchViewModel.SideEffects?){
+    private fun handleSideEffect(effect: SearchViewModel.SideEffects?) {
         effect ?: return
-        when(effect){
+        when (effect) {
             SearchViewModel.SideEffects.Loading -> binding.progressBar.isVisible = true
             SearchViewModel.SideEffects.Loaded -> binding.progressBar.isVisible = false
             is SearchViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
@@ -104,6 +103,6 @@ class SearchFragment : Fragment(){
     }
 
     private fun showErrorToast(t: Throwable?) {
-        Toast.makeText(requireContext(),"${t?.message}", Toast.LENGTH_LONG).show()
+        Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
 }

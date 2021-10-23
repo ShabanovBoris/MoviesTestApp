@@ -34,8 +34,10 @@ class SearchViewModel @Inject constructor(
     fun searchMovies(title: String) = viewModelScope.launch(handler) {
         _sideEffectFlow.value = SideEffects.Loading
 
-        searchMoviesInteractor.searchByTitle(title)
-            .combine(searchMoviesInteractor.searchByTitleFromCache(title)) { remote, local ->
+            combine(
+                searchMoviesInteractor.searchByTitle(title),
+                searchMoviesInteractor.searchByTitleFromCache(title)
+            ) { remote, local ->
                 if (remote.isFailure) {
                     _sideEffectFlow.value = SideEffects.NetworkError(remote.exceptionOrNull())
                     local

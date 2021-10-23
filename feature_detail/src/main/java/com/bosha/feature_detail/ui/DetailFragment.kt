@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -19,6 +20,7 @@ import coil.request.ImageRequest
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
+import com.bosha.feature_detail.utils.datetime.schedule
 import com.bosha.utils.extensions.doOnEndTransition
 import com.bosha.utils.navigation.Screens
 import com.google.android.material.transition.MaterialContainerTransform
@@ -51,6 +53,7 @@ class DetailFragment : Fragment() {
     ): View = FragmentDetailBinding.inflate(inflater, container, false).also {
         _binding = it
         setUpTransitionAnim()
+        NotificationManagerCompat.from(requireContext()).cancelAll()
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -65,6 +68,19 @@ class DetailFragment : Fragment() {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach(::handleSideEffect)
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        /**
+         * if [setUpTransitionAnim] did not call callback from [setSharedElementEnterTransition],
+         * ie when fragment opened from deeplink from outside
+         * animate manually
+         */
+        getAnimGroup().forEach {
+            it.animate().alpha(1F).setDuration(500).start()
+        }
     }
 
     override fun onDestroyView() {
@@ -109,6 +125,12 @@ class DetailFragment : Fragment() {
         tvRating.text = details.votes.toString()
 
         tvStory.text = details.overview
+
+        ibSchedule.setOnClickListener {
+            schedule { duration ->
+                viewModel.scheduleMovie(details.id.toString(), duration)
+            }
+        }
 
         tvRunningTime.text = "${details.runtime} min"
 
@@ -176,7 +198,9 @@ class DetailFragment : Fragment() {
             tvRunningTime,
             ibFavorite,
             gradient,
-            tvGenres
+            tvGenres,
+            ibSchedule,
+            tvSchedule
         )
     }
 }

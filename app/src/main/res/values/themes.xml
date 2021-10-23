@@ -17,6 +17,8 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">?colorPrimaryVariant</item>
         <item name="android:textViewStyle">@style/Widget.MoviesDemo.TextView.Casual</item>
+        <item name="android:datePickerDialogTheme">@style/Widget.MoviesDemo.DatePickerStyle</item>
+        <item name="android:timePickerDialogTheme">@style/Widget.MoviesDemo.TimePickerStyle</item>
     </style>
 
     <style name="Theme.MoviesDemo.MySplash" parent="Theme.SplashScreen">

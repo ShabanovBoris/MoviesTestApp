@@ -1,6 +1,5 @@
 package com.bosha.domain.entities
 
-import com.bosha.domain.entities.Genre
 
 data class Movie(
     val id: Int,

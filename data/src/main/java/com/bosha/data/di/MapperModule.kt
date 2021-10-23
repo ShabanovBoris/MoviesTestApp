@@ -9,6 +9,7 @@ import com.bosha.data.mappers.*
 import com.bosha.domain.entities.Actor
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.entities.MovieDetails
+import com.bosha.domain.utils.Mapper
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,7 +17,7 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface MapperModule {
+interface MapperModuleBinds {
 
     @Binds
     fun provideNetworkActorMapper(impl: ActorNetworkMapper): Mapper<JsonActor, Actor>
