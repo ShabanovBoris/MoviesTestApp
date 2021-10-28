@@ -1,7 +1,11 @@
 package com.bosha.data.repositories
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.remote.RemoteDataSource
+import com.bosha.data.datasource.remote.impl.MoviesPagingSource
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.domain.repositories.MovieRepository
@@ -12,24 +16,27 @@ import kotlinx.coroutines.flow.map
 import java.net.UnknownHostException
 import java.util.concurrent.TimeoutException
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RepositoryMovieImpl @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
-) : MovieRepository {
+    private val localDataSource: LocalDataSource,
+) : MovieRepository, PagingRepository {
     override fun fetchMovies(): Flow<MoviesResult> {
-       return remoteDataSource.fetchMovies()
-           .mapToResult()
+        return remoteDataSource.fetchMovies()
+            .mapToResult()
     }
 
     override fun getCachedMovies(): Flow<MoviesResult> {
-       return localDataSource.getMovies()
-           .map { Result.success(it) }
+        return localDataSource.getMovies()
+            .map { Result.success(it) }
     }
 
     override fun getFavoritesMovies(): Flow<MoviesResult> {
         return localDataSource.getFavoritesMovies()
-            .map { Result.success(it) } }
+            .map { Result.success(it) }
+    }
 
     override suspend fun insertCachedMovies(list: List<Movie>) {
         localDataSource.insertMovies(list)
@@ -40,7 +47,7 @@ class RepositoryMovieImpl @Inject constructor(
     }
 
     override suspend fun getCachedMovie(id: String): Movie {
-       return localDataSource.getMovie(id)
+        return localDataSource.getMovie(id)
     }
 
     override suspend fun deleteFavorite(id: String) {
@@ -53,8 +60,8 @@ class RepositoryMovieImpl @Inject constructor(
     }
 
     override fun searchByTitle(title: String): Flow<MoviesResult> {
-       return remoteDataSource.searchByTitle(title)
-           .mapToResult()
+        return remoteDataSource.searchByTitle(title)
+            .mapToResult()
     }
 
     override fun searchByTitleFromCache(title: String): Flow<MoviesResult> {
@@ -72,4 +79,11 @@ class RepositoryMovieImpl @Inject constructor(
                     emit(Result.failure(cause as Exception))
                 else throw cause
             }
+
+    override fun fetchMoviesPaging(): Flow<PagingData<Movie>> =
+        Pager(
+            config = PagingConfig(1, enablePlaceholders = false),
+            pagingSourceFactory = { MoviesPagingSource(remoteDataSource) }
+        ).flow
+
 }

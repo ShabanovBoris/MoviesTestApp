@@ -1,4 +1,4 @@
-package com.bosha.feature_main.ui.homelist
+package com.bosha.feature_main.ui.favorite
 
 import android.view.LayoutInflater
 import android.view.View
@@ -52,7 +52,7 @@ class MovieListAdapter(private val onClick: (card: View) -> Unit) :
     }
 }
 
-private class DiffCallback : DiffUtil.ItemCallback<Movie>() {
+class DiffCallback : DiffUtil.ItemCallback<Movie>() {
     override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean =
         oldItem.id == newItem.id
 

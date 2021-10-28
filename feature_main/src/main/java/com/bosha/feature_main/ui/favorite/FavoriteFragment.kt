@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
 import com.bosha.feature_main.databinding.FragmentHomeBinding
-import com.bosha.feature_main.ui.homelist.MovieListAdapter
 import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens

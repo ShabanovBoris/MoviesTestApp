@@ -2,6 +2,7 @@ package com.bosha.feature_main.ui.homelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bosha.data.repositories.PagingRepository
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeListViewModel @Inject constructor(
     private val getMoviesInteractor: GetMoviesInteractor,
-    private val addMoviesInteractor: AddMoviesInteractor
+    private val addMoviesInteractor: AddMoviesInteractor,
+    private val pagingRepository: PagingRepository
 ) : ViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
@@ -34,9 +36,15 @@ class HomeListViewModel @Inject constructor(
         MutableStateFlow(SideEffects.Loading)
     val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
 
+    val pagingFlow = pagingRepository.fetchMoviesPaging()
+        .onEach {
+            _sideEffectFlow.value = SideEffects.Loaded
+        }
+
+
     init {
-        cacheLoad()
-        updateCache()
+//        cacheLoad()
+//        updateCache()
     }
 
     private fun cacheLoad() = viewModelScope.launch(handler) {

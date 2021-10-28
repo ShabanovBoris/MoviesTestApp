@@ -132,7 +132,8 @@ class DetailFragment : Fragment() {
             }
         }
 
-        tvRunningTime.text = "${details.runtime} min"
+        tvRunningTime.text = getString(R.string.runtime, details.runtime)
+
 
         ibFavorite.isChecked = viewModel.movieIsLiked
         ibFavorite.setOnCheckedChangeListener { _, boolean ->

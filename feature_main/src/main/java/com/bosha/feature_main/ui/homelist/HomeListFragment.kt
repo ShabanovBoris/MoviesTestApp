@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bosha.domain.entities.Movie
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.extensions.onViewLifecycleWhenStarted
@@ -29,6 +28,16 @@ class HomeListFragment : Fragment() {
 
     private val viewModel by viewModels<HomeListViewModel>()
 
+    private val rvAdapter by lazy {
+        MovieListPagingAdapter {
+            navigate {
+                target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
+                extras { addSharedElement(it, Screens.DETAIL.value) }
+            }
+            binding.progressBar.isVisible = true
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -43,8 +52,8 @@ class HomeListFragment : Fragment() {
         initSearchNavigation()
 
         onViewLifecycleWhenStarted {
-            viewModel.dataFlow
-                .onEach(::setList)
+            viewModel.pagingFlow
+                .onEach(rvAdapter::submitData)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             viewModel.sideEffectFlow
@@ -70,21 +79,13 @@ class HomeListFragment : Fragment() {
     private fun setUpRecycler() {
         binding.rvMovieList.apply {
             setHasFixedSize(true)
+            overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
             layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(GridSpacingItemDecoration(2, 30, true))
-            adapter = MovieListAdapter {
-                navigate {
-                    target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
-                    extras { addSharedElement(it, Screens.DETAIL.value) }
-                }
-                binding.progressBar.isVisible = true
-            }
+            adapter = rvAdapter.withLoadStateFooter(
+                MoviesLoadStateAdapter()
+            )
         }
-    }
-
-    private fun setList(list: List<Movie>?) {
-        list ?: return
-        (binding.rvMovieList.adapter as MovieListAdapter).submitList(list)
     }
 
     private fun handleSideEffect(effect: HomeListViewModel.SideEffects) {

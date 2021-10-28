@@ -1,0 +1,39 @@
+package com.bosha.data.datasource.remote.impl
+
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import com.bosha.data.datasource.remote.RemoteDataSource
+import com.bosha.domain.entities.Movie
+import javax.inject.Inject
+
+class MoviesPagingSource @Inject constructor(
+    private val dataSource: RemoteDataSource
+) : PagingSource<Int, Movie>(), RemoteDataSource by dataSource{
+
+    override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
+        return state.anchorPosition?.let {
+            state.closestPageToPosition(it)?.prevKey?.plus(1)
+                ?: state.closestPageToPosition(it)?.nextKey?.minus(1)
+        }
+    }
+
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
+        val position = params.key ?: 1
+
+        return try {
+            val movies = dataSource.rowQuery(position)
+            val nextKey = if (movies.isEmpty()) {
+                null
+            } else {
+                position + params.loadSize
+            }
+            LoadResult.Page(
+                data = movies,
+                prevKey = if (position == 1) null else position - 1,
+                nextKey = nextKey
+            )
+        } catch (e: Exception) {
+            LoadResult.Error(e)
+        }
+    }
+}
