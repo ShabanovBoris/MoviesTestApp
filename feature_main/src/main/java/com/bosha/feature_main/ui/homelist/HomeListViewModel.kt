@@ -21,7 +21,7 @@ import javax.inject.Inject
 class HomeListViewModel @Inject constructor(
     private val getMoviesInteractor: GetMoviesInteractor,
     private val addMoviesInteractor: AddMoviesInteractor,
-    private val pagingRepository: PagingRepository
+    pagingRepository: PagingRepository
 ) : ViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
@@ -40,6 +40,7 @@ class HomeListViewModel @Inject constructor(
         .onEach {
             _sideEffectFlow.value = SideEffects.Loaded
         }
+
 
 
     init {

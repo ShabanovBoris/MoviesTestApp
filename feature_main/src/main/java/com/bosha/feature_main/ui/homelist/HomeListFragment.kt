@@ -9,6 +9,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
@@ -44,7 +46,6 @@ class HomeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = FragmentHomeBinding.inflate(inflater, container, false).also {
         _binding = it
-
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -58,6 +59,10 @@ class HomeListFragment : Fragment() {
 
             viewModel.sideEffectFlow
                 .onEach(::handleSideEffect)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+
+            rvAdapter.loadStateFlow
+                .onEach(::pagingLoadStateHandler)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
         }
     }
@@ -82,9 +87,7 @@ class HomeListFragment : Fragment() {
             overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
             layoutManager = GridLayoutManager(requireContext(), 2)
             addItemDecoration(GridSpacingItemDecoration(2, 30, true))
-            adapter = rvAdapter.withLoadStateFooter(
-                MoviesLoadStateAdapter()
-            )
+            adapter = rvAdapter.withLoadStateFooter(MoviesLoadStateAdapter { rvAdapter.retry() })
         }
     }
 
@@ -93,6 +96,19 @@ class HomeListFragment : Fragment() {
             HomeListViewModel.SideEffects.Loading -> binding.progressBar.isVisible = true
             HomeListViewModel.SideEffects.Loaded -> binding.progressBar.isVisible = false
             is HomeListViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
+        }
+    }
+
+    private fun pagingLoadStateHandler(loadState: CombinedLoadStates){
+        when(val state = loadState.source.append){
+            is LoadState.NotLoading -> binding.progressBar.isVisible = false
+            LoadState.Loading -> binding.progressBar.isVisible = true
+            is LoadState.Error -> showErrorToast(state.error)
+        }
+        when(val state = loadState.source.refresh){
+            is LoadState.NotLoading -> {}
+            LoadState.Loading -> binding.progressBar.isVisible = true
+            is LoadState.Error -> showErrorToast(state.error)
         }
     }
 
