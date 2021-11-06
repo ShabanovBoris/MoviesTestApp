@@ -7,14 +7,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bosha.domain.view.ViewController
+import com.bosha.domain.view.createScreen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
-import com.bosha.utils.extensions.onViewLifecycleWhenStarted
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
@@ -25,10 +25,7 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class HomeListFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = checkNotNull(_binding)
-
-    private val viewModel by viewModels<HomeListViewModel>()
+    private val screen: ViewController<FragmentHomeBinding, HomeListViewModel> = createScreen()
 
     private val rvAdapter by lazy {
         MovieListPagingAdapter {
@@ -36,7 +33,9 @@ class HomeListFragment : Fragment() {
                 target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
                 extras { addSharedElement(it, Screens.DETAIL.value) }
             }
-            binding.progressBar.isVisible = true
+            screen.view {
+                progressBar.isVisible = true
+            }
         }
     }
 
@@ -44,31 +43,33 @@ class HomeListFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragmentHomeBinding.inflate(inflater, container, false).also {
-        _binding = it
-    }.root
+    ): View = screen {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpRecycler()
-        initSearchNavigation()
+        afterViewInflated {
+            observeViewModel()
+            setUpRecycler()
+            initSearchNavigation()
+        }
 
-        onViewLifecycleWhenStarted {
-            viewModel.pagingFlow
+        inflateView(inflater, container)
+    }
+
+    private fun observeViewModel() = screen.viewModelInScope { viewModel ->
+        viewModel.pagingFlow
                 .onEach(rvAdapter::submitData)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
-            viewModel.sideEffectFlow
+        viewModel.sideEffectFlow
                 .onEach(::handleSideEffect)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
             rvAdapter.loadStateFlow
                 .onEach(::pagingLoadStateHandler)
                 .launchIn(viewLifecycleOwner.lifecycleScope)
-        }
     }
 
-    private fun initSearchNavigation() {
-        binding.tbSearch.setOnClickListener {
+    private fun initSearchNavigation() = screen.view{
+        tbSearch.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.SEARCH)
                 options {}
@@ -76,38 +77,36 @@ class HomeListFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
-    }
-
-    private fun setUpRecycler() {
-        binding.rvMovieList.apply {
+    private fun setUpRecycler() = screen.view {
+        rvMovieList.apply {
             setHasFixedSize(true)
             overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
-            layoutManager = GridLayoutManager(requireContext(), 2)
+            layoutManager = GridLayoutManager(requireContext(), 2).apply {
+                initialPrefetchItemCount = 15
+            }
             addItemDecoration(GridSpacingItemDecoration(2, 30, true))
             adapter = rvAdapter.withLoadStateFooter(MoviesLoadStateAdapter { rvAdapter.retry() })
         }
     }
 
-    private fun handleSideEffect(effect: HomeListViewModel.SideEffects) {
+    private fun handleSideEffect(effect: HomeListViewModel.SideEffects) = screen.view {
         when (effect) {
-            HomeListViewModel.SideEffects.Loading -> binding.progressBar.isVisible = true
-            HomeListViewModel.SideEffects.Loaded -> binding.progressBar.isVisible = false
+            HomeListViewModel.SideEffects.Loading -> progressBar.isVisible = true
+            HomeListViewModel.SideEffects.Loaded -> progressBar.isVisible = false
             is HomeListViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
         }
     }
 
-    private fun pagingLoadStateHandler(loadState: CombinedLoadStates){
-        when(val state = loadState.source.append){
-            is LoadState.NotLoading -> binding.progressBar.isVisible = false
-            LoadState.Loading -> binding.progressBar.isVisible = true
+    private fun pagingLoadStateHandler(loadState: CombinedLoadStates) = screen.view {
+        when (val state = loadState.source.append) {
+            is LoadState.NotLoading -> progressBar.isVisible = false
+            LoadState.Loading -> progressBar.isVisible = true
             is LoadState.Error -> showErrorToast(state.error)
         }
-        when(val state = loadState.source.refresh){
-            is LoadState.NotLoading -> {}
-            LoadState.Loading -> binding.progressBar.isVisible = true
+        when (val state = loadState.source.refresh) {
+            is LoadState.NotLoading -> {
+            }
+            LoadState.Loading -> progressBar.isVisible = true
             is LoadState.Error -> showErrorToast(state.error)
         }
     }

@@ -27,11 +27,22 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    buildFeatures{
+        viewBinding true
+    }
 }
 
 dependencies {
     //coroutines
     implementation Libs.coroutines
+
+    //for ScreenView
+    implementation Libs.lifecycleViewModelktx
+    implementation Libs.lifecycleRuntimektx
+    implementation Libs.appcompat
+    implementation Libs.logcat
+    implementation Libs.reflect
+    implementation Libs.corektx
 
     testImplementation Libs.junit
 }
