@@ -1,4 +1,4 @@
-package com.bosha.domain.view
+package com.bosha.domain.view.viewcontroller
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
+import com.bosha.domain.view.ViewLifecycleDelegate
 import kotlinx.coroutines.CoroutineScope
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
@@ -22,7 +23,7 @@ class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
         }
     )
 
-    private val doAfterInflated = mutableSetOf<() -> Unit>()
+    private val doOnPreDraw = mutableSetOf<() -> Unit>()
 
     private var viewModelType: KClass<V> by Delegates.notNull()
 
@@ -51,14 +52,14 @@ class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
             .call(inflater, container, false) as B
 
         binding.root.doOnPreDraw {
-            doAfterInflated.forEach { it() }
+            doOnPreDraw.forEach { it() }
         }
 
         return binding.root
     }
 
-    override fun afterViewInflated(action: () -> Unit) {
-        doAfterInflated.add(action)
+    override fun onPreDraw(action: () -> Unit) {
+        doOnPreDraw.add(action)
     }
 
     override operator fun invoke(block: ViewController<B, V>.() -> View): View = block()

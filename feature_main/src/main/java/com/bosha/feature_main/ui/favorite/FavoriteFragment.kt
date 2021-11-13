@@ -10,8 +10,8 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
-import com.bosha.domain.view.ViewController
-import com.bosha.domain.view.createScreen
+import com.bosha.domain.view.viewcontroller.ViewController
+import com.bosha.domain.view.viewcontroller.createScreen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.navigation.NavCommand
@@ -30,19 +30,20 @@ class FavoriteFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = screen {
+    ): View = screen{
 
-        view {
-            tbSearch.isGone = true
-            rvMovieList.setPadding(0, 0, 0, 0)
-        }
 
-        afterViewInflated {
+        onPreDraw {
 
             setUpRecycler()
 
-            viewModel{
-                dataFlow
+            screen.view {
+                tbSearch.isGone = true
+                rvMovieList.setPadding(0, 0, 0, 0)
+            }
+
+            screen.viewModelInScope {
+                it.dataFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
                     .onEach(::setList)
                     .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -50,7 +51,6 @@ class FavoriteFragment : Fragment() {
         }
         inflateView(inflater, container)
     }
-
 
     private fun setUpRecycler() = screen.view {
         rvMovieList.apply {

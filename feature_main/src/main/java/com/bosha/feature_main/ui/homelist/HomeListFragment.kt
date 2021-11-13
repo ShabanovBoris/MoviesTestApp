@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bosha.domain.view.ViewController
-import com.bosha.domain.view.createScreen
+import com.bosha.domain.view.viewcontroller.ViewController
+import com.bosha.domain.view.viewcontroller.createScreen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.navigation.NavCommand
@@ -45,30 +45,32 @@ class HomeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = screen {
 
-        afterViewInflated {
-            observeViewModel()
-            setUpRecycler()
-            initSearchNavigation()
-        }
 
         inflateView(inflater, container)
     }
 
-    private fun observeViewModel() = screen.viewModelInScope { viewModel ->
-        viewModel.pagingFlow
-                .onEach(rvAdapter::submitData)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.sideEffectFlow
-                .onEach(::handleSideEffect)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-
-            rvAdapter.loadStateFlow
-                .onEach(::pagingLoadStateHandler)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initSearchNavigation()
+        setUpRecycler()
+        observeViewModel()
     }
 
-    private fun initSearchNavigation() = screen.view{
+    private fun observeViewModel() = screen.viewModelInScope { viewModel ->
+        viewModel.pagingFlow
+            .onEach { rvAdapter.submitData(it) }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        viewModel.sideEffectFlow
+            .onEach(::handleSideEffect)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        rvAdapter.loadStateFlow
+            .onEach(::pagingLoadStateHandler)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun initSearchNavigation() = screen.view {
         tbSearch.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.SEARCH)

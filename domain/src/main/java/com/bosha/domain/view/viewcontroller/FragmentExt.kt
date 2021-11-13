@@ -1,4 +1,4 @@
-package com.bosha.domain.view
+package com.bosha.domain.view.viewcontroller
 
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -8,9 +8,16 @@ inline fun <reified B : ViewBinding, reified V : ViewModel> Fragment.createScree
 
     val screen = DefaultScreen.get(V::class, B::class) { this }
 
-    screen.afterViewInflated {
-        screen.lifecycleDelegate(viewLifecycleOwner)
-    }
+
+    screen.lifecycleDelegate(this)
+
+    /**
+     * Change the lifecycle to viewLifecycle when it be ready
+     */
+    screen.onPreDraw {
+            screen.lifecycleDelegate(viewLifecycleOwner)
+        }
+
 
     return screen
 }
@@ -22,9 +29,15 @@ inline fun <reified B : ViewBinding> Fragment.createScreenView(): ViewController
 
     val screen = DefaultScreen.get(Nothing::class, B::class) { this }
 
-    screen.afterViewInflated {
+    screen.lifecycleDelegate(this)
+
+    /**
+     * Change the lifecycle to viewLifecycle when it be ready
+     */
+    screen.onPreDraw {
         screen.lifecycleDelegate(viewLifecycleOwner)
     }
+
 
     return screen
 }

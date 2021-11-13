@@ -102,7 +102,7 @@ class DetailViewModel @AssistedInject constructor(
             assistedFactory: Factory,
             id: String
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(id) as T
             }
         }

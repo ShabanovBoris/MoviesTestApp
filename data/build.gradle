@@ -66,9 +66,8 @@ dependencies {
     implementation Libs.okHttp
     implementation Libs.retrofit
     implementation Libs.logInterceptor
-
-    def paging_version = "3.0.1"
-    api "androidx.paging:paging-runtime:$paging_version"
-
+    //paging
     testImplementation Libs.junit
+
+    api Libs.paging
 }

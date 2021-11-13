@@ -1,4 +1,4 @@
-package com.bosha.domain.view
+package com.bosha.domain.view.viewcontroller
 
 import android.view.LayoutInflater
 import android.view.View
@@ -17,7 +17,10 @@ interface ViewController<B : ViewBinding, V : ViewModel> {
 
     fun destroyView()
 
-    fun afterViewInflated(action: () -> Unit)
+    /**
+     * The view already inflated but not showed yet
+     */
+    fun onPreDraw(action: () -> Unit)
 
     operator fun invoke(block: ViewController<B, V>.() -> View): View
 

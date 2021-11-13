@@ -3,7 +3,6 @@ package com.bosha.feature_main.ui.favorite
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bosha.domain.entities.Movie
-import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -37,6 +36,7 @@ class FavoriteViewModel @Inject constructor(
         getMoviesInteractor.getFavoritesMovies()
             .onEach {
                 _dataFlow.value = it.getOrNull()
+                logcat(LogPriority.ERROR) { "get movies favorite $it" }
             }
             .collect()
     }
