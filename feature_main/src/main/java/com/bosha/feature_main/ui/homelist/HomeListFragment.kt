@@ -8,8 +8,6 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.CombinedLoadStates
-import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.view.viewcontroller.ViewController
 import com.bosha.domain.view.viewcontroller.createScreen
@@ -19,6 +17,7 @@ import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -44,14 +43,11 @@ class HomeListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = screen {
-
-
         inflateView(inflater, container)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initSearchNavigation()
+        initSearchTabNavigation()
         setUpRecycler()
         observeViewModel()
     }
@@ -66,11 +62,12 @@ class HomeListFragment : Fragment() {
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
         rvAdapter.loadStateFlow
-            .onEach(::pagingLoadStateHandler)
+            .distinctUntilChangedBy { it.source }
+            .onEach(viewModel::handlePagingLoadState)
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun initSearchNavigation() = screen.view {
+    private fun initSearchTabNavigation() = screen.view {
         tbSearch.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.SEARCH)
@@ -93,23 +90,12 @@ class HomeListFragment : Fragment() {
 
     private fun handleSideEffect(effect: HomeListViewModel.SideEffects) = screen.view {
         when (effect) {
-            HomeListViewModel.SideEffects.Loading -> progressBar.isVisible = true
+            HomeListViewModel.SideEffects.Loading -> {
+                progressBar.isVisible = true
+            }
             HomeListViewModel.SideEffects.Loaded -> progressBar.isVisible = false
             is HomeListViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
-        }
-    }
-
-    private fun pagingLoadStateHandler(loadState: CombinedLoadStates) = screen.view {
-        when (val state = loadState.source.append) {
-            is LoadState.NotLoading -> progressBar.isVisible = false
-            LoadState.Loading -> progressBar.isVisible = true
-            is LoadState.Error -> showErrorToast(state.error)
-        }
-        when (val state = loadState.source.refresh) {
-            is LoadState.NotLoading -> {
-            }
-            LoadState.Loading -> progressBar.isVisible = true
-            is LoadState.Error -> showErrorToast(state.error)
+            else -> {}
         }
     }
 

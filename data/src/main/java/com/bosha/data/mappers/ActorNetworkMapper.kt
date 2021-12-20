@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 
 class ActorNetworkMapper @Inject constructor(): Mapper<JsonActor, Actor> {
-    override fun toDomainEntity(data: JsonActor): Actor =  Actor(
+    override fun toDomainEntity(data: JsonActor, page: Int?): Actor =  Actor(
         id = data.id,
         name = data.name,
         imageUrl = baseImageBackdropUrl + data.profilePicture)

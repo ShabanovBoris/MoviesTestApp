@@ -1,4 +1,4 @@
-package com.bosha.data.datasource.remote.impl
+package com.bosha.data.datasource
 
 import android.util.Log
 import androidx.paging.PagingSource
@@ -7,9 +7,9 @@ import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.domain.entities.Movie
 import javax.inject.Inject
 
-class MoviesPagingSource @Inject constructor(
+class RemoteMoviesPagingSource @Inject constructor(
     private val dataSource: RemoteDataSource
-) : PagingSource<Int, Movie>(), RemoteDataSource by dataSource{
+) : PagingSource<Int, Movie>(), RemoteDataSource by dataSource {
 
     override fun getRefreshKey(state: PagingState<Int, Movie>): Int? {
         return state.anchorPosition?.let {
@@ -22,8 +22,8 @@ class MoviesPagingSource @Inject constructor(
         val position = params.key ?: 1
 
         while (true) {
-             try {
-                val movies = dataSource.rowQuery(position)
+            try {
+                val movies = dataSource.rawQuery(position)
                 val nextKey = if (movies.isEmpty()) {
                     null
                 } else {
@@ -34,9 +34,9 @@ class MoviesPagingSource @Inject constructor(
                     prevKey = if (position == 1) null else position - 1,
                     nextKey = nextKey
                 )
-            } catch (e: Exception){
-                 Log.e(this.toString(), "load: ${e.message}", )
-             }
+            } catch (e: Exception) {
+                Log.e(this.toString(), "load: ${e.message}")
+            }
         }
 
         error(IllegalStateException())

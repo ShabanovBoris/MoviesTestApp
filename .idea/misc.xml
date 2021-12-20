@@ -28,9 +28,12 @@
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/ic_favorite.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/ic_favorite_empty.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/ic_round_person.xml" value="0.28307692307692306" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/drawable/ic_schedule.xml" value="0.24444444444444444" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/actor_item.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/fragment_detail.xml" value="0.264" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/fragment_webview.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/view_holder_actor.xml" value="0.2713541666666667" />
+        <entry key="..\:/Project/MoviesDemo/feature_detail/src/main/res/layout/web_view_icon.xml" value="0.2" />
         <entry key="..\:/Project/MoviesDemo/feature_favorite/src/main/res/layout/fragment_favorite.xml" value="0.2713541666666667" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/black_gradient.xml" value="0.28307692307692306" />
         <entry key="..\:/Project/MoviesDemo/feature_main/src/main/res/drawable/black_gradient_with_stroke.xml" value="0.2875" />

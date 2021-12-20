@@ -32,11 +32,11 @@ class MoviesRemoteDataSource @Inject constructor(
         const val baseImageBackdropUrl = "https://image.tmdb.org/t/p/w780"
     }
 
-    override suspend fun rowQuery(page: Int): List<Movie> {
+    override suspend fun rawQuery(page: Int): List<Movie> {
         genresMap ?: getGenresMap()
 
         return getMoviesByPage(page)
-            .map { movieMapper.toDomainEntity(it) }
+            .map { movieMapper.toDomainEntity(it, page) }
     }
 
 
@@ -63,7 +63,7 @@ class MoviesRemoteDataSource @Inject constructor(
         flow { emit(api.getDetails(id)) }
             .zip(getCredits(id)) { details, actors ->
                 (detailsMapper as DetailsNetworkMapper).actors = actors
-                detailsMapper.toDomainEntity(details)
+                detailsMapper.toDomainEntity(details, null)
             }
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 

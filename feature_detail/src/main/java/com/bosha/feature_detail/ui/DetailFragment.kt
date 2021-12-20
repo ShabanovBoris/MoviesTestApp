@@ -22,7 +22,9 @@ import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.feature_detail.utils.datetime.schedule
 import com.bosha.utils.extensions.doOnEndTransition
+import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
+import com.bosha.utils.navigation.navigate
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -56,8 +58,11 @@ class DetailFragment : Fragment() {
         NotificationManagerCompat.from(requireContext()).cancelAll()
     }.root
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpActorsRecycler()
+        binding.tvWebView.initIcon()
 
         viewModel.dataFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -138,6 +143,12 @@ class DetailFragment : Fragment() {
         ibFavorite.isChecked = viewModel.movieIsLiked
         ibFavorite.setOnCheckedChangeListener { _, boolean ->
             viewModel.addDeleteFavorite(details.id.toString(), details.title, boolean)
+        }
+
+        tvWebView.setOnClickListener {
+            navigate {
+                target = NavCommand(Screens.WEB_VIEW).setArgs(details.id.toString())
+            }
         }
     }
 

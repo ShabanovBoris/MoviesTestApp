@@ -1,5 +1,6 @@
 package com.bosha.data.datasource.local
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,8 +12,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MovieDao {
 
+    /** Default getter */
     @Query("SELECT * FROM ${DbContract.Movie.TABLE_NAME} ORDER BY ${DbContract.Movie.POPULARITY} DESC")
     fun getMovies(): Flow<List<MovieEntity>>
+
+    /** Paging getter */
+    @Query("SELECT * FROM ${DbContract.Movie.TABLE_NAME} ORDER BY ${DbContract.Movie.POPULARITY} DESC")
+    fun getMoviesPaging(): PagingSource<Int, MovieEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMovies(list: List<MovieEntity>)

@@ -8,4 +8,6 @@ interface PagingRepository {
 
     fun fetchMoviesPaging(): Flow<PagingData<Movie>>
 
+    fun getMoviesPaging(): Flow<PagingData<Movie>>
+
 }

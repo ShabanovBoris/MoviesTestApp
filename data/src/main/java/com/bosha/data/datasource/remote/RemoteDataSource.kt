@@ -11,5 +11,5 @@ interface RemoteDataSource {
 
     fun searchByTitle(title: String): Flow<List<Movie>>
 
-    suspend fun rowQuery(page: Int): List<Movie>
+    suspend fun rawQuery(page: Int): List<Movie>
 }

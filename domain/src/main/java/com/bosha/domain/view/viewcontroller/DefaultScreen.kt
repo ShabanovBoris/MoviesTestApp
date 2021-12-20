@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
 import com.bosha.domain.view.ViewLifecycleDelegate
 import kotlinx.coroutines.CoroutineScope
+import logcat.logcat
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
@@ -53,13 +54,18 @@ class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
 
         binding.root.doOnPreDraw {
             doOnPreDraw.forEach { it() }
+            doOnPreDraw.clear()
         }
 
         return binding.root
     }
 
     override fun onPreDraw(action: () -> Unit) {
-        doOnPreDraw.add(action)
+        val wrapper = {
+            action()
+            logcat { "onPreDraw size ${doOnPreDraw.size}" }
+        }
+        doOnPreDraw.add(wrapper)
     }
 
     override operator fun invoke(block: ViewController<B, V>.() -> View): View = block()

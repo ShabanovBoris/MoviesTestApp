@@ -11,7 +11,7 @@ class MovieNetworkMapper @Inject constructor(): Mapper<JsonMovie, Movie> {
 
     var genresMap: Map<Int, Genre>? = null
 
-    override fun toDomainEntity(data: JsonMovie): Movie = Movie(
+    override fun toDomainEntity(data: JsonMovie, page: Int?): Movie = Movie(
         id = data.id,
         title = data.title,
         genres = findGenres(data.genreIds, requireNotNull(genresMap)),
@@ -21,7 +21,8 @@ class MovieNetworkMapper @Inject constructor(): Mapper<JsonMovie, Movie> {
         detailImageUrl = MoviesRemoteDataSource.baseImageBackdropUrl + data.backdropPath,
         storyLine = data.overview,
         releaseDate = data.releaseDate ?: "No release Date",
-        popularity = data.popularity
+        popularity = data.popularity,
+        page = page
     )
 
     override fun toDataEntity(domain: Movie): JsonMovie {
