@@ -25,8 +25,10 @@ import com.bosha.utils.extensions.doOnEndTransition
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
+import com.bosha.utils.view.AwesomeCheckbox
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -66,6 +68,7 @@ class DetailFragment : Fragment() {
 
         viewModel.dataFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .filterNotNull()
             .onEach(::setUpView)
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
@@ -112,9 +115,7 @@ class DetailFragment : Fragment() {
         Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
 
-    private fun setUpView(details: MovieDetails?) = binding.apply {
-        details ?: return@apply
-
+    private fun setUpView(details: MovieDetails) = binding.apply {
         waitImageLoading(details.imageBackdrop)
 
         (binding.rvActors.adapter as ActorRecyclerAdapter).list = details.actors
@@ -139,10 +140,10 @@ class DetailFragment : Fragment() {
 
         tvRunningTime.text = getString(R.string.runtime, details.runtime)
 
-
-        ibFavorite.isChecked = viewModel.movieIsLiked
-        ibFavorite.setOnCheckedChangeListener { _, boolean ->
-            viewModel.addDeleteFavorite(details.id.toString(), details.title, boolean)
+        acbFavorite.animationType = AwesomeCheckbox.Animation.NOPE
+        acbFavorite.checked = viewModel.movieIsLiked
+        acbFavorite.onCheckChange { isChecked ->
+            viewModel.addOrDeleteFavorite(details.id.toString(), details.title, isChecked)
         }
 
         tvWebView.setOnClickListener {
@@ -208,7 +209,7 @@ class DetailFragment : Fragment() {
             tvRating,
             tvRunningTime,
             tvRunningTime,
-            ibFavorite,
+            acbFavorite,
             gradient,
             tvGenres,
             ibSchedule,

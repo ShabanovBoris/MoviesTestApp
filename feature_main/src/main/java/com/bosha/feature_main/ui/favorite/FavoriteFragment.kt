@@ -18,6 +18,7 @@ import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -45,6 +46,7 @@ class FavoriteFragment : Fragment() {
             screen.viewModelInScope {
                 it.dataFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                    .filterNotNull()
                     .onEach(::setList)
                     .launchIn(viewLifecycleOwner.lifecycleScope)
             }
@@ -67,8 +69,6 @@ class FavoriteFragment : Fragment() {
     }
 
     private fun setList(list: List<Movie>?) = screen.view {
-        list ?: return@view
-
         (rvMovieList.adapter as MovieListAdapter).submitList(list)
     }
 }

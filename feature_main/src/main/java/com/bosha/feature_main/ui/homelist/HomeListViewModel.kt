@@ -54,7 +54,6 @@ class HomeListViewModel @Inject constructor(
      * todo delete old logic after add paging
      */
     init {
-
 //        cacheLoad()
 //        updateCache()
 
