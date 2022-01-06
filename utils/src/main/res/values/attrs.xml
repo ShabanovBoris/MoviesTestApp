@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AwesomeCheckbox">
+        <attr name="animationType" format="enum">
+            <enum name="Scale" value="0"/>
+            <enum name="Fade" value="1"/>
+            <enum name="Nope" value="2"/>
+        </attr>
+        <!--override-->
+        <attr name="android:tint"/>
+    </declare-styleable>
+</resources>

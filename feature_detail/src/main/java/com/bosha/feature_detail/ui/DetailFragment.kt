@@ -25,7 +25,6 @@ import com.bosha.utils.extensions.doOnEndTransition
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
-import com.bosha.utils.view.AwesomeCheckbox
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
@@ -140,7 +139,6 @@ class DetailFragment : Fragment() {
 
         tvRunningTime.text = getString(R.string.runtime, details.runtime)
 
-        acbFavorite.animationType = AwesomeCheckbox.Animation.NOPE
         acbFavorite.checked = viewModel.movieIsLiked
         acbFavorite.onCheckChange { isChecked ->
             viewModel.addOrDeleteFavorite(details.id.toString(), details.title, isChecked)

@@ -1,26 +1,33 @@
 package com.bosha.utils.view
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.animation.AnticipateInterpolator
 import android.view.animation.AnticipateOvershootInterpolator
-import android.widget.FrameLayout
 import androidx.annotation.MainThread
+import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.getColorOrThrow
+import androidx.core.content.res.getIntOrThrow
+import androidx.core.content.withStyledAttributes
+import com.bosha.utils.R
 import com.bosha.utils.databinding.ViewAwesomeCheckboxBinding
 
+@RequiresApi(Build.VERSION_CODES.Q)
 class AwesomeCheckbox @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defaultAttrs: Int = 0
-) : FrameLayout(context, attrs, defaultAttrs) {
+    defStyleAttrs: Int = 0,
+    defStyleRes: Int = R.style.Widget_Movies_AwesomeCheckbox
+) : ConstraintLayout(context, attrs, defStyleAttrs, defStyleRes) {
 
 
     private val binding by lazy(LazyThreadSafetyMode.NONE) {
         ViewAwesomeCheckboxBinding.inflate(
             LayoutInflater.from(context),
-            this,
-            true
+            this
         )
     }
 
@@ -33,9 +40,29 @@ class AwesomeCheckbox @JvmOverloads constructor(
         get() = isChecked
 
     var animationType: Animation? = null
+    var iconsTint: Int? = null
 
     init {
         binding.ivFavorite.setOnClickListener { check() }
+        context.withStyledAttributes(
+            attrs,
+            R.styleable.AwesomeCheckbox,
+            defStyleAttrs,
+            defStyleRes
+        ) {
+            getIntOrThrow(R.styleable.AwesomeCheckbox_animationType).let {
+                animationType = Animation.values()[it]
+            }
+//            val defaultColor = TypedValue()
+//            context.theme.resolveAttribute(R.attr.colorSecondary, defaultColor, true)
+//            iconsTint = getColor(R.styleable.AwesomeCheckbox_android_tint, defaultColor.data)
+            iconsTint = getColorOrThrow(R.styleable.AwesomeCheckbox_android_tint)
+        }
+
+        iconsTint?.let {
+            binding.ivFavorite.drawable.setTint(it)
+            binding.ivFavoriteBg.drawable.setTint(it)
+        }
     }
 
     private fun setUpIconVisibility() {
@@ -48,7 +75,7 @@ class AwesomeCheckbox @JvmOverloads constructor(
         }
     }
 
-    private var onCheckChange: ((Boolean) -> Unit)? = null
+    private var onCheckChange: MutableSet<(Boolean) -> Unit> = mutableSetOf()
 
     private var isChecked = false
 
@@ -56,7 +83,9 @@ class AwesomeCheckbox @JvmOverloads constructor(
     private fun check() {
         animateCheck()
         isChecked = checked.not()
-        onCheckChange?.invoke(checked)
+        onCheckChange.forEach{
+            it(checked)
+        }
     }
 
     private fun animateCheck() {
@@ -104,12 +133,12 @@ class AwesomeCheckbox @JvmOverloads constructor(
     }
 
     fun onCheckChange(action: (Boolean) -> Unit) {
-        onCheckChange = action
+        onCheckChange.add(action)
     }
 
-    enum class Animation {
-        SCALE,
-        FADE,
-        NOPE
+    enum class Animation(val value: Int) {
+        SCALE(0),
+        FADE(1),
+        NOPE(2)
     }
 }
