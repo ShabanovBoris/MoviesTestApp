@@ -63,7 +63,6 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setUpActorsRecycler()
-        binding.tvWebView.initIcon()
 
         viewModel.dataFlow
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
