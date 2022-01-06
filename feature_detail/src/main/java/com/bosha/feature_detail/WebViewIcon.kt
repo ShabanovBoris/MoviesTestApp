@@ -14,7 +14,9 @@ class WebViewIcon @JvmOverloads constructor(
     defaultAttr: Int = 0
 ) : LinearLayout(context, attrs, defaultAttr) {
 
-    private var binding: WebViewCustomBinding? = null
+    private val binding by lazy(LazyThreadSafetyMode.NONE){
+        WebViewCustomBinding.inflate(LayoutInflater.from(context), this)
+    }
     private var color: Int? = null
 
     init {
@@ -24,12 +26,13 @@ class WebViewIcon @JvmOverloads constructor(
             context.theme.resolveAttribute(R.attr.colorOnSecondary, defaultColor, true)
             color = getColor(R.styleable.WebViewIcon_android_tint, defaultColor.data)
         }
-        initIcon()
+        initIconColor()
     }
 
-    private fun initIcon() = WebViewCustomBinding.inflate(LayoutInflater.from(context), this).also {
-        val color = color ?: return@also
-        it.ivIconWeb.drawable.setTint(color)
-        it.tvWebView.setTextColor(color)
+    private fun initIconColor() {
+        color?.let {
+            binding.ivIconWeb.drawable.setTint(it)
+            binding.tvWebView.setTextColor(it)
+        }
     }
 }
