@@ -26,23 +26,33 @@ class MoviesRemoteDataSource @Inject constructor(
     private val actorMapper: Mapper<JsonActor, Actor>,
     private val movieMapper: Mapper<JsonMovie, Movie>,
     private val detailsMapper: Mapper<JsonMovieDetails, MovieDetails>
-    ) : RemoteDataSource {
+) : RemoteDataSource {
     companion object {
         const val baseImagePosterUrl = "https://image.tmdb.org/t/p/w500"
         const val baseImageBackdropUrl = "https://image.tmdb.org/t/p/w780"
     }
 
-    private var genresMap
-    get() = (movieMapper as MovieNetworkMapper).genresMap
-    set(value) {
-        (movieMapper as MovieNetworkMapper).genresMap = value
+    override suspend fun rawQuery(page: Int): List<Movie> {
+        genresMap ?: getGenresMap()
+
+        return getMoviesByPage(page)
+            .map { movieMapper.toDomainEntity(it, page) }
     }
+
+
+
+    private var genresMap
+        get() = (movieMapper as MovieNetworkMapper).genresMap
+        set(value) {
+            (movieMapper as MovieNetworkMapper).genresMap = value
+        }
 
     override fun fetchMovies(): Flow<List<Movie>> =
         flow {
-            //It may be pagination in future
-            getMoviesByPage(1..5) {
-                emit(it)
+            (1..5).forEach {
+                getMoviesByPage(it) { list ->
+                    emit(list)
+                }
             }
         }
             .onStart { genresMap ?: getGenresMap() }
@@ -53,7 +63,7 @@ class MoviesRemoteDataSource @Inject constructor(
         flow { emit(api.getDetails(id)) }
             .zip(getCredits(id)) { details, actors ->
                 (detailsMapper as DetailsNetworkMapper).actors = actors
-                detailsMapper.toDomainEntity(details)
+                detailsMapper.toDomainEntity(details, null)
             }
             .flowOn(dispatcher ?: Dispatchers.Main.immediate)
 
@@ -73,9 +83,12 @@ class MoviesRemoteDataSource @Inject constructor(
         genresMap = mutableMap.toImmutableMap()
     }
 
-    private suspend fun getMoviesByPage(range: IntRange, init: suspend (List<JsonMovie>) -> Unit) {
-        range.forEach {
-            init(api.fetchMovies(it).results)
-        }
+    private suspend fun getMoviesByPage(
+        page: Int,
+        init: (suspend (List<JsonMovie>) -> Unit)? = null
+    ): List<JsonMovie> {
+        val response = api.fetchMovies(page).results
+        init?.invoke(response)
+        return response
     }
 }

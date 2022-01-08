@@ -12,7 +12,7 @@ class DetailsNetworkMapper @Inject constructor(): Mapper<JsonMovieDetails, Movie
 
     var actors: List<Actor>? = null
 
-    override fun toDomainEntity(data: JsonMovieDetails): MovieDetails = MovieDetails(
+    override fun toDomainEntity(data: JsonMovieDetails, page: Int?): MovieDetails = MovieDetails(
     id = data.id,
     title = data.title,
     overview = data.overview ?: "",

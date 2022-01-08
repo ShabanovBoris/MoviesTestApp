@@ -14,4 +14,13 @@
             android:id="@+id/deepLink"
             app:uri="moviesdemo://detail/{id}" />
     </fragment>
+
+    <fragment
+        android:id="@+id/webViewFragment"
+        android:name="com.bosha.feature_detail.ui.webview.WebViewFragment"
+        android:label="WebViewFragment" >
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="moviesdemo://webview/{id}" />
+    </fragment>
 </navigation>

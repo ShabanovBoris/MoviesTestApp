@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class MovieDbMapper @Inject constructor(): Mapper<MovieEntity, Movie> {
 
-    override fun toDomainEntity(data: MovieEntity): Movie =
+    override fun toDomainEntity(data: MovieEntity, page: Int?): Movie =
         Movie(
             id = data.id,
             title = data.title,
@@ -22,7 +22,8 @@ class MovieDbMapper @Inject constructor(): Mapper<MovieEntity, Movie> {
             imageUrl = data.imageUrl,
             releaseDate = data.releaseDate,
             popularity = data.popularity,
-            isLiked = data.isLiked
+            isLiked = data.isLiked,
+            page = data.page
         )
 
 
@@ -37,6 +38,7 @@ class MovieDbMapper @Inject constructor(): Mapper<MovieEntity, Movie> {
             imageUrl = domain.imageUrl,
             releaseDate = domain.releaseDate,
             popularity = domain.popularity,
-            isLiked = domain.isLiked
+            isLiked = domain.isLiked,
+            page = domain.page
         )
 }

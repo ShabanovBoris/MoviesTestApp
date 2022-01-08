@@ -13,10 +13,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
@@ -50,7 +47,6 @@ class DetailViewModel @AssistedInject constructor(
     }
 
     private fun load() = viewModelScope.launch(handler) {
-
         combine(
             getMoviesInteractor.getDetailsById(id),
             getMoviesInteractor.getFavoritesMovies()
@@ -69,20 +65,20 @@ class DetailViewModel @AssistedInject constructor(
             }
     }
 
-    fun addDeleteFavorite(id: String, title: String, isLiked: Boolean) = viewModelScope.launch {
+    fun addOrDeleteFavorite(id: String, title: String, isLiked: Boolean) = viewModelScope.launch {
         if (isLiked) {
-            val movie = try {
+            try {
                 getMoviesInteractor.getCachedMovieById(id)
             } catch (e: Exception) {
-                viewModelScope.launch {
-                    searchMoviesInteractor.searchByTitle(title)
-                        .collect {
-                            if (it.isSuccess) addMoviesInteractor.insertMovies(it.getOrThrow())
-                        }
-                }.join()
-                getMoviesInteractor.getCachedMovieById(id)
+                searchMoviesInteractor.searchByTitle(title).first {
+                    if (it.isSuccess) {
+                        addMoviesInteractor.insertMovies(it.getOrThrow())
+                        val movie = getMoviesInteractor.getCachedMovieById(id)
+                        addMoviesInteractor.insertFavoriteMovie(movie.copy(isLiked = isLiked))
+                    }
+                    true
+                }
             }
-            addMoviesInteractor.insertFavoriteMovie(movie.copy(isLiked = isLiked))
         } else {
             deleteMoviesInteractor.deleteFavorite(id)
         }
@@ -102,7 +98,7 @@ class DetailViewModel @AssistedInject constructor(
             assistedFactory: Factory,
             id: String
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 return assistedFactory.create(id) as T
             }
         }

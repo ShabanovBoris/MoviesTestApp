@@ -38,5 +38,7 @@ data class MovieEntity(
     val popularity: Double,
 
     @ColumnInfo(name = IS_LIKED)
-    val isLiked: Boolean
+    val isLiked: Boolean,
+
+    val page: Int?
 )

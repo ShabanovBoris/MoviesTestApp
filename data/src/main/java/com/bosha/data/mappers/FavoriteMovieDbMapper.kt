@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class FavoriteMovieDbMapper @Inject constructor(): Mapper<FavoriteMovieEntity, Movie> {
 
-    override fun toDomainEntity(data: FavoriteMovieEntity): Movie =
+    override fun toDomainEntity(data: FavoriteMovieEntity, page: Int?): Movie =
         Movie(
             id = data.id,
             title = data.title,

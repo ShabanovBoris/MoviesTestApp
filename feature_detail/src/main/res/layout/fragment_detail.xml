@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     android:id="@+id/detail_container">
 
+    <ImageView
+        android:id="@+id/ib_schedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_schedule"
+        app:layout_constraintEnd_toEndOf="@+id/tv_schedule"
+        app:layout_constraintStart_toStartOf="@+id/tv_schedule"
+        app:layout_constraintTop_toBottomOf="@+id/tv_schedule"
+        app:tint="?colorOnSecondary" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_main_image"
@@ -28,26 +37,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <CheckBox
-        android:id="@+id/ib_favorite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:buttonTint="?colorSecondary"
-        android:button="@drawable/favorite_selector"
-        android:layout_margin="16dp"
+    <com.bosha.utils.view.AwesomeCheckbox
+        android:id="@+id/acb_favorite"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="36dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/ib_schedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_schedule"
-        app:layout_constraintEnd_toEndOf="@+id/tv_schedule"
-        app:layout_constraintStart_toStartOf="@+id/tv_schedule"
-        app:layout_constraintTop_toBottomOf="@+id/tv_schedule"
-        app:tint="?colorOnSecondary" />
 
     <TextView
         android:id="@+id/tv_schedule"
@@ -91,7 +87,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
+        app:layout_constraintGuide_begin="658dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_actors"
@@ -199,5 +195,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/iv_main_image"
         tools:visibility="visible" />
+
+
+    <com.bosha.feature_detail.WebViewIcon
+        android:id="@+id/tv_web_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintTop_toTopOf="@id/guideline"
+        app:layout_constraintStart_toStartOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

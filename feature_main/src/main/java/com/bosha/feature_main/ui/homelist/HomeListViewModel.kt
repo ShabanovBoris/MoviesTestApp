@@ -2,15 +2,17 @@ package com.bosha.feature_main.ui.homelist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.CombinedLoadStates
+import androidx.paging.LoadState
+import androidx.paging.cachedIn
+import androidx.paging.filter
+import com.bosha.data.repositories.PagingRepository
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.GetMoviesInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
@@ -19,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeListViewModel @Inject constructor(
     private val getMoviesInteractor: GetMoviesInteractor,
-    private val addMoviesInteractor: AddMoviesInteractor
+    private val addMoviesInteractor: AddMoviesInteractor,
+    pagingRepository: PagingRepository
 ) : ViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
@@ -34,10 +37,59 @@ class HomeListViewModel @Inject constructor(
         MutableStateFlow(SideEffects.Loading)
     val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
 
+    val pagingFlow = pagingRepository.fetchMoviesPaging()
+        .onEach {
+
+                it.filter {
+                    logcat(LogPriority.ERROR){ it.toString() }
+                    true
+                }
+
+            _sideEffectFlow.value = SideEffects.Loaded
+        }
+        .cachedIn(viewModelScope)
+
+
+    /**
+     * todo delete old logic after add paging
+     */
     init {
-        cacheLoad()
-        updateCache()
+//        cacheLoad()
+//        updateCache()
+
+//        buildList {
+//            add("a")
+//            set(0 , "b")
+//            reverse()
+//        }.asFlow()
+//            .collect()
     }
+
+    /**
+     * initial load does not trigger [source.append], that means we expect the [source.refresh]
+     * only when the [source.append] is not [LoadState.Loading] and wise versa
+     */
+    fun handlePagingLoadState(loadState: CombinedLoadStates) {
+        /** loader when loading new page */
+        if (loadState.source.refresh !is LoadState.Loading)
+            _sideEffectFlow.update {
+                when (val state = loadState.source.append) {
+                    LoadState.Loading -> SideEffects.Loading
+                    is LoadState.NotLoading -> SideEffects.Loaded
+                    is LoadState.Error -> SideEffects.NetworkError(state.error)
+                }
+            }
+        /** loader when loading initial page */
+        if (loadState.source.append !is LoadState.Loading)
+            _sideEffectFlow.update {
+                when (val state = loadState.source.refresh) {
+                    LoadState.Loading -> SideEffects.Loading
+                    is LoadState.NotLoading -> SideEffects.Loaded
+                    is LoadState.Error -> SideEffects.NetworkError(state.error)
+                }
+            }
+    }
+
 
     private fun cacheLoad() = viewModelScope.launch(handler) {
         getMoviesInteractor.getCachedMovies()
@@ -49,15 +101,15 @@ class HomeListViewModel @Inject constructor(
 
     private fun updateCache() = viewModelScope.launch(handler) {
         getMoviesInteractor.fetchMovies()
-            .onEach {
-                if (it.isFailure)
-                    _sideEffectFlow.value = SideEffects.NetworkError(it.exceptionOrNull())
+            .onEach { movie ->
+                if (movie.isFailure)
+                    _sideEffectFlow.update { SideEffects.NetworkError(movie.exceptionOrNull()) }
             }
             .onEach {
                 it.getOrNull()?.let { list ->
                     addMoviesInteractor.insertMovies(list)
                 }
-                _sideEffectFlow.value = SideEffects.Loaded
+                _sideEffectFlow.update { SideEffects.Loaded }
             }
             .collect()
     }
@@ -66,5 +118,6 @@ class HomeListViewModel @Inject constructor(
         object Loading : SideEffects
         object Loaded : SideEffects
         class NetworkError(val t: Throwable?) : SideEffects
+        object Empty : SideEffects
     }
 }

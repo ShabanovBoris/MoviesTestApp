@@ -4,6 +4,7 @@ import com.bosha.data.datasource.local.LocalDataSource
 import com.bosha.data.datasource.local.impl.MovieLocalDataSource
 import com.bosha.data.datasource.remote.RemoteDataSource
 import com.bosha.data.datasource.remote.impl.MoviesRemoteDataSource
+import com.bosha.data.repositories.PagingRepository
 import com.bosha.data.repositories.RepositoryMovieImpl
 import com.bosha.domain.interactors.AddMoviesInteractor
 import com.bosha.domain.interactors.DeleteMoviesInteractor
@@ -27,11 +28,16 @@ interface DataModule {
 
     @Singleton
     @Binds
+    fun bindPagingRepository(repositoryImpl: RepositoryMovieImpl): PagingRepository
+
+    @Singleton
+    @Binds
     fun bindRemoteDataSource(remoteDataSource: MoviesRemoteDataSource): RemoteDataSource
 
     @Singleton
     @Binds
     fun bindLocalDataSource(localDataSource: MovieLocalDataSource): LocalDataSource
+
 
     companion object{
         @Singleton

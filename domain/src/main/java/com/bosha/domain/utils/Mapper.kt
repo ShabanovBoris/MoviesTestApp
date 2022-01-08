@@ -3,12 +3,13 @@ package com.bosha.domain.utils
 
 interface Mapper<DATA, DOMAIN> {
 
-    fun toDomainEntity(data: DATA): DOMAIN
+    fun toDomainEntity(data: DATA, page: Int?): DOMAIN
 
     fun toDataEntity(domain: DOMAIN): DATA
 
     fun toDomainEntityList(list: List<DATA>): List<DOMAIN>{
-        return list.map { toDomainEntity(it) }
+        // page uses only for raw query
+        return list.map { toDomainEntity(it, 0) }
     }
 
     fun toDataEntityList(list: List<DOMAIN>): List<DATA>{

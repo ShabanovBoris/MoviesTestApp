@@ -4,4 +4,5 @@
     <string name="storyline">Story line</string>
     <string name="transition_name">transition_name</string>
     <string name="schedule_movie">Schedule movie</string>
+    <string name="runtime">%d min</string>
 </resources>
