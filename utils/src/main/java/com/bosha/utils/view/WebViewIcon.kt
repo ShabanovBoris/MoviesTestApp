@@ -1,4 +1,4 @@
-package com.bosha.feature_detail
+package com.bosha.utils.view
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
-import com.bosha.feature_detail.databinding.WebViewCustomBinding
+import com.bosha.utils.R
+import com.bosha.utils.databinding.WebViewCustomBinding
 
 class WebViewIcon @JvmOverloads constructor(
     context: Context,

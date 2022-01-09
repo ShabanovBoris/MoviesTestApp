@@ -197,7 +197,7 @@
         tools:visibility="visible" />
 
 
-    <com.bosha.feature_detail.WebViewIcon
+    <com.bosha.utils.view.WebViewIcon
         android:id="@+id/tv_web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

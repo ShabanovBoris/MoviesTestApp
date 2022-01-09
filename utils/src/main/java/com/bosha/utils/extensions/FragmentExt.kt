@@ -1,5 +1,9 @@
 package com.bosha.utils.extensions
 
+import android.view.View
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -24,3 +28,35 @@ fun <T : Fragment> T.onViewLifecycleWhenStarted(block: suspend () -> Unit) =
             block()
         }
     }
+
+fun <T : Fragment> T.hideSystemBars(rootView: View) {
+    val controller = WindowCompat.getInsetsController(requireActivity().window, rootView)
+    controller?.hide(WindowInsetsCompat.Type.navigationBars())
+    controller?.hide(WindowInsetsCompat.Type.statusBars())
+}
+
+fun <T : Fragment> T.showSystemBars(rootView: View) {
+    val controller = WindowCompat.getInsetsController(requireActivity().window, rootView)
+    controller?.show(WindowInsetsCompat.Type.navigationBars())
+    controller?.show(WindowInsetsCompat.Type.statusBars())
+}
+
+fun <T : Fragment> T.hideStatusBar(rootView: View) {
+    val controller = WindowCompat.getInsetsController(requireActivity().window, rootView)
+    controller?.hide(WindowInsetsCompat.Type.statusBars())
+}
+
+fun <T : Fragment> T.applyInsetsFitsSystemWindows(
+    rootView: View,
+    handleInset: (WindowInsetsCompat) -> WindowInsetsCompat
+) {
+    fitsSystemWindows(false)
+    ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
+        handleInset(insets)
+    }
+}
+
+// tell the window that we want to handle/fit any system windows
+fun <T : Fragment> T.fitsSystemWindows(shouldFits: Boolean): Unit =
+    WindowCompat.setDecorFitsSystemWindows(requireActivity().window, shouldFits)
+

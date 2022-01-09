@@ -12,6 +12,7 @@
     <!--Custom colors-->
     <color name="dark">#191926</color>
     <color name="dark_light">#404056</color>
+    <color name="dark_light_transparent">#BC404056</color>
     <color name="accent_bright_color">#FF3466</color>
     <color name="white_alpha_0.5">#80FFFFFF</color>
     <color name="blue_link_color">#3ea6ff</color>

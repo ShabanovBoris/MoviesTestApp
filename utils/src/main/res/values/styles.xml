@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="MainProgressBar" parent="android:Widget.Material.ProgressBar">
+        <item name="android:indeterminateTint">?colorOnPrimary</item>
+        <item name="android:alpha">0.5</item>
+        <item name="android:scaleX">2</item>
+        <item name="android:scaleY">2</item>
+    </style>
+
     <style name="Widget.Movies.AwesomeCheckbox" parent="">
         <item name="android:tint">?android:colorAccent</item>
         <item name="animationType">Scale</item>
     </style>
+
+    <declare-styleable name="WebViewIcon">
+        <attr name="android:tint"/>
+    </declare-styleable>
 </resources>

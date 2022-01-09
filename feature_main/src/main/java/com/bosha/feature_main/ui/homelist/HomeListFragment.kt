@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,6 +15,10 @@ import com.bosha.domain.view.viewcontroller.ViewController
 import com.bosha.domain.view.viewcontroller.createScreen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
+import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
+import com.bosha.utils.extensions.fitsSystemWindows
+import com.bosha.utils.extensions.setMarginTop
+import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
@@ -25,6 +31,10 @@ import kotlinx.coroutines.flow.onEach
 class HomeListFragment : Fragment() {
 
     private val screen: ViewController<FragmentHomeBinding, HomeListViewModel> = createScreen()
+
+    val window by lazy {
+        activity?.window!!
+    }
 
     private val rvAdapter by lazy {
         MovieListPagingAdapter {
@@ -50,6 +60,22 @@ class HomeListFragment : Fragment() {
         initSearchTabNavigation()
         setUpRecycler()
         observeViewModel()
+
+        screen.view {
+            handleInset(fhRoot)
+        }
+    }
+
+    private fun handleInset(view: View) {
+        applyInsetsFitsSystemWindows(view) {
+            screen.view {
+                rvMovieList.setPaddingTop(
+                    rvMovieList.paddingTop + it.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                )
+                tbSearch.setMarginTop( tbSearch.marginTop + it.getInsets(WindowInsetsCompat.Type.statusBars()).top)
+            }
+            it
+        }
     }
 
     private fun observeViewModel() = screen.viewModelInScope { viewModel ->
@@ -69,6 +95,7 @@ class HomeListFragment : Fragment() {
 
     private fun initSearchTabNavigation() = screen.view {
         tbSearch.setOnClickListener {
+            fitsSystemWindows(true)
             navigate {
                 target = NavCommand(Screens.SEARCH)
                 options {}

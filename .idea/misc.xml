@@ -65,7 +65,9 @@
         <entry key="..\:/Project/MoviesDemo/utils/src/main/res/drawable/favorite_selector.xml" value="0.22962962962962963" />
         <entry key="..\:/Project/MoviesDemo/utils/src/main/res/drawable/ic_favorite.xml" value="0.22962962962962963" />
         <entry key="..\:/Project/MoviesDemo/utils/src/main/res/layout/view_awesome_checkbox.xml" value="0.2713541666666667" />
+        <entry key="..\:/Project/MoviesDemo/utils/src/main/res/layout/web_view_custom.xml" value="0.2713541666666667" />
         <entry key="..\:/Sdk/platform-tools/caches/transforms-3/0b86320c71311844fa2230d5c8600c8e/transformed/appcompat-1.3.1/res/drawable/abc_dialog_material_background.xml" value="0.2755208333333333" />
+        <entry key="..\:/Sdk/platforms/android-31/data/res/layout/auto_complete_list.xml" value="0.259375" />
       </map>
     </option>
   </component>

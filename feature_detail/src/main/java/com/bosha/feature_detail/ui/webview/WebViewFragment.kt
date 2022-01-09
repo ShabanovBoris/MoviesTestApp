@@ -6,7 +6,7 @@ import android.view.View
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.Toast
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
 import com.bosha.feature_detail.R
 
@@ -21,14 +21,17 @@ class WebViewFragment: Fragment(R.layout.fragment_webview) {
         setUpWebViewSettings(view)
     }
 
-    //перенести вебвью в фрагмент
     private fun setUpWebViewSettings(view: View){
         val webView = view.findViewById<WebView>(R.id.webview)
+        val loader = view.findViewById<ProgressBar>(R.id.vw_pb_loading)
+
         webView.webChromeClient = object : WebChromeClient() {
             override fun onProgressChanged(view: WebView?, newProgress: Int) {
                 super.onProgressChanged(view, newProgress)
-                if (newProgress == 100)
-                Toast.makeText(requireContext(), "loaded", Toast.LENGTH_SHORT).show() // заменить на норм лоадер
+                if (newProgress == 100) {
+                    loader.visibility = View.GONE
+                    webView.visibility = View.VISIBLE
+                }
             }
 
             override fun onReceivedIcon(view: WebView?, icon: Bitmap?) {
@@ -41,6 +44,10 @@ class WebViewFragment: Fragment(R.layout.fragment_webview) {
         webView.webViewClient = WebViewClient() //если открывается браузер
         webView.settings.javaScriptEnabled = true
 
-        webView.loadUrl("https://www.themoviedb.org/movie/$movieId")
+        webView.loadUrl("$BASE_URL_WEB_VIEW$movieId")
+    }
+
+    companion object {
+        const val BASE_URL_WEB_VIEW = "https://www.themoviedb.org/movie/"
     }
 }
