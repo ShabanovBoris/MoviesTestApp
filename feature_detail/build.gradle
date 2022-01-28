@@ -35,9 +35,10 @@ android {
 }
 dependencies {
     implementation(project(':utils'))
+    implementation(project(':uikit'))
     implementation(project(':tasks'))
-    implementation(project(':data'))
-    implementation(project(':domain'))
+    implementation(project(':core'))
+    implementation(project(':core_data'))
 }
 dependencies {
     implementation Libs.kotlinStdLib
