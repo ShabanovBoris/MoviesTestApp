@@ -15,7 +15,7 @@ import logcat.logcat
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
-class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
+class ViewControllerDefaultImpl<B : ViewBinding, V : ViewModel> private constructor() :
     ViewController<B, V> {
 
     val lifecycleDelegate = ViewLifecycleDelegate(
@@ -39,7 +39,7 @@ class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
     }
 
     private var _binding: B? = null
-    private val binding get() = checkNotNull(_binding) { "call createView() before use binding" }
+    override val binding get() = checkNotNull(_binding) { "binding is null" }
 
     override fun destroyView() {
         _binding = null
@@ -70,7 +70,7 @@ class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
 
     override operator fun invoke(block: ViewController<B, V>.() -> View): View = block()
 
-    override fun view(block: B.() -> Unit) {
+    override fun views(block: B.() -> Unit) {
         binding.block()
     }
 
@@ -90,7 +90,7 @@ class DefaultScreen<B : ViewBinding, V : ViewModel> private constructor() :
             viewModelType: KClass<V>,
             viewBindingType: KClass<B>,
             vmStoreInitializer: () -> ViewModelStoreOwner
-        ) = DefaultScreen<B, V>().also {
+        ) = ViewControllerDefaultImpl<B, V>().also {
 
             it.vmStoreInitializer = vmStoreInitializer
 

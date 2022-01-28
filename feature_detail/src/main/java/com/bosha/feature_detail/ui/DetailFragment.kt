@@ -10,18 +10,26 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import coil.imageLoader
+import coil.load
 import coil.request.ImageRequest
+import com.bosha.domain.entities.Actor
 import com.bosha.domain.entities.MovieDetails
 import com.bosha.feature_detail.R
+import com.bosha.feature_detail.databinding.ActorItemBinding
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.feature_detail.utils.datetime.schedule
+import com.bosha.utils.SimpleAdapter
+import com.bosha.utils.SimpleRvAdapter
+import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
 import com.bosha.utils.extensions.doOnEndTransition
+import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
@@ -60,11 +68,14 @@ class DetailFragment : Fragment() {
     }.root
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setUpActorsRecycler()
-
-        viewModel.dataFlow
+        applyInsetsFitsSystemWindows(view) {
+            binding.detailContainer.setPaddingTop(
+                it.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            )
+            it
+        }
+        viewModel.uiState
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .filterNotNull()
             .onEach(::setUpView)
@@ -97,7 +108,16 @@ class DetailFragment : Fragment() {
     private fun setUpActorsRecycler() {
         binding.rvActors.apply {
             setHasFixedSize(true)
-            adapter = ActorRecyclerAdapter()
+//            adapter = ActorRecyclerAdapter()
+            adapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
+                binding.tvActorFullname.text = item.name
+
+                binding.ivAvatar.load(item.imageUrl) {
+                    crossfade(true)
+                    placeholder(R.drawable.ic_round_person)
+                    error(R.drawable.ic_round_person)
+                }
+            }
         }
     }
 
@@ -113,37 +133,31 @@ class DetailFragment : Fragment() {
         Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
 
-    private fun setUpView(details: MovieDetails) = binding.apply {
-        waitImageLoading(details.imageBackdrop)
+    private fun setUpView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
+        waitImageLoading(uiState.movieDetails.imageBackdrop)
+        setUpActorsRecycler()
+        setUpListeners(uiState.movieDetails)
 
-        (binding.rvActors.adapter as ActorRecyclerAdapter).list = details.actors
+        (binding.rvActors.adapter as SimpleRvAdapter<ActorItemBinding, Actor>).items = uiState.movieDetails.actors
+        tvMainTitle.text = uiState.movieDetails.title
+        tvGenres.text = uiState.genres
+        rbRating.rating = uiState.movieDetails.votes.toFloat()
+        tvRating.text = uiState.movieDetails.votes.toString()
+        tvStory.text = uiState.movieDetails.overview
+        tvRunningTime.text = getString(R.string.runtime, uiState.movieDetails.runtime)
+        acbFavorite.checked = uiState.isFavorite
+    }
 
-        tvMainTitle.text = details.title
-
-        /** genres*/
-        for (g in details.genres) {
-            tvGenres.append(g.name + " ")
-        }
-
-        rbRating.rating = details.votes.toFloat()
-        tvRating.text = details.votes.toString()
-
-        tvStory.text = details.overview
-
-        ibSchedule.setOnClickListener {
+    private fun setUpListeners(details: MovieDetails) {
+        binding.ibSchedule.setOnClickListener {
             schedule { duration ->
                 viewModel.scheduleMovie(details.id.toString(), duration)
             }
         }
-
-        tvRunningTime.text = getString(R.string.runtime, details.runtime)
-
-        acbFavorite.checked = viewModel.movieIsLiked
-        acbFavorite.onCheckChange { isChecked ->
-            viewModel.addOrDeleteFavorite(details.id.toString(), details.title, isChecked)
+        binding.acbFavorite.onCheckChange { isChecked ->
+            viewModel.changeFavoriteState(details.id.toString(), details.title, isChecked)
         }
-
-        tvWebView.setOnClickListener {
+        binding.tvWebView.setOnClickListener {
             navigate {
                 target = NavCommand(Screens.WEB_VIEW).setArgs(details.id.toString())
             }
@@ -155,7 +169,7 @@ class DetailFragment : Fragment() {
             .data(dataUrl)
             .target {
                 ivMainImage.setImageDrawable(it)
-                setFilter(ivMainImage)
+                setBWFilter(ivMainImage)
                 //resume
                 startPostponedEnterTransition()
             }
@@ -164,7 +178,7 @@ class DetailFragment : Fragment() {
     }
 
     // set black-white filter
-    private fun setFilter(image: ImageView) {
+    private fun setBWFilter(image: ImageView) {
         val matrix = ColorMatrix().apply {
             set(
                 floatArrayOf(

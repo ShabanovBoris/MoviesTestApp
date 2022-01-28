@@ -18,6 +18,7 @@ import com.bosha.utils.extensions.waitPreDraw
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
+import com.bosha.utils.observe
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
@@ -36,6 +37,9 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = FragmentSearchBinding.inflate(inflater, container, false).also {
         _binding = it
+        observe(viewModel.errorEvent){
+
+        }
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,3 +110,5 @@ class SearchFragment : Fragment() {
         Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
 }
+
+

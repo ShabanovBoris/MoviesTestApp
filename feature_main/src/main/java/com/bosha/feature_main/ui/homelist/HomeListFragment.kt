@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.core.view.marginTop
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -16,7 +15,7 @@ import com.bosha.domain.view.viewcontroller.createScreen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
-import com.bosha.utils.extensions.fitsSystemWindows
+import com.bosha.utils.extensions.setDecorFitsSystemWindows
 import com.bosha.utils.extensions.setMarginTop
 import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
@@ -32,17 +31,13 @@ class HomeListFragment : Fragment() {
 
     private val screen: ViewController<FragmentHomeBinding, HomeListViewModel> = createScreen()
 
-    val window by lazy {
-        activity?.window!!
-    }
-
     private val rvAdapter by lazy {
         MovieListPagingAdapter {
             navigate {
                 target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
                 extras { addSharedElement(it, Screens.DETAIL.value) }
             }
-            screen.view {
+            screen.views {
                 progressBar.isVisible = true
             }
         }
@@ -61,18 +56,19 @@ class HomeListFragment : Fragment() {
         setUpRecycler()
         observeViewModel()
 
-        screen.view {
+        screen.views {
             handleInset(fhRoot)
         }
     }
 
     private fun handleInset(view: View) {
+        val initialRVInset = screen.binding.rvMovieList.paddingTop
+
         applyInsetsFitsSystemWindows(view) {
-            screen.view {
-                rvMovieList.setPaddingTop(
-                    rvMovieList.paddingTop + it.getInsets(WindowInsetsCompat.Type.statusBars()).top
-                )
-                tbSearch.setMarginTop( tbSearch.marginTop + it.getInsets(WindowInsetsCompat.Type.statusBars()).top)
+            val statusBarInset = it.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            screen.views {
+                rvMovieList.setPaddingTop(initialRVInset + statusBarInset)
+                tbSearch.setMarginTop(statusBarInset)
             }
             it
         }
@@ -93,9 +89,9 @@ class HomeListFragment : Fragment() {
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun initSearchTabNavigation() = screen.view {
+    private fun initSearchTabNavigation() = screen.views {
         tbSearch.setOnClickListener {
-            fitsSystemWindows(true)
+            setDecorFitsSystemWindows(true)
             navigate {
                 target = NavCommand(Screens.SEARCH)
                 options {}
@@ -103,7 +99,7 @@ class HomeListFragment : Fragment() {
         }
     }
 
-    private fun setUpRecycler() = screen.view {
+    private fun setUpRecycler() = screen.views {
         rvMovieList.apply {
             setHasFixedSize(true)
             overScrollMode = View.OVER_SCROLL_IF_CONTENT_SCROLLS
@@ -115,7 +111,7 @@ class HomeListFragment : Fragment() {
         }
     }
 
-    private fun handleSideEffect(effect: HomeListViewModel.SideEffects) = screen.view {
+    private fun handleSideEffect(effect: HomeListViewModel.SideEffects) = screen.views {
         when (effect) {
             HomeListViewModel.SideEffects.Loading -> {
                 progressBar.isVisible = true

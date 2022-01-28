@@ -10,6 +10,8 @@ import kotlinx.coroutines.CoroutineScope
 
 interface ViewController<B : ViewBinding, V : ViewModel> {
 
+    val binding: B
+
     fun inflateView(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -25,7 +27,7 @@ interface ViewController<B : ViewBinding, V : ViewModel> {
     operator fun invoke(block: ViewController<B, V>.() -> View): View
 
     @MainThread
-    fun view(block: B.() -> Unit)
+    fun views(block: B.() -> Unit)
 
     fun viewModel(block: V.() -> Unit)
 

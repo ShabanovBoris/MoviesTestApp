@@ -50,13 +50,12 @@ fun <T : Fragment> T.applyInsetsFitsSystemWindows(
     rootView: View,
     handleInset: (WindowInsetsCompat) -> WindowInsetsCompat
 ) {
-    fitsSystemWindows(false)
+    setDecorFitsSystemWindows(false)
     ViewCompat.setOnApplyWindowInsetsListener(rootView) { _, insets ->
         handleInset(insets)
     }
 }
 
 // tell the window that we want to handle/fit any system windows
-fun <T : Fragment> T.fitsSystemWindows(shouldFits: Boolean): Unit =
+fun <T : Fragment> T.setDecorFitsSystemWindows(shouldFits: Boolean): Unit =
     WindowCompat.setDecorFitsSystemWindows(requireActivity().window, shouldFits)
-

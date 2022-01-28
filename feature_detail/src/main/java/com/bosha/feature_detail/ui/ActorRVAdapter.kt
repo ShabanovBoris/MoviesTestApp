@@ -8,6 +8,10 @@ import com.bosha.domain.entities.Actor
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.ActorItemBinding
 
+@Deprecated(
+    "Для простых адаптеров теперь использую SimpleRvAdapter или расширение SimpleAdapter<B,T>()",
+    replaceWith = ReplaceWith("SimpleRvAdapter")
+)
 class ActorRecyclerAdapter : RecyclerView.Adapter<ActorRecyclerAdapter.ViewHolderDataActor>() {
 
     var list = listOf<Actor>()

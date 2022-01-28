@@ -40,22 +40,18 @@ interface DataModule {
 
 
     companion object{
-        @Singleton
         @Provides
         fun provideGetMoviesInteractor(repository: MovieRepository) =
             GetMoviesInteractor(repository)
 
-        @Singleton
         @Provides
         fun provideAddMoviesInteractor(repository: MovieRepository) =
             AddMoviesInteractor(repository)
 
-        @Singleton
         @Provides
         fun provideDeleteMoviesInteractor(repository: MovieRepository) =
             DeleteMoviesInteractor(repository)
 
-        @Singleton
         @Provides
         fun provideSearchMoviesInteractor(repository: MovieRepository) =
             SearchMoviesInteractor(repository)

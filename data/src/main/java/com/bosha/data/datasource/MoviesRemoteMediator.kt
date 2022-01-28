@@ -12,6 +12,7 @@ import retrofit2.HttpException
 import java.io.IOException
 
 @ExperimentalPagingApi
+@Deprecated("Доработать или удалить")
 class MoviesRemoteMediator(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource

@@ -6,7 +6,7 @@ import androidx.viewbinding.ViewBinding
 
 inline fun <reified B : ViewBinding, reified V : ViewModel> Fragment.createScreen(): ViewController<B, V> {
 
-    val screen = DefaultScreen.get(V::class, B::class) { this }
+    val screen = ViewControllerDefaultImpl.get(V::class, B::class) { this }
 
 
     screen.lifecycleDelegate(this)
@@ -27,7 +27,7 @@ inline fun <reified B : ViewBinding, reified V : ViewModel> Fragment.createScree
  */
 inline fun <reified B : ViewBinding> Fragment.createScreenView(): ViewController<B, Nothing> {
 
-    val screen = DefaultScreen.get(Nothing::class, B::class) { this }
+    val screen = ViewControllerDefaultImpl.get(Nothing::class, B::class) { this }
 
     screen.lifecycleDelegate(this)
 

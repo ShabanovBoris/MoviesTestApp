@@ -39,6 +39,7 @@ class DateTime(parentContext: Context) {
     private fun calculateDuration() {
         val date = requireNotNull(date)
         val time = requireNotNull(time)
+//        1.days.inWholeHours
 
         val timeNow = Calendar.getInstance().timeInMillis
 

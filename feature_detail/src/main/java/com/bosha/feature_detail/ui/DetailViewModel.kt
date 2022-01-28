@@ -32,15 +32,14 @@ class DetailViewModel @AssistedInject constructor(
         throwable.printStackTrace()
     }
 
-    private val _dataFlow: MutableStateFlow<MovieDetails?> = MutableStateFlow(null)
-    val dataFlow get() = _dataFlow.asStateFlow()
+    private var movieIsLiked = false
+
+    private val _uiStateFlow: MutableStateFlow<DetailsUISate?> = MutableStateFlow(null)
+    val uiState get() = _uiStateFlow.asStateFlow()
 
     private val _sideEffectFlow: MutableStateFlow<SideEffects> =
         MutableStateFlow(SideEffects.Loading)
     val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
-
-    var movieIsLiked = false
-        private set
 
     init {
         load()
@@ -59,13 +58,23 @@ class DetailViewModel @AssistedInject constructor(
                 if (it.isFailure)
                     _sideEffectFlow.value = SideEffects.NetworkError(it.exceptionOrNull())
 
-                _dataFlow.value = it.getOrNull()
+                _uiStateFlow.value = it.getOrNull()?.let { details ->
+                    val genres = ""
+                    for (g in details.genres) {
+                        genres.plus(g.name + " ")
+                    }
+                    DetailsUISate(
+                        details,
+                        movieIsLiked,
+                        genres
+                    )
+                }
 
                 _sideEffectFlow.value = SideEffects.Loaded
             }
     }
 
-    fun addOrDeleteFavorite(id: String, title: String, isLiked: Boolean) = viewModelScope.launch {
+    fun changeFavoriteState(id: String, title: String, isLiked: Boolean) = viewModelScope.launch {
         if (isLiked) {
             try {
                 getMoviesInteractor.getCachedMovieById(id)
@@ -103,6 +112,12 @@ class DetailViewModel @AssistedInject constructor(
             }
         }
     }
+
+    data class DetailsUISate(
+        val movieDetails: MovieDetails,
+        val isFavorite: Boolean,
+        val genres: String
+    )
 
     sealed interface SideEffects {
         object Loading : SideEffects
