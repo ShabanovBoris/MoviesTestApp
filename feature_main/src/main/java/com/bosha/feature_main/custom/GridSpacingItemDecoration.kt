@@ -1,4 +1,4 @@
-package com.bosha.feature_main.util
+package com.bosha.feature_main.custom
 
 import android.graphics.Rect
 import android.view.View

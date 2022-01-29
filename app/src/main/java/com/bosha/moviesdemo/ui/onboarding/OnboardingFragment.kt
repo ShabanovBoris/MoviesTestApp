@@ -30,7 +30,6 @@ class OnboardingFragment : Fragment() {
             .apply(::setUpViewPager).root
     }
 
-
     private fun setUpViewPager(binding: FragmentOnboardBinding) {
         binding.viewPager.adapter = OnboardingPagerAdapter {
             toMainScreen()

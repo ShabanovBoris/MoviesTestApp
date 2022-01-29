@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.view.viewcontroller.ViewController
 import com.bosha.domain.view.viewcontroller.createScreen
+import com.bosha.feature_main.custom.GridSpacingItemDecoration
 import com.bosha.feature_main.databinding.FragmentHomeBinding
-import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
 import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand

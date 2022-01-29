@@ -12,8 +12,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.domain.view.viewcontroller.ViewController
 import com.bosha.domain.view.viewcontroller.createScreen
+import com.bosha.feature_main.custom.GridSpacingItemDecoration
 import com.bosha.feature_main.databinding.FragmentHomeBinding
-import com.bosha.feature_main.util.GridSpacingItemDecoration
 import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
 import com.bosha.utils.extensions.setDecorFitsSystemWindows
 import com.bosha.utils.extensions.setMarginTop
