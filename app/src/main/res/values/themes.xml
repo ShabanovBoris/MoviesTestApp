@@ -11,14 +11,16 @@
         <item name="colorOnSecondary">@color/blue_link_color</item>
         <!-- Status bar color. -->
         <item name="statusBarBackground">@android:color/transparent</item>
-        <item name="android:statusBarColor">?colorPrimary</item>
-        <item name="android:navigationBarColor">?colorPrimary</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="bottomBarColor">@color/dark_light_transparent</item>
 
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">?colorPrimaryVariant</item>
         <item name="android:textViewStyle">@style/Widget.MoviesDemo.TextView.Casual</item>
         <item name="android:datePickerDialogTheme">@style/Widget.MoviesDemo.DatePickerStyle</item>
         <item name="android:timePickerDialogTheme">@style/Widget.MoviesDemo.TimePickerStyle</item>
+
     </style>
 
     <style name="Theme.MoviesDemo.MySplash" parent="Theme.SplashScreen">

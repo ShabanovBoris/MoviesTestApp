@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.bosha.utils.view.AwesomeCheckbox
+    <com.bosha.uikit.AwesomeCheckbox
         android:id="@+id/acb_favorite"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -197,7 +197,7 @@
         tools:visibility="visible" />
 
 
-    <com.bosha.feature_detail.WebViewIcon
+    <com.bosha.uikit.WebViewIcon
         android:id="@+id/tv_web_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

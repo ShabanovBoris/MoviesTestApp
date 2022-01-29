@@ -34,11 +34,11 @@ android {
     }
 }
 dependencies {
-    implementation project(':domain')
     implementation project(':utils')
-    implementation project(':data')
 }
 dependencies {
+    implementation project(':core')
+    implementation project(':core_data')
     implementation Libs.kotlinStdLib
     implementation Libs.corektx
     implementation Libs.appcompat

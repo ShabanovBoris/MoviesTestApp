@@ -1,7 +1,7 @@
 package com.bosha.utils.navigation
 
 object NavConstants {
-    val SCHEME = "moviesdemo://"
+    internal val SCHEME = "moviesdemo://"
 }
 
 enum class Screens(val value: String) {

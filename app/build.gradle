@@ -42,11 +42,11 @@ dependencies {
 
     implementation project(':utils')
     implementation project(':tasks')
-    implementation project(':data')
-    implementation project(':domain')
 }
 
 dependencies {
+    implementation project(':core')
+    implementation project(':core_data')
     implementation Libs.kotlinStdLib
     implementation Libs.corektx
     implementation Libs.appcompat

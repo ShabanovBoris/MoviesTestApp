@@ -4,8 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bosha.domain.entities.Movie
 import com.bosha.domain.interactors.SearchMoviesInteractor
+import com.bosha.utils.Event
+import com.bosha.utils.EventEmitter
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.asContextElement
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import logcat.LogPriority
@@ -15,11 +18,16 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val searchMoviesInteractor: SearchMoviesInteractor
-) : ViewModel() {
+) : ViewModel(), EventEmitter {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
         throwable.printStackTrace()
+    }
+
+    val errorEvent = Event<String>()
+    init {
+        errorEvent.emit("qwerty")
     }
 
     private val _dataFlow: MutableStateFlow<List<Movie>?> = MutableStateFlow(null)
@@ -31,8 +39,14 @@ class SearchViewModel @Inject constructor(
     /**
      * Search from local storage when remote returns error
      */
-    fun searchMovies(title: String) = viewModelScope.launch(handler) {
-        _sideEffectFlow.value = SideEffects.Loading
+    fun searchMovies(title: String) {
+        val data = ThreadLocal<Int>()
+
+        viewModelScope.launch(handler + data.asContextElement(44)) {
+            data.get()
+
+
+            _sideEffectFlow.value = SideEffects.Loading
 
             combine(
                 searchMoviesInteractor.searchByTitle(title),
@@ -43,11 +57,12 @@ class SearchViewModel @Inject constructor(
                     local
                 } else remote
             }
-            .onEach {
-                _dataFlow.value = it.getOrNull()
-                _sideEffectFlow.value = SideEffects.Loaded
-            }
-            .collect()
+                .onEach {
+                    _dataFlow.value = it.getOrNull()
+                    _sideEffectFlow.value = SideEffects.Loaded
+                }
+                .collect()
+        }
     }
 
     sealed interface SideEffects {

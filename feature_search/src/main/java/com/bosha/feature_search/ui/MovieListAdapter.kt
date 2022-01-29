@@ -17,7 +17,8 @@ class MovieListAdapter(private val onClick: (View) -> Unit) :
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolderMovie {
-        val view = MovieSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view =
+            MovieSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
         return ViewHolderMovie(view).apply {
             binding.movieCard.setOnClickListener(onClick)
@@ -29,7 +30,8 @@ class MovieListAdapter(private val onClick: (View) -> Unit) :
     }
 
 
-    class ViewHolderMovie(val binding: MovieSearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolderMovie(val binding: MovieSearchItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bindData(movie: Movie) = binding.apply {
 

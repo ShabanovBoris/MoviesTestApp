@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
@@ -14,6 +15,8 @@ import com.bosha.domain.view.viewcontroller.ViewController
 import com.bosha.domain.view.viewcontroller.createScreen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.feature_main.util.GridSpacingItemDecoration
+import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
+import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
 import com.bosha.utils.navigation.navigate
@@ -32,17 +35,17 @@ class FavoriteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = screen{
-
-
         onPreDraw {
-
             setUpRecycler()
-
-            screen.view {
+            screen.views {
                 tbSearch.isGone = true
-                rvMovieList.setPadding(0, 0, 0, 0)
+                applyInsetsFitsSystemWindows(this.root) {
+                    rvMovieList.setPaddingTop(
+                        it.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                    )
+                    it
+                }
             }
-
             screen.viewModelInScope {
                 it.dataFlow
                     .flowWithLifecycle(viewLifecycleOwner.lifecycle)
@@ -54,7 +57,7 @@ class FavoriteFragment : Fragment() {
         inflateView(inflater, container)
     }
 
-    private fun setUpRecycler() = screen.view {
+    private fun setUpRecycler() = screen.views {
         rvMovieList.apply {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(root.context, 2)
@@ -68,7 +71,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    private fun setList(list: List<Movie>?) = screen.view {
+    private fun setList(list: List<Movie>?) = screen.views {
         (rvMovieList.adapter as MovieListAdapter).submitList(list)
     }
 }

@@ -25,6 +25,7 @@ class NotificationSender(private val appContext: Context) {
 
     private val builder by lazy {
         NotificationCompat.Builder(appContext, CHANNEL_ID)
+                // Закоммитил параметры котрые следует уточнить
 //            .setGroup("Timer group")
 //            .setGroupSummary(false)
             .setWhen(Date().time)
