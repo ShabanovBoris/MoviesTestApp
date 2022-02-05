@@ -4,13 +4,13 @@ import com.bosha.core_data.datasource.local.LocalDataSource
 import com.bosha.core_data.datasource.local.impl.MovieLocalDataSource
 import com.bosha.core_data.datasource.remote.RemoteDataSource
 import com.bosha.core_data.datasource.remote.impl.MoviesRemoteDataSource
+import com.bosha.core_data.repositories.PagingRepository
 import com.bosha.core_data.repositories.RepositoryMovieImpl
 import com.bosha.core_domain.interactors.AddMoviesInteractor
 import com.bosha.core_domain.interactors.DeleteMoviesInteractor
 import com.bosha.core_domain.interactors.GetMoviesInteractor
 import com.bosha.core_domain.interactors.SearchMoviesInteractor
 import com.bosha.core_domain.repositories.MovieRepository
-import com.bosha.feature_main.data.repository.PagingRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -28,7 +28,7 @@ interface DataModule {
 
     @Singleton
     @Binds
-    fun bindPagingRepository(repositoryImpl: RepositoryMovieImpl): com.bosha.feature_main.data.repository.PagingRepository
+    fun bindPagingRepository(repositoryImpl: RepositoryMovieImpl): PagingRepository
 
     @Singleton
     @Binds

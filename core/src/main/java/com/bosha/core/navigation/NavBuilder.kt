@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.*
 import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.R
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.NavConstants
 
