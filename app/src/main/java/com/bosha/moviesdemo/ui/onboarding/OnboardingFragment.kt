@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
+import com.bosha.core.navigation.navigate
 import com.bosha.moviesdemo.R
 import com.bosha.moviesdemo.databinding.FragmentOnboardBinding
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
-import com.bosha.utils.navigation.navigate
 import com.google.android.material.tabs.TabLayoutMediator
 
 class OnboardingFragment : Fragment() {

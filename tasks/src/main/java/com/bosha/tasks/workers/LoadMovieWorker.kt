@@ -10,15 +10,13 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ForegroundInfo
 import androidx.work.WorkerParameters
-import com.bosha.domain.entities.MovieDetails
-import com.bosha.domain.interactors.GetMoviesInteractor
+import com.bosha.core_domain.entities.MovieDetails
+import com.bosha.core_domain.interactors.GetMoviesInteractor
 import com.bosha.feature_schedule.R
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.withContext
 import logcat.LogPriority
 import logcat.logcat

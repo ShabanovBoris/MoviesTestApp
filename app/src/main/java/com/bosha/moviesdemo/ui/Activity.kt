@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.bosha.core.onNoInternet
 import com.bosha.moviesdemo.R
-import com.bosha.utils.onNoInternet
 import dagger.hilt.android.AndroidEntryPoint
 
 

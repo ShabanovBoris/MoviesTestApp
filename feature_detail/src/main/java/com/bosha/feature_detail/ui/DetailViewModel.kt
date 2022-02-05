@@ -3,17 +3,20 @@ package com.bosha.feature_detail.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.bosha.domain.entities.MovieDetails
-import com.bosha.domain.interactors.AddMoviesInteractor
-import com.bosha.domain.interactors.DeleteMoviesInteractor
-import com.bosha.domain.interactors.GetMoviesInteractor
-import com.bosha.domain.interactors.SearchMoviesInteractor
-import com.bosha.domain.utils.TaskScheduler
+import com.bosha.core.DataState
+import com.bosha.core.DataType
+import com.bosha.core.TaskScheduler
+import com.bosha.core.view.BaseViewModel
+import com.bosha.core_domain.entities.MovieDetails
+import com.bosha.core_domain.interactors.AddMoviesInteractor
+import com.bosha.core_domain.interactors.DeleteMoviesInteractor
+import com.bosha.core_domain.interactors.GetMoviesInteractor
+import com.bosha.core_domain.interactors.SearchMoviesInteractor
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
@@ -26,7 +29,7 @@ class DetailViewModel @AssistedInject constructor(
     private val deleteMoviesInteractor: DeleteMoviesInteractor,
     private val searchMoviesInteractor: SearchMoviesInteractor,
     private val taskScheduler: TaskScheduler
-) : ViewModel() {
+) : BaseViewModel() {
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
         throwable.printStackTrace()
@@ -34,12 +37,7 @@ class DetailViewModel @AssistedInject constructor(
 
     private var movieIsLiked = false
 
-    private val _uiStateFlow: MutableStateFlow<DetailsUISate?> = MutableStateFlow(null)
-    val uiState get() = _uiStateFlow.asStateFlow()
-
-    private val _sideEffectFlow: MutableStateFlow<SideEffects> =
-        MutableStateFlow(SideEffects.Loading)
-    val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
+    val uiState = DataState<DetailsUISate>()
 
     init {
         load()
@@ -55,22 +53,13 @@ class DetailViewModel @AssistedInject constructor(
             detail
         }
             .collect {
-                if (it.isFailure)
-                    _sideEffectFlow.value = SideEffects.NetworkError(it.exceptionOrNull())
-
-                _uiStateFlow.value = it.getOrNull()?.let { details ->
-                    val genres = ""
-                    for (g in details.genres) {
-                        genres.plus(g.name + " ")
+                it.onFailure {
+                    uiState.emit(DataType.error(it))
+                }.onSuccess {
+                        uiState.emit(
+                            DataType.data(DetailsUISate.create(it, movieIsLiked))
+                        )
                     }
-                    DetailsUISate(
-                        details,
-                        movieIsLiked,
-                        genres
-                    )
-                }
-
-                _sideEffectFlow.value = SideEffects.Loaded
             }
     }
 
@@ -117,11 +106,19 @@ class DetailViewModel @AssistedInject constructor(
         val movieDetails: MovieDetails,
         val isFavorite: Boolean,
         val genres: String
-    )
-
-    sealed interface SideEffects {
-        object Loading : SideEffects
-        object Loaded : SideEffects
-        class NetworkError(val t: Throwable?) : SideEffects
+    ) {
+        companion object {
+            fun create(details: MovieDetails, movieIsLiked: Boolean): DetailsUISate {
+                val genres = ""
+                for (g in details.genres) {
+                    genres.plus(g.name + " ")
+                }
+                return DetailsUISate(
+                    details,
+                    movieIsLiked,
+                    genres
+                )
+            }
+        }
     }
 }

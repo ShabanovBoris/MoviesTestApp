@@ -6,29 +6,30 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bosha.domain.entities.Movie
-import com.bosha.domain.view.viewcontroller.ViewController
-import com.bosha.domain.view.viewcontroller.createScreen
-import com.bosha.feature_main.custom.GridSpacingItemDecoration
+import com.bosha.core.navigation.navigate
+import com.bosha.core.view.BaseFragment
+import com.bosha.core.view.viewcontroller.Screen
+import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_main.databinding.FragmentHomeBinding
+import com.bosha.uikit.GridSpacingItemDecoration
 import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
 import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
-import com.bosha.utils.navigation.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import logcat.LogPriority
+import logcat.logcat
 
 @AndroidEntryPoint
-class FavoriteFragment : Fragment() {
+class FavoriteFragment : BaseFragment<FragmentHomeBinding, FavoriteViewModel>() {
 
-    private val screen: ViewController<FragmentHomeBinding, FavoriteViewModel> = createScreen()
+    override val screen = Screen<FragmentHomeBinding, FavoriteViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,25 +37,30 @@ class FavoriteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = screen{
         onPreDraw {
-            setUpRecycler()
-            screen.views {
-                tbSearch.isGone = true
-                applyInsetsFitsSystemWindows(this.root) {
-                    rvMovieList.setPaddingTop(
-                        it.getInsets(WindowInsetsCompat.Type.statusBars()).top
-                    )
-                    it
-                }
-            }
-            screen.viewModelInScope {
-                it.dataFlow
-                    .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                    .filterNotNull()
-                    .onEach(::setList)
-                    .launchIn(viewLifecycleOwner.lifecycleScope)
-            }
+           logcat(LogPriority.ERROR) { "FavoriteFragment: onCreateView onPreDraw" }
         }
         inflateView(inflater, container)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setUpRecycler()
+        screen.views {
+            tbSearch.isGone = true
+            applyInsetsFitsSystemWindows(this.root) {
+                rvMovieList.setPaddingTop(
+                    it.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                )
+                it
+            }
+        }
+        screen.viewModelInScope {
+            it.dataFlow
+                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .filterNotNull()
+                .onEach(::setList)
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+        }
     }
 
     private fun setUpRecycler() = screen.views {

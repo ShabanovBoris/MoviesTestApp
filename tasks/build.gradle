@@ -34,18 +34,16 @@ android {
     }
 }
 dependencies {
-    implementation project(':utils')
-}
-dependencies {
     implementation project(':core')
     implementation project(':core_data')
+    implementation project(':core_domain')
     implementation Libs.kotlinStdLib
-    implementation Libs.corektx
+    implementation Libs.androidxCorektx
     implementation Libs.appcompat
     implementation Libs.material
     implementation Libs.constraint
     //coroutines
-    implementation Libs.coroutines
+    implementation Libs.coroutinesAndroid
     //hilt
     implementation Libs.hilt
     kapt Libs.hiltCompiler

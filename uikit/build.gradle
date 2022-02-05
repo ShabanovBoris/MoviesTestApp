@@ -33,6 +33,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":core"))
     //navigation
     api Libs.navFragment
     api Libs.navUi

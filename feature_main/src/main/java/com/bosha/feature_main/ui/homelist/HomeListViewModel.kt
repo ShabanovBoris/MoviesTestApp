@@ -4,12 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
-import androidx.paging.cachedIn
-import androidx.paging.filter
-import com.bosha.data.repositories.PagingRepository
-import com.bosha.domain.entities.Movie
-import com.bosha.domain.interactors.AddMoviesInteractor
-import com.bosha.domain.interactors.GetMoviesInteractor
+import com.bosha.core_domain.entities.Movie
+import com.bosha.core_domain.interactors.AddMoviesInteractor
+import com.bosha.core_domain.interactors.GetMoviesInteractor
+import com.bosha.feature_main.data.repository.PagingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.*

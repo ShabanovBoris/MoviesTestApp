@@ -5,7 +5,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import com.bosha.domain.utils.TaskScheduler
+import com.bosha.core.TaskScheduler
 import com.bosha.tasks.workers.LoadMovieWorker
 import com.bosha.tasks.workers.NotifyWorker
 import java.time.Duration
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class TaskSchedulerImpl @Inject constructor(
     private val workManager: WorkManager
-): TaskScheduler{
+): TaskScheduler {
 
     @SuppressLint("NewApi", "UnsafeOptInUsageError")
     override fun scheduleNotification(id: String, delay: Duration){

@@ -2,10 +2,9 @@ package com.bosha.feature_search.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bosha.domain.entities.Movie
-import com.bosha.domain.interactors.SearchMoviesInteractor
-import com.bosha.utils.Event
-import com.bosha.utils.EventEmitter
+import com.bosha.core.EventEmitter
+import com.bosha.core_domain.entities.Movie
+import com.bosha.core_domain.interactors.SearchMoviesInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.asContextElement
@@ -23,11 +22,6 @@ class SearchViewModel @Inject constructor(
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
         throwable.printStackTrace()
-    }
-
-    val errorEvent = Event<String>()
-    init {
-        errorEvent.emit("qwerty")
     }
 
     private val _dataFlow: MutableStateFlow<List<Movie>?> = MutableStateFlow(null)

@@ -33,8 +33,16 @@ android {
 }
 
 dependencies {
+    //navigation
+    api Libs.navFragment
+    api Libs.navUi
+    //github.com/square/logcat
+    api Libs.logcat
+
+    //lifecycle
+    implementation Libs.lifecycleRuntimektx
     //coroutines
-    implementation Libs.coroutines
+    implementation Libs.coroutinesAndroid
 
     //for ScreenView
     implementation Libs.lifecycleViewModelktx
@@ -42,7 +50,7 @@ dependencies {
     implementation Libs.appcompat
     implementation Libs.logcat
     implementation Libs.reflect
-    implementation Libs.corektx
+    implementation Libs.androidxCorektx
 
     testImplementation Libs.junit
 }

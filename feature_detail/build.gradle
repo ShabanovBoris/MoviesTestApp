@@ -34,20 +34,20 @@ android {
     }
 }
 dependencies {
-    implementation(project(':utils'))
     implementation(project(':uikit'))
     implementation(project(':tasks'))
     implementation(project(':core'))
     implementation(project(':core_data'))
+    implementation(project(':core_domain'))
 }
 dependencies {
     implementation Libs.kotlinStdLib
-    implementation Libs.corektx
+    implementation Libs.androidxCorektx
     implementation Libs.appcompat
     implementation Libs.material
     implementation Libs.constraint
     //coroutines
-    implementation Libs.coroutines
+    implementation Libs.coroutinesAndroid
     //lifecycle
     implementation Libs.lifecycleRuntimektx
     implementation Libs.lifecycleViewModelktx

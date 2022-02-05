@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bosha.domain.entities.Movie
+import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.MovieItemBinding
 

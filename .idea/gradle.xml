@@ -7,7 +7,7 @@
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="corretto-11" />
+        <option name="gradleJvm" value="corretto-11 (2)" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
@@ -15,12 +15,12 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core_data" />
+            <option value="$PROJECT_DIR$/core_domain" />
             <option value="$PROJECT_DIR$/feature_detail" />
             <option value="$PROJECT_DIR$/feature_main" />
             <option value="$PROJECT_DIR$/feature_search" />
             <option value="$PROJECT_DIR$/tasks" />
             <option value="$PROJECT_DIR$/uikit" />
-            <option value="$PROJECT_DIR$/utils" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

@@ -1,14 +1,15 @@
 public class Libs {
-    static String kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_ver";
-    static String corektx = "androidx.core:core-ktx:" + Versions.core_version;
-    static String appcompat = "androidx.appcompat:appcompat:1.3.1";
-    static String material = "com.google.android.material:material:1.4.0";
-    static String constraint = "androidx.constraintlayout:constraintlayout:2.1.1";
+    static String kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:" + Versions.kotlin_version;
+    static String androidxCorektx = "androidx.core:core-ktx:" + Versions.coreKtx_version;
+    static String appcompat = "androidx.appcompat:appcompat:1.4.1";
+    static String material = "com.google.android.material:material:1.5.0";
+    static String constraint = "androidx.constraintlayout:constraintlayout:2.1.3";
     //navigation
     static String navFragment = "androidx.navigation:navigation-fragment-ktx:" + Versions.navigation_version;
     static String navUi = "androidx.navigation:navigation-ui-ktx:" + Versions.navigation_version;
     //coroutines
-    static String coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:" + Versions.coroutines_version;
+    static String coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:" + Versions.coroutines_version;
+    static String coroutinesAndroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:" + Versions.coroutines_version;
     //ktx
     static String lifecycleRuntimektx = "androidx.lifecycle:lifecycle-runtime-ktx:2.4.0";
     static String lifecycleViewModelktx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0";
@@ -17,7 +18,7 @@ public class Libs {
     //test
     static String junit = "junit:junit:4.13.2";
     //reflect
-    static String reflect = "org.jetbrains.kotlin:kotlin-reflect:1.5.21";
+    static String reflect = "org.jetbrains.kotlin:kotlin-reflect:" + Versions.kotlin_version;
     //github.com/square/logcat
     static String logcat = "com.squareup.logcat:logcat:0.1";
     //splash
@@ -32,8 +33,8 @@ public class Libs {
     static String room = "androidx.room:room-runtime:" + Versions.room_version;
     static String roomKtx = "androidx.room:room-ktx:" + Versions.room_version;
     static String roomCompiler = "androidx.room:room-compiler:" + Versions.room_version;
-    //kotlin serialization
-    static String kotlinSerial = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0";
+    //java serialization
+    static String kotlinSerial = "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2";
     static String kotlinSerialConverter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0";
     //network
     static String okHttp = "com.squareup.okhttp3:okhttp:" + Versions.okhttp_version;
@@ -46,5 +47,6 @@ public class Libs {
     static String hiltWork = "androidx.hilt:hilt-work:1.0.0";
     static String androidxHiltCompiler = "androidx.hilt:hilt-compiler:1.0.0";
     //Paging
-    static String paging = "androidx.paging:paging-runtime-ktx:3.0.1";
+    static String paging = "androidx.paging:paging-runtime-ktx:3.1.0-beta01";
+    static String pagingRoom = "androidx.room:room-paging:" + Versions.room_version;
 }

@@ -1,9 +1,25 @@
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
     repositories {
+        gradlePluginPortal()
+        maven {
+            url 'https://dl.google.com/dl/android/maven2/'
+            artifactUrls('https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines/1.6.0/kotlinx-coroutines-1.6.0.pom')
+        }
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        maven {
+            url 'https://dl.google.com/dl/android/maven2/'
+            artifactUrls('https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines/1.6.0/kotlinx-coroutines-1.6.0.pom')
+        }
+        google()
+        mavenCentral()
     }
 }
 rootProject.name = "MoviesDemo"
@@ -12,7 +28,7 @@ include ':feature_search'
 include ':feature_main'
 include ':core'
 include ':core_data'
-include ':utils'
+include ':core_domain'
 include ':feature_detail'
 include ':tasks'
 include ':uikit'

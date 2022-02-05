@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bosha.domain.entities.Actor
+import com.bosha.core_domain.entities.Actor
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.ActorItemBinding
 

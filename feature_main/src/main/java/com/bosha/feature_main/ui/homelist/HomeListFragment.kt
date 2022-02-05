@@ -1,35 +1,32 @@
 package com.bosha.feature_main.ui.homelist
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bosha.domain.view.viewcontroller.ViewController
-import com.bosha.domain.view.viewcontroller.createScreen
-import com.bosha.feature_main.custom.GridSpacingItemDecoration
+import com.bosha.core.navigation.navigate
+import com.bosha.core.view.BaseFragment
+import com.bosha.core.view.viewcontroller.Screen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
+import com.bosha.uikit.GridSpacingItemDecoration
 import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
 import com.bosha.utils.extensions.setDecorFitsSystemWindows
 import com.bosha.utils.extensions.setMarginTop
 import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
-import com.bosha.utils.navigation.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChangedBy
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class HomeListFragment : Fragment() {
+class HomeListFragment : BaseFragment<FragmentHomeBinding, HomeListViewModel>() {
 
-    private val screen: ViewController<FragmentHomeBinding, HomeListViewModel> = createScreen()
+    override val screen = Screen<FragmentHomeBinding, HomeListViewModel>()
 
     private val rvAdapter by lazy {
         MovieListPagingAdapter {
@@ -41,14 +38,6 @@ class HomeListFragment : Fragment() {
                 progressBar.isVisible = true
             }
         }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = screen {
-        inflateView(inflater, container)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

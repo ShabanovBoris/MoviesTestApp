@@ -1,4 +1,6 @@
 plugins {
+    id("name.remal.check-dependency-updates") version "1.5.0"
+
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
@@ -40,20 +42,22 @@ dependencies {
     implementation project(':feature_search')
     implementation project(':feature_detail')
 
-    implementation project(':utils')
     implementation project(':tasks')
+
+    implementation project(':core')
+    implementation project(':core_data')
+    implementation project(':core_domain')
+    implementation project(':uikit')
 }
 
 dependencies {
-    implementation project(':core')
-    implementation project(':core_data')
     implementation Libs.kotlinStdLib
-    implementation Libs.corektx
+    implementation Libs.androidxCorektx
     implementation Libs.appcompat
     implementation Libs.material
     implementation Libs.constraint
     //coroutines
-    implementation Libs.coroutines
+    implementation Libs.coroutinesAndroid
     //lifecycle
     implementation Libs.lifecycleRuntimektx
     implementation Libs.lifecycleViewModelktx

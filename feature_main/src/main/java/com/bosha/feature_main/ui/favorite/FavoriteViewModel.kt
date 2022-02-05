@@ -2,14 +2,12 @@ package com.bosha.feature_main.ui.favorite
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.bosha.domain.entities.Movie
-import com.bosha.domain.interactors.GetMoviesInteractor
+import com.bosha.core_domain.entities.Movie
+import com.bosha.core_domain.interactors.GetMoviesInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat

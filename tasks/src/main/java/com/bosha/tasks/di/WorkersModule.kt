@@ -2,7 +2,7 @@ package com.bosha.tasks.di
 
 import android.content.Context
 import androidx.work.WorkManager
-import com.bosha.domain.utils.TaskScheduler
+import com.bosha.core.TaskScheduler
 import com.bosha.tasks.TaskSchedulerImpl
 import dagger.Binds
 import dagger.Module

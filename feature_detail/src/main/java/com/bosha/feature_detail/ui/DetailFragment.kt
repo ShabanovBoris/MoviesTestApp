@@ -14,30 +14,26 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import coil.imageLoader
 import coil.load
 import coil.request.ImageRequest
-import com.bosha.domain.entities.Actor
-import com.bosha.domain.entities.MovieDetails
+import com.bosha.core.navigation.navigate
+import com.bosha.core.observe
+import com.bosha.core_domain.entities.Actor
+import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.ActorItemBinding
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.feature_detail.utils.datetime.schedule
-import com.bosha.utils.SimpleAdapter
-import com.bosha.utils.SimpleRvAdapter
+import com.bosha.uikit.SimpleAdapter
+import com.bosha.uikit.SimpleRvAdapter
 import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
 import com.bosha.utils.extensions.doOnEndTransition
 import com.bosha.utils.extensions.setPaddingTop
 import com.bosha.utils.navigation.NavCommand
 import com.bosha.utils.navigation.Screens
-import com.bosha.utils.navigation.navigate
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -75,16 +71,14 @@ class DetailFragment : Fragment() {
             )
             it
         }
-        viewModel.uiState
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .filterNotNull()
-            .onEach(::setUpView)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.sideEffectFlow
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach(::handleSideEffect)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        observe(
+            viewModel.uiState,
+            onReady = ::setUpView,
+            onLoading = {
+                binding.pbDetailsProgress.isVisible = true
+            },
+            onError = ::showErrorToast
+        )
     }
 
 
@@ -108,7 +102,6 @@ class DetailFragment : Fragment() {
     private fun setUpActorsRecycler() {
         binding.rvActors.apply {
             setHasFixedSize(true)
-//            adapter = ActorRecyclerAdapter()
             adapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
                 binding.tvActorFullname.text = item.name
 
@@ -121,14 +114,6 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun handleSideEffect(effect: DetailViewModel.SideEffects) {
-        when (effect) {
-            DetailViewModel.SideEffects.Loading -> binding.pbDetailsProgress.isVisible = true
-            DetailViewModel.SideEffects.Loaded -> binding.pbDetailsProgress.isVisible = false
-            is DetailViewModel.SideEffects.NetworkError -> showErrorToast(effect.t)
-        }
-    }
-
     private fun showErrorToast(t: Throwable?) {
         Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
@@ -138,7 +123,8 @@ class DetailFragment : Fragment() {
         setUpActorsRecycler()
         setUpListeners(uiState.movieDetails)
 
-        (binding.rvActors.adapter as SimpleRvAdapter<ActorItemBinding, Actor>).items = uiState.movieDetails.actors
+        (binding.rvActors.adapter as SimpleRvAdapter<ActorItemBinding, Actor>).items =
+            uiState.movieDetails.actors
         tvMainTitle.text = uiState.movieDetails.title
         tvGenres.text = uiState.genres
         rbRating.rating = uiState.movieDetails.votes.toFloat()
@@ -146,6 +132,8 @@ class DetailFragment : Fragment() {
         tvStory.text = uiState.movieDetails.overview
         tvRunningTime.text = getString(R.string.runtime, uiState.movieDetails.runtime)
         acbFavorite.checked = uiState.isFavorite
+
+        binding.pbDetailsProgress.isVisible = false
     }
 
     private fun setUpListeners(details: MovieDetails) {

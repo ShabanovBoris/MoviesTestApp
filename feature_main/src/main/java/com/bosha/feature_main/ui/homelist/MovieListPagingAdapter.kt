@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.bosha.domain.entities.Movie
+import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.MovieItemBinding
 import com.bosha.feature_main.ui.favorite.DiffCallback
