@@ -16,9 +16,9 @@ class DispatcherModule {
         const val DISPATCHER_DEFAULT = "dispatcher_default"
     }
 
-    //by default
+    //Main Dispatcher by default
     @Provides
-    fun provideDispatcher(): CoroutineDispatcher = Dispatchers.Main
+    fun provideDispatcher(): CoroutineDispatcher = Dispatchers.Main.immediate
 
     @Named(DISPATCHER_IO)
     @Provides
