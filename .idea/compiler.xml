@@ -4,6 +4,8 @@
     <bytecodeTargetLevel target="1.7">
       <module name="MoviesDemo.app" target="11" />
       <module name="MoviesDemo.buildSrc" target="11" />
+      <module name="MoviesDemo.buildSrc.main" target="11" />
+      <module name="MoviesDemo.buildSrc.test" target="11" />
       <module name="MoviesDemo.core" target="11" />
       <module name="MoviesDemo.core_data" target="11" />
       <module name="MoviesDemo.feature_detail" target="11" />

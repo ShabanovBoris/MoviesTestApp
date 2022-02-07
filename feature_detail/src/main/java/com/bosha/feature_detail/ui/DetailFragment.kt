@@ -73,7 +73,10 @@ class DetailFragment : Fragment() {
         }
         observe(
             viewModel.uiState,
-            onReady = ::setUpView,
+            onReady = {
+                prepareView(it)
+                binding.pbDetailsProgress.isVisible = false
+            },
             onLoading = {
                 binding.pbDetailsProgress.isVisible = true
             },
@@ -99,18 +102,10 @@ class DetailFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun setUpActorsRecycler() {
+    private fun setUpActorsRecycler(recyclerAdapter: SimpleRvAdapter<ActorItemBinding, Actor>) {
         binding.rvActors.apply {
             setHasFixedSize(true)
-            adapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
-                binding.tvActorFullname.text = item.name
-
-                binding.ivAvatar.load(item.imageUrl) {
-                    crossfade(true)
-                    placeholder(R.drawable.ic_round_person)
-                    error(R.drawable.ic_round_person)
-                }
-            }
+            adapter = recyclerAdapter
         }
     }
 
@@ -118,13 +113,23 @@ class DetailFragment : Fragment() {
         Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
     }
 
-    private fun setUpView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
+    private fun prepareView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
+        val recyclerAdapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
+            binding.tvActorFullname.text = item.name
+            binding.ivAvatar.load(item.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_round_person)
+                error(R.drawable.ic_round_person)
+            }
+        }
+        setUpActorsRecycler(recyclerAdapter)
+        recyclerAdapter.items = uiState.movieDetails.actors
         waitImageLoading(uiState.movieDetails.imageBackdrop)
-        setUpActorsRecycler()
         setUpListeners(uiState.movieDetails)
+        setUpView(uiState)
+    }
 
-        (binding.rvActors.adapter as SimpleRvAdapter<ActorItemBinding, Actor>).items =
-            uiState.movieDetails.actors
+    private fun setUpView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
         tvMainTitle.text = uiState.movieDetails.title
         tvGenres.text = uiState.genres
         rbRating.rating = uiState.movieDetails.votes.toFloat()
@@ -132,8 +137,6 @@ class DetailFragment : Fragment() {
         tvStory.text = uiState.movieDetails.overview
         tvRunningTime.text = getString(R.string.runtime, uiState.movieDetails.runtime)
         acbFavorite.checked = uiState.isFavorite
-
-        binding.pbDetailsProgress.isVisible = false
     }
 
     private fun setUpListeners(details: MovieDetails) {
