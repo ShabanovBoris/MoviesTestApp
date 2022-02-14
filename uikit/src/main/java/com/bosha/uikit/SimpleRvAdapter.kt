@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.bosha.utils.extensions.inflateView
+import com.bosha.core.extensions.inflateViewBinding
 import kotlin.reflect.KClass
 
 @Suppress("FunctionName")
@@ -30,7 +30,7 @@ class SimpleRvAdapter<BINDING : ViewBinding, ITEM>(
         parent: ViewGroup,
         viewType: Int
     ): SimpleViewHolder<BINDING, ITEM> {
-        val binding = viewBindingType.inflateView(LayoutInflater.from(parent.context), parent)
+        val binding = viewBindingType.inflateViewBinding(LayoutInflater.from(parent.context), parent)
         return SimpleViewHolder(binding, onBind)
     }
 

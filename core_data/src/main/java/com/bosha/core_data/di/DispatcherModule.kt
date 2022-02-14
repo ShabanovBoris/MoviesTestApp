@@ -1,4 +1,4 @@
-package com.bosha.moviesdemo.di
+package com.bosha.core_data.di
 
 import dagger.Module
 import dagger.Provides

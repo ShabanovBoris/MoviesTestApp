@@ -1,11 +1,11 @@
-package com.bosha.utils.extensions
+package com.bosha.core.extensions
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
 import kotlin.reflect.KClass
 
-fun <T : ViewBinding> KClass<T>.inflateView(
+fun <T : ViewBinding> KClass<T>.inflateViewBinding(
     inflater: LayoutInflater,
     container: ViewGroup?
 ): T {

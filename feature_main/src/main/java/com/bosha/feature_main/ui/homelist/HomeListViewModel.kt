@@ -1,11 +1,11 @@
 package com.bosha.feature_main.ui.homelist
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
 import androidx.paging.filter
+import com.bosha.core.view.BaseViewModel
 import com.bosha.core_data.repositories.PagingRepository
 import com.bosha.core_domain.entities.Movie
 import com.bosha.core_domain.interactors.AddMoviesInteractor
@@ -23,7 +23,7 @@ class HomeListViewModel @Inject constructor(
     private val getMoviesInteractor: GetMoviesInteractor,
     private val addMoviesInteractor: AddMoviesInteractor,
     pagingRepository: PagingRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
@@ -56,13 +56,6 @@ class HomeListViewModel @Inject constructor(
     init {
 //        cacheLoad()
 //        updateCache()
-
-//        buildList {
-//            add("a")
-//            set(0 , "b")
-//            reverse()
-//        }.asFlow()
-//            .collect()
     }
 
     /**

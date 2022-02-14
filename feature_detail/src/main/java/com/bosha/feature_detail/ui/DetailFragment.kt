@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
@@ -17,8 +16,13 @@ import androidx.fragment.app.viewModels
 import coil.imageLoader
 import coil.load
 import coil.request.ImageRequest
+import com.bosha.core.extensions.applyInsetsFitsSystemWindows
+import com.bosha.core.extensions.doOnEndTransition
+import com.bosha.core.extensions.setPaddingTop
+import com.bosha.core.navigation.NavCommand
+import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
-import com.bosha.core.observe
+import com.bosha.core.observeInScope
 import com.bosha.core_domain.entities.Actor
 import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.feature_detail.R
@@ -27,11 +31,6 @@ import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.feature_detail.utils.datetime.schedule
 import com.bosha.uikit.SimpleAdapter
 import com.bosha.uikit.SimpleRvAdapter
-import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
-import com.bosha.utils.extensions.doOnEndTransition
-import com.bosha.utils.extensions.setPaddingTop
-import com.bosha.utils.navigation.NavCommand
-import com.bosha.utils.navigation.Screens
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -71,7 +70,7 @@ class DetailFragment : Fragment() {
             )
             it
         }
-        observe(
+        observeInScope(
             viewModel.uiState,
             onReady = {
                 prepareView(it)
@@ -80,7 +79,7 @@ class DetailFragment : Fragment() {
             onLoading = {
                 binding.pbDetailsProgress.isVisible = true
             },
-            onError = ::showErrorToast
+            onError = ::showErrorStub
         )
     }
 
@@ -109,8 +108,8 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun showErrorToast(t: Throwable?) {
-        Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
+    private fun showErrorStub(t: Throwable?) {
+        // todo добавить stubView с ошибкой
     }
 
     private fun prepareView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
@@ -158,12 +157,18 @@ class DetailFragment : Fragment() {
     private fun waitImageLoading(dataUrl: String) = binding.apply {
         val request = ImageRequest.Builder(requireContext())
             .data(dataUrl)
-            .target {
-                ivMainImage.setImageDrawable(it)
-                setBWFilter(ivMainImage)
-                //resume
-                startPostponedEnterTransition()
-            }
+            .target(
+                onError = {
+                    //resume after [postponeEnterTransition]
+                    startPostponedEnterTransition()
+                },
+                onSuccess = {
+                    ivMainImage.setImageDrawable(it)
+                    setBWFilter(ivMainImage)
+                    //resume after [postponeEnterTransition]
+                    startPostponedEnterTransition()
+                }
+            )
             .build()
         requireContext().imageLoader.enqueue(request)
     }

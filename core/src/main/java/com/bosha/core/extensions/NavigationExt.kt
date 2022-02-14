@@ -1,4 +1,4 @@
-package com.bosha.utils.extensions
+package com.bosha.core.extensions
 
 import androidx.transition.Transition
 import com.google.android.material.transition.MaterialContainerTransform

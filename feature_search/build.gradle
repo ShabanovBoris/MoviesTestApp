@@ -37,7 +37,8 @@ android {
 dependencies {
     implementation project(':core')
     implementation(project(':core_data',))
-    implementation(project(':core_domain',))
+    implementation(project(':core_domain'))
+    implementation(project(':uikit'))
 }
 dependencies {
     implementation Libs.kotlinStdLib

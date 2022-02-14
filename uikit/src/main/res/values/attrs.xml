@@ -9,4 +9,8 @@
         <!--override-->
         <attr name="android:tint"/>
     </declare-styleable>
+
+    <declare-styleable name="Theme.MoviesDemo">
+        <attr name="bottomBarColor" format="reference|color"></attr>
+    </declare-styleable>
 </resources>

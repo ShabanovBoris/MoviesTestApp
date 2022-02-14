@@ -1,4 +1,4 @@
-package com.bosha.utils.extensions
+package com.bosha.core.extensions
 
 import android.view.View
 import androidx.core.view.ViewCompat

@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.HostMenuFragment"
+    tools:context=".ui.BottomBarContainerFragment"
     tools:viewBindingIgnore="true">
 
     <androidx.fragment.app.FragmentContainerView
@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/graph_main" />
+        app:navGraph="@navigation/graph_home_screen" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
