@@ -34,12 +34,6 @@ class ScreenControllerDelegate<B : ViewBinding, V : ViewModel>(
     }
 }
 
-inline fun <reified B : ViewBinding> Fragment.screenWithoutViewModel(): ScreenController<B, Nothing> {
-    val screen = ScreenControllerDefaultImpl.create(Nothing::class, B::class) { this }
-    screen.lifecycleDelegate(this)
-    //Change the lifecycle to viewLifecycle when it be ready
-    screen.onPreDraw {
-        screen.lifecycleDelegate(viewLifecycleOwner)
-    }
-    return screen
+inline fun <reified B : ViewBinding> Fragment.screenWithoutViewModel(): ScreenControllerDelegate<B, Nothing> {
+    return ScreenControllerDelegate(Nothing::class, B::class)
 }

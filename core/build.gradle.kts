@@ -36,6 +36,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":uikit"))
     //navigation
     api(Dependencies.navFragment)
     api(Dependencies.navUi)

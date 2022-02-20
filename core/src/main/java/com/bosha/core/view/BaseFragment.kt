@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.bosha.core.navigation.NavCommand
+import com.bosha.core.navigation.Screens
+import com.bosha.core.navigation.navigate
 import com.bosha.core.observeEvent
 import com.bosha.core.view.viewcontroller.ScreenController
 import kotlinx.coroutines.CoroutineScope
@@ -29,17 +30,36 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
         savedInstanceState: Bundle?
     ): View = screen {
         onPreDraw {
-            logcat(priority = LogPriority.INFO, OPEN_SCREEN_LOG_TAG){ this@BaseFragment::class.java.name }
+            logcat(
+                priority = LogPriority.INFO,
+                OPEN_SCREEN_LOG_TAG
+            ) { this@BaseFragment::class.java.name }
         }
         inflateView(inflater, container)
     }
 
-    @CallSuper
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        observeEvent(viewModel.errorEvent){
-            // TODO make separate fragment
-            Toast.makeText(requireContext(), it.text, Toast.LENGTH_SHORT).show()
+        observeEvent(viewModel.errorEvent) {
+            navigate {
+                target = NavCommand(Screens.ERROR).setArgs(
+                    it.textRes.toString(),
+                    it.descriptionRes.toString(),
+                    it.imageRes.toString()
+                )
+                options {
+
+                }
+            }
+
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        logcat(
+            priority = LogPriority.INFO,
+            CLOSE_SCREEN_LOG_TAG
+        ) { this@BaseFragment::class.java.name }
     }
 
     fun doInScope(block: suspend CoroutineScope.() -> Unit) {
@@ -48,7 +68,8 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
         }
     }
 
-    companion object{
+    companion object {
         private const val OPEN_SCREEN_LOG_TAG = "OPEN_SCREEN_LOG_TAG"
+        private const val CLOSE_SCREEN_LOG_TAG = "CLOSE_SCREEN_LOG_TAG"
     }
 }

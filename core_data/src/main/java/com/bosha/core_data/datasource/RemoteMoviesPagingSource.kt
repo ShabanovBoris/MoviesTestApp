@@ -36,6 +36,7 @@ class RemoteMoviesPagingSource @Inject constructor(
                 )
             } catch (e: Exception) {
                 Log.e(this.toString(), "load: ${e.message}")
+                return LoadResult.Error(e)
             }
         }
 

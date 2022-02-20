@@ -7,7 +7,7 @@ import com.bosha.core.DataState
 import com.bosha.core.TaskScheduler
 import com.bosha.core.TypedState
 import com.bosha.core.view.BaseViewModel
-import com.bosha.core.view.ErrorConfig
+import com.bosha.core.view.showError
 import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.core_domain.interactors.AddMoviesInteractor
 import com.bosha.core_domain.interactors.DeleteMoviesInteractor
@@ -63,7 +63,7 @@ class DetailViewModel @AssistedInject constructor(
                 it
                     .onFailure { error ->
                         uiState.emit(TypedState.error(error))
-                        errorEvent.emit(ErrorConfig(error.message.orEmpty()))
+                        showError()
                     }
                     .onSuccess {
                         uiState.emitData(DetailsUISate(it, movieIsLiked))

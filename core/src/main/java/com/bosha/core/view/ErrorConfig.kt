@@ -1,7 +1,24 @@
 package com.bosha.core.view
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import com.bosha.core.R
+
 data class ErrorConfig(
-    val text: String? = "",
-    val description: String? = null,
-    val imageRes: String? = null
-)
+    @StringRes val textRes: Int,
+    @StringRes val descriptionRes: Int,
+    @DrawableRes val imageRes: Int
+) {
+    companion object {
+        val commonErrorConfig: ErrorConfig =
+            ErrorConfig(
+                R.string.default_error_text,
+                R.string.default_error_description,
+                R.drawable.ic_default_error
+            )
+    }
+}
+
+fun BaseViewModel.showError(errorConfig: ErrorConfig = ErrorConfig.commonErrorConfig) {
+    errorEvent.emit(errorConfig)
+}

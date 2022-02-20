@@ -11,9 +11,10 @@
 
     <include app:graph="@navigation/graph_detail"/>
 
+    <include app:graph="@navigation/error_graph"/>
+
     <fragment
         android:id="@+id/onboardingFragment"
         android:name="com.bosha.moviesdemo.ui.onboarding.OnboardingFragment"
         android:label="OnboardingFragment" />
-
 </navigation>

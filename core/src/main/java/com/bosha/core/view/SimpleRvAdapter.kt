@@ -1,4 +1,4 @@
-package com.bosha.uikit
+package com.bosha.core.view
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater

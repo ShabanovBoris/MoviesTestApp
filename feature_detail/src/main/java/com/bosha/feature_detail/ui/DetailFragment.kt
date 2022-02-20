@@ -23,14 +23,15 @@ import com.bosha.core.navigation.NavCommand
 import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
 import com.bosha.core.observeInScope
+import com.bosha.core.view.ErrorConfig
+import com.bosha.core.view.SimpleAdapter
+import com.bosha.core.view.SimpleRvAdapter
 import com.bosha.core_domain.entities.Actor
 import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.ActorItemBinding
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.feature_detail.utils.datetime.schedule
-import com.bosha.uikit.SimpleAdapter
-import com.bosha.uikit.SimpleRvAdapter
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -41,15 +42,15 @@ class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = checkNotNull(_binding)
 
-    private val movieId: String by lazy {
-        requireNotNull(requireArguments().getString("id"))
+    private val movieId: String? by lazy {
+        requireArguments().getString("id")
     }
 
     @Inject
     lateinit var viewModelAssistedFactory: DetailViewModel.Factory
 
     private val viewModel by viewModels<DetailViewModel> {
-        DetailViewModel.provideFactory(viewModelAssistedFactory, movieId)
+        DetailViewModel.provideFactory(viewModelAssistedFactory, movieId ?: "-1")
     }
 
     override fun onCreateView(
@@ -79,7 +80,9 @@ class DetailFragment : Fragment() {
             onLoading = {
                 binding.pbDetailsProgress.isVisible = true
             },
-            onError = ::showErrorStub
+            onError = {
+                showErrorStub()
+            }
         )
     }
 
@@ -108,8 +111,16 @@ class DetailFragment : Fragment() {
         }
     }
 
-    private fun showErrorStub(t: Throwable?) {
+    private fun showErrorStub() {
         // todo добавить stubView с ошибкой
+        val config = ErrorConfig.commonErrorConfig
+        navigate {
+            target = NavCommand(Screens.ERROR).setArgs(
+                config.textRes.toString(),
+                config.descriptionRes.toString(),
+                config.imageRes.toString()
+            )
+        }
     }
 
     private fun prepareView(uiState: DetailViewModel.DetailsUISate) = binding.apply {

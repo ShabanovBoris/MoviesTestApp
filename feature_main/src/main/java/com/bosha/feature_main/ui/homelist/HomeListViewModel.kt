@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
-import androidx.paging.filter
 import com.bosha.core.view.BaseViewModel
+import com.bosha.core.view.showError
 import com.bosha.core_data.repositories.PagingRepository
 import com.bosha.core_domain.entities.Movie
 import com.bosha.core_domain.interactors.AddMoviesInteractor
@@ -39,11 +39,10 @@ class HomeListViewModel @Inject constructor(
 
     val pagingFlow = pagingRepository.fetchMoviesPaging()
         .onEach {
-
-                it.filter {
-                    logcat(LogPriority.ERROR){ it.toString() }
-                    true
-                }
+//                it.filter {
+//                    logcat(LogPriority.ERROR){ it.toString() }
+//                    true
+//                }
 
             _sideEffectFlow.value = SideEffects.Loaded
         }
@@ -64,12 +63,15 @@ class HomeListViewModel @Inject constructor(
      */
     fun handlePagingLoadState(loadState: CombinedLoadStates) {
         /** loader when loading new page */
+        logcat("PAGING_STATE") { loadState.toString() }
         if (loadState.source.refresh !is LoadState.Loading)
             _sideEffectFlow.update {
                 when (val state = loadState.source.append) {
                     LoadState.Loading -> SideEffects.Loading
                     is LoadState.NotLoading -> SideEffects.Loaded
-                    is LoadState.Error -> SideEffects.NetworkError(state.error)
+                    is LoadState.Error -> {
+                        SideEffects.NetworkError(state.error)
+                    }
                 }
             }
         /** loader when loading initial page */
@@ -78,7 +80,10 @@ class HomeListViewModel @Inject constructor(
                 when (val state = loadState.source.refresh) {
                     LoadState.Loading -> SideEffects.Loading
                     is LoadState.NotLoading -> SideEffects.Loaded
-                    is LoadState.Error -> SideEffects.NetworkError(state.error)
+                    is LoadState.Error -> {
+                        showError()
+                        SideEffects.NetworkError(state.error)
+                    }
                 }
             }
     }
