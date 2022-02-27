@@ -6,7 +6,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
-    id("org.jetbrains.kotlin.plugin.serialization") version "${VersionsKt.kotlin_version}"
+    id("org.jetbrains.kotlin.plugin.serialization") version VersionsKt.kotlin_version
 }
 
 

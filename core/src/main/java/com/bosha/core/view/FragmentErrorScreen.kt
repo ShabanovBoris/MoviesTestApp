@@ -29,7 +29,7 @@ class FragmentErrorScreen : BaseFragment<FragmentCommonErrorBinding, Nothing>() 
             navigate {
                 target = NavCommand(Screens.MAIN)
                 options {
-                    popUpTo(getNavGraphHost())
+                    popUpTo(getHostNavGraphId())
                 }
             }
         }

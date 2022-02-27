@@ -23,11 +23,11 @@ class Activity : AppCompatActivity(), HostNavControllerHolder {
         }
     }
 
-    override fun getNavController(): NavController {
+    override fun getHostNavController(): NavController {
         return findNavController(R.id.nav_graph_application)
     }
 
-    override fun getHostNavGraph(): Int {
+    override fun getHostNavGraphId(): Int {
         return R.id.nav_graph_application
     }
 }

@@ -2,14 +2,14 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/graph_main"
+    android:id="@+id/graph_bottombar_container"
     app:startDestination="@id/bottomBarContainerFragment">
 
 
     <fragment
         android:id="@+id/bottomBarContainerFragment"
         android:name="com.bosha.feature_main.ui.BottomBarContainerFragment"
-        android:label="fragment_main"
+        android:label="fragment_bottombar_container"
         tools:layout="@layout/fragment_bottom_bar_container">
         <deepLink app:uri="moviesdemo://main" />
     </fragment>

@@ -9,6 +9,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
+import com.bosha.core.extensions.printHierarchyTrace
 import com.bosha.core.navigation.NavCommand
 import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
@@ -39,6 +40,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        printHierarchyTrace()
         observeEvent(viewModel.errorEvent) {
             navigate {
                 target = NavCommand(Screens.ERROR).setArgs(
