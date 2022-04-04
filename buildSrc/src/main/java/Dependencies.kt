@@ -1,5 +1,7 @@
+@Deprecated("All dependencies declared in Version catalog")
 object Dependencies {
      val kotlinStdLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${VersionsKt.kotlin_version}"
+     val kotlinStdLibLatest = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:latest.release"
      val androidxCorektx = "androidx.core:core-ktx:${VersionsKt.coreKtx_version}"
      val appcompat = "androidx.appcompat:appcompat:1.4.1"
      val material = "com.google.android.material:material:1.5.0"

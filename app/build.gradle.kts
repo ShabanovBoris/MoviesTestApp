@@ -39,46 +39,57 @@ android {
     }
 }
 dependencies {
-    implementation(project(":feature_main"))
-    implementation(project(":feature_search"))
+    projects.apply {
+        implementation(featureMain)
+        implementation(featureSearch)
+    }
     implementation(project(":feature_detail"))
-
     implementation(project(":tasks"))
-
     implementation(project(":core"))
     implementation(project(":core_data"))
     implementation(project(":core_domain"))
     implementation(project(":uikit"))
-}
+//    projects{
+//        implementation(this)
+//    }
+//    implementation(project(":uikit"))
+//    add("implementation",project(":uikit"))
 
+//    implementation(platform())
+}
+dependencies.constraints {
+
+}
 dependencies {
-    implementation(Dependencies.kotlinStdLib)
-    implementation(Dependencies.androidxCorektx)
-    implementation(Dependencies.appcompat)
-    implementation(Dependencies.material)
-    implementation(Dependencies.constraint)
-    //coroutines
-    implementation(Dependencies.coroutinesAndroid)
-    //lifecycle
-    implementation(Dependencies.lifecycleRuntimektx)
-    implementation(Dependencies.lifecycleViewModelktx)
-    //hilt
-    implementation(Dependencies.hilt)
-    kapt(Dependencies.hiltCompiler)
-    kapt(Dependencies.androidxHiltCompiler)
-    //splash
-    implementation(Dependencies.splashScreen)
-    //room
-    implementation(Dependencies.room)
-    implementation(Dependencies.roomKtx)
-    kapt(Dependencies.roomCompiler)
-    //serialization
-    implementation(Dependencies.kotlinSerial)
-    implementation(Dependencies.kotlinSerialConverter)
-    //network
-    implementation(Dependencies.okHttp)
-    implementation(Dependencies.retrofit)
-    implementation(Dependencies.logInterceptor)
+    Dependencies.apply {
+        implementation(kotlinStdLib)
+        implementation(androidxCorektx)
+        implementation(appcompat)
+        implementation(material)
+        implementation(constraint)
+        //coroutines
+        implementation(coroutinesAndroid)
+        //lifecycle
+        implementation(lifecycleRuntimektx)
+        implementation(lifecycleViewModelktx)
+        //hilt
+        implementation(hilt)
+        kapt(hiltCompiler)
+        kapt(androidxHiltCompiler)
+        //splash
+        implementation(splashScreen)
+        //room
+        implementation(room)
+        implementation(roomKtx)
+        kapt(roomCompiler)
+        //serialization
+        implementation(kotlinSerial)
+        implementation(kotlinSerialConverter)
+        //network
+        implementation(okHttp)
+        implementation(retrofit)
+        implementation(logInterceptor)
+    }
 
     //app start up
     implementation("androidx.startup:startup-runtime:1.1.0")

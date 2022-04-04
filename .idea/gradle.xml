@@ -4,6 +4,18 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/../my-build-logic" name="my-build-logic">
+                <projects>
+                  <project path="$PROJECT_DIR$/../my-build-logic" />
+                  <project path="$PROJECT_DIR$/../my-build-logic/java-plugins" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="testRunner" value="GRADLE" />
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -24,9 +36,10 @@
             <option value="$PROJECT_DIR$/img" />
             <option value="$PROJECT_DIR$/tasks" />
             <option value="$PROJECT_DIR$/uikit" />
+            <option value="$PROJECT_DIR$/../my-build-logic" />
+            <option value="$PROJECT_DIR$/../my-build-logic/java-plugins" />
           </set>
         </option>
-        <option name="resolveModulePerSourceSet" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

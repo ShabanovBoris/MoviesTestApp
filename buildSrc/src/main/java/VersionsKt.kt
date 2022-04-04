@@ -1,3 +1,4 @@
+@Deprecated("All versions declared in Version catalog")
 object VersionsKt {
     val kotlin_version = "1.6.10"
     val coreKtx_version = "1.7.0"

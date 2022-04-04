@@ -9,8 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.imageLoader
@@ -123,9 +125,19 @@ class DetailFragment : Fragment() {
         }
     }
 
+    //tests
+//    val bjbb by viewModels<DetailViewModel> ({})
+//    PhoneNumberUtils.
     private fun prepareView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
         val recyclerAdapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
-            binding.tvActorFullname.text = item.name
+            val params = TextViewCompat.getTextMetricsParams(binding.tvActorFullname)
+
+//            val precomputedText = PrecomputedTextCompat.create(item.name, params) // on workerthread
+//            TextViewCompat.setPrecomputedText(binding.tvActorFullname, precomputedText)
+
+            val precomputedTextFuture = PrecomputedTextCompat.getTextFuture(item.name, params, null)
+            binding.tvActorFullname.setTextFuture(precomputedTextFuture)
+
             binding.ivAvatar.load(item.imageUrl) {
                 crossfade(true)
                 placeholder(R.drawable.ic_round_person)

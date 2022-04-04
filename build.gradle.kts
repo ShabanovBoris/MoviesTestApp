@@ -3,7 +3,7 @@ buildscript {
     val daggerVer: String by extra
     val kotlinVer: String by extra
     dependencies {
-        classpath("com.android.tools.build:gradle:7.1.1")
+        classpath("com.android.tools.build:gradle:7.3.0-alpha07")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVer")
         classpath("com.google.dagger:hilt-android-gradle-plugin:$daggerVer")
     }
@@ -13,6 +13,9 @@ buildscript {
     }
 }
 
+tasks.register("clean") {
+    rootProject.buildDir.delete()
+}
 
 //plugins {
 //    id 'com.android.application' version '7.1.0-rc01' apply false
