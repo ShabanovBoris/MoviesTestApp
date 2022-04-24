@@ -1,11 +1,10 @@
 plugins {
-    id("my-android-library")
+    id(androidLibraryConvention)
 }
 
-dependencies {
-    //navigation
-    api(Dependencies.navFragment)
-    api(Dependencies.navUi)
-    //github.com/square/logcat
-    api(Dependencies.logcat)
-}
+api(
+   libs.androidxCorektx,
+   libs.appcompat,
+   libs.material,
+   libs.constraint,
+)

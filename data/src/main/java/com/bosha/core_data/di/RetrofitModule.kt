@@ -26,12 +26,14 @@ class RetrofitModule {
 
     @Provides
     fun provideOkHttpClient(
-        interceptor: Interceptor,
+        apiKeyInterceptor: Interceptor,
         loggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient =
         OkHttpClient().newBuilder().apply {
-            addInterceptor(loggingInterceptor)
-            addNetworkInterceptor(interceptor)
+            if (BuildConfig.DEBUG){
+                addInterceptor(loggingInterceptor)
+            }
+            addNetworkInterceptor(apiKeyInterceptor)
         }.build()
 
     @Provides

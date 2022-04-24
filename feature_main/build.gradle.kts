@@ -1,32 +1,34 @@
+@Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
-    id("my-android-library")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id(androidLibraryConvention)
+    id(libs.plugins.kotlinKaptPlugin.get().pluginId)
+    id(libs.plugins.hiltAndroidPlugin.get().pluginId)
 }
+impl(
+    projects.uikit,
+    projects.core,
+    projects.data,
+    projects.domain
+)
 
-dependencies {
-    implementation(project(":uikit"))
-
-    implementation(project(":core"))
-    implementation(project(":core_data"))
-    implementation(project(":core_domain"))
-}
-dependencies {
-    implementation(Dependencies.kotlinStdLibLatest)
-    implementation(Dependencies.androidxCorektx)
-    implementation(Dependencies.appcompat)
-    implementation(Dependencies.material)
-    implementation(Dependencies.constraint)
+impl(
+    libs.coil,
+    libs.kotlinStdLib,
+    libs.androidxCorektx,
+    libs.appcompat,
+    libs.material,
+    libs.constraint,
     //coroutines
-    implementation(Dependencies.coroutinesAndroid)
+    libs.coroutinesAndroid,
     //lifecycle
-    implementation(Dependencies.lifecycleRuntimektx)
-    implementation(Dependencies.lifecycleViewModelktx)
+    libs.lifecycleRuntimektx,
+    libs.lifecycleViewModelktx,
     //hilt
-    implementation(Dependencies.hilt)
-    kapt(Dependencies.hiltCompiler)
-    //coil
-    implementation(Dependencies.coil)
+    libs.hilt
+)
 
-    testImplementation(Dependencies.junit)
+dependencies {
+    kapt(libs.hiltCompiler)
+
+    testImplementation(libs.junit)
 }

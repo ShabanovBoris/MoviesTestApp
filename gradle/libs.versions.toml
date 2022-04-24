@@ -1,5 +1,5 @@
 [versions]
-kotlin_version = "1.6.10"
+kotlin_version = "1.6.20"
 coreKtx_version = "1.7.0"
 navigation_version = "2.4.0-beta02"
 room_version = "2.4.1"
@@ -7,6 +7,8 @@ retrofit_version = "2.9.0"
 okhttp_version = "5.0.0-alpha.2"
 dagger_version = "2.40.5"
 coroutines_version = "1.6.0"
+gradle_version = "7.3.0-alpha09"
+
 
 [libraries]
 kotlinStdLib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin_version" }
@@ -76,8 +78,17 @@ androidxHiltCompiler = { module = "androidx.hilt:hilt-compiler", version = "1.0.
 paging = { module = "androidx.paging:paging-runtime-ktx", version = "3.1.0-beta01" }
 pagingRoom = { module = "androidx.room:room-paging", version.ref = "room_version" }
 
+#Plugin Classhpath
+hiltClasspath = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "dagger_version" }
 
 #[bundle]
 # a bundle of libraries
 # coroutines = ["coroutinesCore", "androidCoroutines", ...]
-#[plugins]
+[plugins]
+androidApplicationGradlePlugin = { id = "com.android.application", version.ref = "gradle_version" }
+androidLibraryGradlePlugon = { id = "com.android.library", version.ref = "gradle_version" }
+kotlinGradlePlugon = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin_version" }
+
+kotlinSerializationPlugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin_version" }
+hiltAndroidPlugin = { id = "dagger.hilt.android.plugin", version.ref = "gradle_version" }
+kotlinKaptPlugin = { id = "kotlin-kapt", version.ref = "kotlin_version" }

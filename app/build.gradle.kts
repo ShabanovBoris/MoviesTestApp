@@ -1,54 +1,22 @@
+@Suppress("DSL_SCOPE_VIOLATION", "UnstableApiUsage")
 plugins {
+    id(androidApplicationConvention)
     id("name.remal.check-dependency-updates") version "1.5.0"
-    id("com.android.application")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("dagger.hilt.android.plugin")
+    id(libs.plugins.kotlinKaptPlugin.get().pluginId)
+    id(libs.plugins.hiltAndroidPlugin.get().pluginId)
 }
 
-android {
-    compileSdk = 31
-
-    defaultConfig {
-        applicationId = "com.bosha.moviesdemo"
-        minSdk = 24
-        targetSdk = 31
-        versionCode = 1
-        versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-            )
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        viewBinding = true
-    }
-}
 dependencies {
     projects.apply {
         implementation(featureMain)
         implementation(featureSearch)
+        implementation(featureDetail)
+        implementation(core)
+        implementation(data)
+        implementation(domain)
+        implementation(tasks)
+        implementation(uikit)
     }
-    implementation(project(":feature_detail"))
-    implementation(project(":tasks"))
-    implementation(project(":core"))
-    implementation(project(":core_data"))
-    implementation(project(":core_domain"))
-    implementation(project(":uikit"))
 //    projects{
 //        implementation(this)
 //    }
@@ -61,8 +29,10 @@ dependencies.constraints {
 
 }
 dependencies {
-    Dependencies.apply {
-        implementation(kotlinStdLib)
+//    "demoImplementation"("com.google.firebase:firebase-ads:9.8.0")
+
+
+    libs.apply {
         implementation(androidxCorektx)
         implementation(appcompat)
         implementation(material)

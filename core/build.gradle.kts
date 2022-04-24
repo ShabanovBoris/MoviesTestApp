@@ -1,27 +1,27 @@
 plugins {
-    id("my-android-library")
+    id(androidLibraryConvention)
 }
 
+
 dependencies {
-    implementation(project(":uikit"))
+    implementation(projects.uikit)
     //navigation
-    api(Dependencies.navFragment)
-    api(Dependencies.navUi)
+    api(libs.navFragment)
+    api(libs.navUi)
     //github.com/square/logcat
-    api(Dependencies.logcat)
+    api(libs.logcat)
 
     //lifecycle
-    implementation(Dependencies.lifecycleRuntimektx)
+    implementation(libs.lifecycleRuntimektx)
     //coroutines
-    implementation(Dependencies.coroutinesAndroid)
+    implementation(libs.coroutinesAndroid)
 
     //for ScreenView
-    implementation(Dependencies.lifecycleViewModelktx)
-    implementation(Dependencies.lifecycleRuntimektx)
-    implementation(Dependencies.appcompat)
-    implementation(Dependencies.logcat)
-    implementation(Dependencies.reflect)
-    implementation(Dependencies.androidxCorektx)
+    implementation(libs.lifecycleViewModelktx)
+    implementation(libs.lifecycleRuntimektx)
+    implementation(libs.appcompat)
+    implementation(libs.androidxCorektx)
+    implementation(libs.reflect)
 
-    testImplementation(Dependencies.junit)
+    testImplementation(libs.junit)
 }
