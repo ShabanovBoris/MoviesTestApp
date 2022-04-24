@@ -1,46 +1,27 @@
 package com.bosha.feature_main.ui.favorite
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bosha.core.extensions.applyInsetsFitsSystemWindows
+import com.bosha.core.extensions.setPaddingTop
+import com.bosha.core.navigation.NavCommand
+import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
+import com.bosha.core.observeInScope
 import com.bosha.core.view.BaseFragment
-import com.bosha.core.view.viewcontroller.Screen
+import com.bosha.core.view.viewcontroller.screen
 import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.uikit.GridSpacingItemDecoration
-import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
-import com.bosha.utils.extensions.setPaddingTop
-import com.bosha.utils.navigation.NavCommand
-import com.bosha.utils.navigation.Screens
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import logcat.LogPriority
-import logcat.logcat
 
 @AndroidEntryPoint
 class FavoriteFragment : BaseFragment<FragmentHomeBinding, FavoriteViewModel>() {
 
-    override val screen = Screen<FragmentHomeBinding, FavoriteViewModel>()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View = screen{
-        onPreDraw {
-           logcat(LogPriority.ERROR) { "FavoriteFragment: onCreateView onPreDraw" }
-        }
-        inflateView(inflater, container)
-    }
+    override val screen by screen<FragmentHomeBinding, FavoriteViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,13 +35,7 @@ class FavoriteFragment : BaseFragment<FragmentHomeBinding, FavoriteViewModel>() 
                 it
             }
         }
-        screen.viewModelInScope {
-            it.dataFlow
-                .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-                .filterNotNull()
-                .onEach(::setList)
-                .launchIn(viewLifecycleOwner.lifecycleScope)
-        }
+        observeInScope(viewModel.movies, onReady = ::setList)
     }
 
     private fun setUpRecycler() = screen.views {
@@ -78,6 +53,7 @@ class FavoriteFragment : BaseFragment<FragmentHomeBinding, FavoriteViewModel>() 
     }
 
     private fun setList(list: List<Movie>?) = screen.views {
+        list ?: return@views
         (rvMovieList.adapter as MovieListAdapter).submitList(list)
     }
 }

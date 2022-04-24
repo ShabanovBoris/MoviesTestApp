@@ -5,28 +5,25 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bosha.core.extensions.applyInsetsFitsSystemWindows
+import com.bosha.core.extensions.setDecorFitsSystemWindows
+import com.bosha.core.extensions.setMarginTop
+import com.bosha.core.extensions.setPaddingTop
+import com.bosha.core.navigation.NavCommand
+import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
 import com.bosha.core.view.BaseFragment
-import com.bosha.core.view.viewcontroller.Screen
+import com.bosha.core.view.viewcontroller.screen
 import com.bosha.feature_main.databinding.FragmentHomeBinding
 import com.bosha.uikit.GridSpacingItemDecoration
-import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
-import com.bosha.utils.extensions.setDecorFitsSystemWindows
-import com.bosha.utils.extensions.setMarginTop
-import com.bosha.utils.extensions.setPaddingTop
-import com.bosha.utils.navigation.NavCommand
-import com.bosha.utils.navigation.Screens
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.distinctUntilChangedBy
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class HomeListFragment : BaseFragment<FragmentHomeBinding, HomeListViewModel>() {
 
-    override val screen = Screen<FragmentHomeBinding, HomeListViewModel>()
+    override val screen by screen<FragmentHomeBinding, HomeListViewModel>()
 
     private val rvAdapter by lazy {
         MovieListPagingAdapter {
@@ -34,25 +31,20 @@ class HomeListFragment : BaseFragment<FragmentHomeBinding, HomeListViewModel>() 
                 target = NavCommand(Screens.DETAIL).setArgs(it.transitionName)
                 extras { addSharedElement(it, Screens.DETAIL.value) }
             }
-            screen.views {
-                progressBar.isVisible = true
-            }
+            binding.progressBar.isVisible = true
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initSearchTabNavigation()
         setUpRecycler()
         observeViewModel()
-
-        screen.views {
-            handleInset(fhRoot)
-        }
+        applyStatusBarInsetsToViews(binding.fhRoot)
     }
 
-    private fun handleInset(view: View) {
-        val initialRVInset = screen.binding.rvMovieList.paddingTop
-
+    private fun applyStatusBarInsetsToViews(view: View) {
+        val initialRVInset = binding.rvMovieList.paddingTop
         applyInsetsFitsSystemWindows(view) {
             val statusBarInset = it.getInsets(WindowInsetsCompat.Type.statusBars()).top
             screen.views {
@@ -63,19 +55,18 @@ class HomeListFragment : BaseFragment<FragmentHomeBinding, HomeListViewModel>() 
         }
     }
 
-    private fun observeViewModel() = screen.viewModelInScope { viewModel ->
-        viewModel.pagingFlow
-            .onEach { rvAdapter.submitData(it) }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.sideEffectFlow
-            .onEach(::handleSideEffect)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        rvAdapter.loadStateFlow
-            .distinctUntilChangedBy { it.source }
-            .onEach(viewModel::handlePagingLoadState)
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+    private fun observeViewModel() {
+        doInScope {
+            viewModel.pagingFlow.collect(rvAdapter::submitData)
+        }
+        doInScope {
+            viewModel.sideEffectFlow.collect(::handleSideEffect)
+        }
+        doInScope {
+            rvAdapter.loadStateFlow
+                .distinctUntilChangedBy { it.source }
+                .collect(viewModel::handlePagingLoadState)
+        }
     }
 
     private fun initSearchTabNavigation() = screen.views {

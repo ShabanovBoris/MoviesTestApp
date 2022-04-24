@@ -14,7 +14,7 @@ interface OnboardingScreen {
 
     fun showOnboardingIfNeed(onShow: () -> View, onSkip: () -> View?): View?
 
-    class Base : OnboardingScreen {
+    class GreetingScreen : OnboardingScreen {
         private var fragmentRef = WeakReference<Fragment>(null)
         private val fragment get() = checkNotNull(fragmentRef.get())
 

@@ -1,4 +1,4 @@
-package com.bosha.utils.navigation
+package com.bosha.core.navigation
 
 data class NavCommand(
     val screen: Screens,

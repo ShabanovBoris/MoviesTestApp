@@ -1,4 +1,4 @@
-package com.bosha.utils.extensions
+package com.bosha.core.extensions
 
 import android.view.View
 import androidx.core.view.ViewCompat
@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
+import logcat.logcat
 
 fun <T : Fragment> T.waitPreDraw() {
     /**
@@ -59,3 +61,14 @@ fun <T : Fragment> T.applyInsetsFitsSystemWindows(
 // tell the window that we want to handle/fit any system windows
 fun <T : Fragment> T.setDecorFitsSystemWindows(shouldFits: Boolean): Unit =
     WindowCompat.setDecorFitsSystemWindows(requireActivity().window, shouldFits)
+
+
+fun <T : Fragment> T.printHierarchyTrace() {
+    val trace = StringBuilder()
+    findNavController().backQueue.forEachIndexed { index, entry ->
+        trace.append("$index: ")
+        trace.append(entry.destination.displayName.split("/").last())
+        trace.append(" ")
+    }
+    logcat("HierarchyTrace") { trace.toString() }
+}

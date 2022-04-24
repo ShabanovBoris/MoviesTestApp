@@ -8,30 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import coil.imageLoader
 import coil.load
 import coil.request.ImageRequest
+import com.bosha.core.extensions.applyInsetsFitsSystemWindows
+import com.bosha.core.extensions.doOnEndTransition
+import com.bosha.core.extensions.setPaddingTop
+import com.bosha.core.navigation.NavCommand
+import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
-import com.bosha.core.observe
+import com.bosha.core.observeInScope
+import com.bosha.core.view.ErrorConfig
+import com.bosha.core.view.SimpleAdapter
+import com.bosha.core.view.SimpleRvAdapter
 import com.bosha.core_domain.entities.Actor
 import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.feature_detail.R
 import com.bosha.feature_detail.databinding.ActorItemBinding
 import com.bosha.feature_detail.databinding.FragmentDetailBinding
 import com.bosha.feature_detail.utils.datetime.schedule
-import com.bosha.uikit.SimpleAdapter
-import com.bosha.uikit.SimpleRvAdapter
-import com.bosha.utils.extensions.applyInsetsFitsSystemWindows
-import com.bosha.utils.extensions.doOnEndTransition
-import com.bosha.utils.extensions.setPaddingTop
-import com.bosha.utils.navigation.NavCommand
-import com.bosha.utils.navigation.Screens
 import com.google.android.material.transition.MaterialContainerTransform
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -42,15 +44,15 @@ class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = checkNotNull(_binding)
 
-    private val movieId: String by lazy {
-        requireNotNull(requireArguments().getString("id"))
+    private val movieId: String? by lazy {
+        requireArguments().getString("id")
     }
 
     @Inject
     lateinit var viewModelAssistedFactory: DetailViewModel.Factory
 
     private val viewModel by viewModels<DetailViewModel> {
-        DetailViewModel.provideFactory(viewModelAssistedFactory, movieId)
+        DetailViewModel.provideFactory(viewModelAssistedFactory, movieId ?: "-1")
     }
 
     override fun onCreateView(
@@ -71,13 +73,18 @@ class DetailFragment : Fragment() {
             )
             it
         }
-        observe(
+        observeInScope(
             viewModel.uiState,
-            onReady = ::setUpView,
+            onReady = {
+                prepareView(it)
+                binding.pbDetailsProgress.isVisible = false
+            },
             onLoading = {
                 binding.pbDetailsProgress.isVisible = true
             },
-            onError = ::showErrorToast
+            onError = {
+                showErrorStub()
+            }
         )
     }
 
@@ -99,32 +106,52 @@ class DetailFragment : Fragment() {
         super.onDestroyView()
     }
 
-    private fun setUpActorsRecycler() {
+    private fun setUpActorsRecycler(recyclerAdapter: SimpleRvAdapter<ActorItemBinding, Actor>) {
         binding.rvActors.apply {
             setHasFixedSize(true)
-            adapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
-                binding.tvActorFullname.text = item.name
-
-                binding.ivAvatar.load(item.imageUrl) {
-                    crossfade(true)
-                    placeholder(R.drawable.ic_round_person)
-                    error(R.drawable.ic_round_person)
-                }
-            }
+            adapter = recyclerAdapter
         }
     }
 
-    private fun showErrorToast(t: Throwable?) {
-        Toast.makeText(requireContext(), "${t?.message}", Toast.LENGTH_LONG).show()
+    private fun showErrorStub() {
+        // todo добавить stubView с ошибкой
+        val config = ErrorConfig.commonErrorConfig
+        navigate {
+            target = NavCommand(Screens.ERROR).setArgs(
+                config.textRes.toString(),
+                config.descriptionRes.toString(),
+                config.imageRes.toString()
+            )
+        }
+    }
+
+    //tests
+//    val bjbb by viewModels<DetailViewModel> ({})
+//    PhoneNumberUtils.
+    private fun prepareView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
+        val recyclerAdapter = SimpleAdapter<ActorItemBinding, Actor> { binding, item ->
+            val params = TextViewCompat.getTextMetricsParams(binding.tvActorFullname)
+
+//            val precomputedText = PrecomputedTextCompat.create(item.name, params) // on workerthread
+//            TextViewCompat.setPrecomputedText(binding.tvActorFullname, precomputedText)
+
+            val precomputedTextFuture = PrecomputedTextCompat.getTextFuture(item.name, params, null)
+            binding.tvActorFullname.setTextFuture(precomputedTextFuture)
+
+            binding.ivAvatar.load(item.imageUrl) {
+                crossfade(true)
+                placeholder(R.drawable.ic_round_person)
+                error(R.drawable.ic_round_person)
+            }
+        }
+        setUpActorsRecycler(recyclerAdapter)
+        recyclerAdapter.items = uiState.movieDetails.actors
+        waitImageLoading(uiState.movieDetails.imageBackdrop)
+        setUpListeners(uiState.movieDetails)
+        setUpView(uiState)
     }
 
     private fun setUpView(uiState: DetailViewModel.DetailsUISate) = binding.apply {
-        waitImageLoading(uiState.movieDetails.imageBackdrop)
-        setUpActorsRecycler()
-        setUpListeners(uiState.movieDetails)
-
-        (binding.rvActors.adapter as SimpleRvAdapter<ActorItemBinding, Actor>).items =
-            uiState.movieDetails.actors
         tvMainTitle.text = uiState.movieDetails.title
         tvGenres.text = uiState.genres
         rbRating.rating = uiState.movieDetails.votes.toFloat()
@@ -132,8 +159,6 @@ class DetailFragment : Fragment() {
         tvStory.text = uiState.movieDetails.overview
         tvRunningTime.text = getString(R.string.runtime, uiState.movieDetails.runtime)
         acbFavorite.checked = uiState.isFavorite
-
-        binding.pbDetailsProgress.isVisible = false
     }
 
     private fun setUpListeners(details: MovieDetails) {
@@ -155,12 +180,18 @@ class DetailFragment : Fragment() {
     private fun waitImageLoading(dataUrl: String) = binding.apply {
         val request = ImageRequest.Builder(requireContext())
             .data(dataUrl)
-            .target {
-                ivMainImage.setImageDrawable(it)
-                setBWFilter(ivMainImage)
-                //resume
-                startPostponedEnterTransition()
-            }
+            .target(
+                onError = {
+                    //resume after [postponeEnterTransition]
+                    startPostponedEnterTransition()
+                },
+                onSuccess = {
+                    ivMainImage.setImageDrawable(it)
+                    setBWFilter(ivMainImage)
+                    //resume after [postponeEnterTransition]
+                    startPostponedEnterTransition()
+                }
+            )
             .build()
         requireContext().imageLoader.enqueue(request)
     }

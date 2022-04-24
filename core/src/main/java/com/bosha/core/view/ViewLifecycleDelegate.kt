@@ -1,8 +1,7 @@
 package com.bosha.core.view
 
-import androidx.lifecycle.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import kotlin.properties.Delegates
 
 
@@ -25,17 +24,10 @@ class ViewLifecycleDelegate(
         this.lifecycleOwner = lifecycleOwner
     }
 
-    fun doInLifecycleScope(block: suspend CoroutineScope.() -> Unit) {
-        lifecycle.coroutineScope.launch {
-            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED, block)
-        }
-    }
-
     override fun onCreate(owner: LifecycleOwner) {
         super.onCreate(owner)
         doOnCreateView?.invoke()
     }
-
 
     override fun onDestroy(owner: LifecycleOwner) {
         super.onDestroy(owner)

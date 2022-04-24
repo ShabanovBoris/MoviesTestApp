@@ -11,13 +11,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bosha.core.extensions.onViewLifecycleWhenStarted
+import com.bosha.core.extensions.waitPreDraw
+import com.bosha.core.navigation.NavCommand
+import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
 import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_search.databinding.FragmentSearchBinding
-import com.bosha.utils.extensions.onViewLifecycleWhenStarted
-import com.bosha.utils.extensions.waitPreDraw
-import com.bosha.utils.navigation.NavCommand
-import com.bosha.utils.navigation.Screens
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*

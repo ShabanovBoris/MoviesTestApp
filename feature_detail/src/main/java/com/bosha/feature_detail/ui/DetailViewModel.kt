@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.bosha.core.DataState
-import com.bosha.core.DataType
 import com.bosha.core.TaskScheduler
+import com.bosha.core.TypedState
 import com.bosha.core.view.BaseViewModel
+import com.bosha.core.view.showError
 import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.core_domain.interactors.AddMoviesInteractor
 import com.bosha.core_domain.interactors.DeleteMoviesInteractor
@@ -22,6 +23,7 @@ import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
 import java.time.Duration
+import javax.inject.Provider
 
 class DetailViewModel @AssistedInject constructor(
     @Assisted private val id: String,
@@ -29,7 +31,7 @@ class DetailViewModel @AssistedInject constructor(
     private val addMoviesInteractor: AddMoviesInteractor,
     private val deleteMoviesInteractor: DeleteMoviesInteractor,
     private val searchMoviesInteractor: SearchMoviesInteractor,
-    private val taskScheduler: TaskScheduler
+    private val taskScheduler: Provider<TaskScheduler>
 ) : BaseViewModel() {
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
@@ -45,6 +47,10 @@ class DetailViewModel @AssistedInject constructor(
     }
 
     private fun load() = viewModelScope.launch(handler) {
+//        runWithLoading(config){
+//            usecase()
+//        }.onSuccess()
+//            .onFailer()...
         combine(
             getMoviesInteractor.getDetailsById(id),
             getMoviesInteractor.getFavoritesMovies()
@@ -54,37 +60,38 @@ class DetailViewModel @AssistedInject constructor(
             detail
         }
             .collect {
-                it.onFailure {
-                    uiState.emit(DataType.error(it))
-                }.onSuccess {
-                        uiState.emit(
-                            DataType.data(DetailsUISate.create(it, movieIsLiked))
-                        )
+                it
+                    .onFailure { error ->
+                        uiState.emit(TypedState.error(error))
+                        showError()
+                    }
+                    .onSuccess {
+                        uiState.emitData(DetailsUISate(it, movieIsLiked))
                     }
             }
     }
 
     fun changeFavoriteState(id: String, title: String, isLiked: Boolean) = viewModelScope.launch {
-        if (isLiked) {
-            try {
-                getMoviesInteractor.getCachedMovieById(id)
-            } catch (e: Exception) {
-                searchMoviesInteractor.searchByTitle(title).first {
-                    if (it.isSuccess) {
-                        addMoviesInteractor.insertMovies(it.getOrThrow())
-                        val movie = getMoviesInteractor.getCachedMovieById(id)
-                        addMoviesInteractor.insertFavoriteMovie(movie.copy(isLiked = isLiked))
-                    }
-                    true
-                }
-            }
-        } else {
+        if (!isLiked) {
             deleteMoviesInteractor.deleteFavorite(id)
+            return@launch
+        }
+        try {
+            getMoviesInteractor.getCachedMovieById(id)
+        } catch (e: Exception) {
+            searchMoviesInteractor.searchByTitle(title).first {
+                if (it.isSuccess) {
+                    addMoviesInteractor.insertMovies(it.getOrThrow())
+                    val movie = getMoviesInteractor.getCachedMovieById(id)
+                    addMoviesInteractor.insertFavoriteMovie(movie.copy(isLiked = isLiked))
+                }
+                true
+            }
         }
     }
 
     fun scheduleMovie(id: String, duration: Duration) {
-        taskScheduler.scheduleNotification(id, duration)
+        taskScheduler.get().scheduleNotification(id, duration)
     }
 
     @AssistedFactory
@@ -105,21 +112,8 @@ class DetailViewModel @AssistedInject constructor(
 
     data class DetailsUISate(
         val movieDetails: MovieDetails,
-        val isFavorite: Boolean,
-        val genres: String
+        val isFavorite: Boolean
     ) {
-        companion object {
-            fun create(details: MovieDetails, movieIsLiked: Boolean): DetailsUISate {
-                val genres = ""
-                for (g in details.genres) {
-                    genres.plus(g.name + " ")
-                }
-                return DetailsUISate(
-                    details,
-                    movieIsLiked,
-                    genres
-                )
-            }
-        }
+        val genres get() = movieDetails.genres.joinToString(" ") { it.name }
     }
 }

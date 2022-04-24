@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/error_graph"
+    app:startDestination="@id/fragmentErrorScreen">
+
+    <fragment
+        android:id="@+id/fragmentErrorScreen"
+        android:name="com.bosha.core.view.FragmentErrorScreen"
+        android:label="FragmentErrorScreen" >
+
+        <deepLink
+            android:id="@+id/deepLink"
+            app:uri="moviesdemo://error/{textRes}/{descriptionRes}/{imageRes}" />
+    </fragment>
+</navigation>

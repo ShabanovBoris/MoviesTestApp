@@ -1,43 +1,51 @@
 package com.bosha.core
 
+import androidx.annotation.MainThread
+import androidx.annotation.WorkerThread
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
  * Класс для создания наблюдаемого состояния
  */
-class DataState<T>(initial: DataType<T> = DataType.Empty) {
+class DataState<T>(initial: TypedState<T> = TypedState.Empty) {
     private val stateFlow = MutableStateFlow(initial)
 
     val flow get() = stateFlow.asStateFlow()
 
-    internal fun set(value: DataType<T>) {
+    internal fun setValue(value: TypedState<T>) {
         stateFlow.tryEmit(value)
+    }
+
+    internal fun safeUpdate(value: TypedState<T>) {
+        //compareAndSet
+        stateFlow.update { value }
     }
 }
 
-fun <T> Fragment.observe(
+fun <T> Fragment.observeInScope(
     dataState: DataState<T>,
     onError: (Throwable) -> Unit = {},
     onDefault: () -> Unit = {},
     onEmpty: () -> Unit = {},
     onLoading: () -> Unit = {},
-    onReady: (T) -> Unit,
+    onReady: (T) -> Unit = {},
 ) {
-    lifecycle.coroutineScope.launch {
+    viewLifecycleOwner.lifecycleScope.launch {
         repeatOnLifecycle(Lifecycle.State.CREATED) {
             dataState.flow.collect {
                 when (it) {
-                    is DataType.Data -> onReady(it.data)
-                    DataType.Default -> onDefault()
-                    DataType.Empty -> onEmpty()
-                    is DataType.Error -> onError(it.error)
-                    DataType.Loading -> onLoading()
+                    is TypedState.Data -> onReady(it.data)
+                    TypedState.Default -> onDefault()
+                    TypedState.Empty -> onEmpty()
+                    is TypedState.Error -> onError(it.error)
+                    TypedState.Loading -> onLoading()
                 }
             }
         }
@@ -45,11 +53,18 @@ fun <T> Fragment.observe(
 }
 
 interface DataStateEmitter {
-    fun <T> DataState<T>.emit(value: DataType<T>) {
-        set(value)
+    @MainThread
+    fun <T> DataState<T>.emit(value: TypedState<T>) {
+        setValue(value)
     }
 
-    fun <T> DataState<T>.update(assign: () -> (DataType<T>)) {
-        set(assign())
+    @MainThread
+    fun <T> DataState<T>.emitData(value: T) {
+        setValue(TypedState.data(value))
+    }
+
+    @WorkerThread
+    fun <T> DataState<T>.safeUpdate(promiseValue: () -> (TypedState<T>)) {
+        safeUpdate(promiseValue())
     }
 }
