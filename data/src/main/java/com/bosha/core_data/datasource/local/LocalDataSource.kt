@@ -16,6 +16,8 @@ interface LocalDataSource {
 
     suspend fun clearData()
 
+    suspend fun refresh(list: List<Movie>)
+
     suspend fun insertMovies(list: List<Movie>)
 
     suspend fun insertFavoriteMovie(movie: Movie)

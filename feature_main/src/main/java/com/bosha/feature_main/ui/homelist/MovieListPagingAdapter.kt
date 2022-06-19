@@ -25,31 +25,35 @@ class MovieListPagingAdapter(private val onClick: (card: View) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: ViewHolderPagerMovie, position: Int) {
-        val item = getItem(position) ?: return
+        val item = getItem(position)
         holder.bindData(item)
     }
 
-    class ViewHolderPagerMovie(val binding: MovieItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolderPagerMovie(val binding: MovieItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bindData(movie: Movie) = binding.apply {
+        fun bindData(movie: Movie?) = binding.apply {
 
-            movieCard.transitionName = movie.id.toString()
-            ivImage.load(movie.imageUrl) {
-                allowHardware(false)
-                crossfade(true)
-                placeholder(R.drawable.ic_loading_image)
-            }
+            movie?.let {
+                movieCard.transitionName = movie.id.toString()
+                ivImage.load(movie.imageUrl) {
+                    allowHardware(false)
+                    crossfade(true)
+                    placeholder(R.drawable.ic_loading_image)
+                }
 
-            tvTitleMovie.text = movie.title
+                tvTitleMovie.text = movie.title
 
-            tvGenre.text = ""
-            for (g in movie.genres) {
-                tvGenre.append(g.name + " ")
-            }
-            rbRating.rating = movie.rating.toFloat()
-            tvRelease.text = movie.releaseDate
+                tvGenre.text = ""
+                for (g in movie.genres) {
+                    tvGenre.append(g.name + " ")
+                }
+                rbRating.rating = movie.rating.toFloat()
+                tvRelease.text = movie.releaseDate
+            } ?: ivImage.load(R.drawable.ic_loading_image)
         }
     }
-
 }
+
+
 

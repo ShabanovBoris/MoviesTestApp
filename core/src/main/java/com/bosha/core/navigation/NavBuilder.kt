@@ -9,6 +9,7 @@ import androidx.navigation.fragment.FragmentNavigator
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.R
 
+@NavigationDsl
 fun <T : FragmentActivity> T.navigate(
     navController: NavController,
     navParameters: NavBuilder.() -> Unit
@@ -18,6 +19,7 @@ fun <T : FragmentActivity> T.navigate(
         .navigate()
 }
 
+@NavigationDsl
 fun <T : FragmentActivity> T.navigate(@IdRes hostId: Int, navParameters: NavBuilder.() -> Unit) {
     NavBuilder(findNavController(hostId))
         .apply(navParameters)
@@ -27,6 +29,7 @@ fun <T : FragmentActivity> T.navigate(@IdRes hostId: Int, navParameters: NavBuil
 /**
  * Use application navigation graph
  */
+@NavigationDsl
 fun <T : Fragment> T.navigate(navParameters: NavBuilder.() -> Unit) {
     NavBuilder(requireActivity().findNavController(R.id.nav_host_fragment_container))
         .apply(navParameters)
@@ -36,6 +39,7 @@ fun <T : Fragment> T.navigate(navParameters: NavBuilder.() -> Unit) {
 /**
  * Use some inner navigation graph
  */
+@NavigationDsl
 fun <T : Fragment> T.navigate(@IdRes hostId: Int, navParameters: NavBuilder.() -> Unit) {
     val controller =
         (childFragmentManager.findFragmentById(hostId) as NavHostFragment).navController

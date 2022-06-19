@@ -9,7 +9,7 @@ import com.bosha.core.extensions.inflateViewBinding
 import kotlin.reflect.KClass
 
 @Suppress("FunctionName")
-inline fun <reified BINDING : ViewBinding, ITEM> SimpleAdapter(noinline onBind: (BINDING, ITEM) -> Unit): SimpleRvAdapter<BINDING, ITEM> {
+inline fun <reified BINDING : ViewBinding, ITEM : Any> SimpleAdapter(noinline onBind: (BINDING, ITEM) -> Unit): SimpleRvAdapter<BINDING, ITEM> {
     return SimpleRvAdapter(BINDING::class, onBind)
 }
 
@@ -41,7 +41,7 @@ class SimpleRvAdapter<BINDING : ViewBinding, ITEM>(
     override fun getItemCount(): Int = items.size
 }
 
-class SimpleViewHolder<BINDING : ViewBinding, ITEM>(
+class SimpleViewHolder<BINDING : ViewBinding, ITEM> internal constructor(
     private val binding: BINDING,
     private val onBind: (BINDING, ITEM) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {

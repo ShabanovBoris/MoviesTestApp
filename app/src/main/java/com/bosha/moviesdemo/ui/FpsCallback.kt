@@ -1,15 +1,15 @@
-package com.bosha.moviesdemo
+package com.bosha.moviesdemo.ui
 
-import android.app.Activity
+import android.content.Context
 import android.view.Choreographer
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bosha.moviesdemo.BuildConfig
+import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.scopes.ActivityScoped
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -44,7 +44,9 @@ class FpsMeter @Inject constructor() {
     }
 
     init {
-        createCallback()
+        if (BuildConfig.DEBUG) {
+            createCallback()
+        }
     }
 
     private fun createCallback() {
@@ -62,6 +64,7 @@ class FpsMeter @Inject constructor() {
 }
 
 fun FpsMeter.observeFps(lifecycleOwner: LifecycleOwner, onUpdate: (Int) -> Unit) {
+    if (BuildConfig.DEBUG.not()) return
     start()
     lifecycleOwner.lifecycleScope.launch {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {

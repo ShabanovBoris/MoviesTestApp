@@ -45,14 +45,15 @@ class MovieLocalDataSource @Inject constructor(
 
 
 
+    private val pageSize = 20
     @OptIn(ExperimentalPagingApi::class)
     override fun getMoviesPaging(mediator: RemoteDataSource): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
-                20,
-                initialLoadSize = 20
+                pageSize = pageSize,
+                initialLoadSize = pageSize
             ),
-            pagingSourceFactory = dao::getMoviesPaging ,
+            pagingSourceFactory = { dao.getMoviesPaging() } ,
             remoteMediator = MoviesRemoteMediator(mediator, this)
         )
             .flow
@@ -70,4 +71,7 @@ class MovieLocalDataSource @Inject constructor(
         dao.clear()
     }
 
+    override suspend fun refresh(list: List<Movie>) {
+        dao.refresh(movieMapper.toDataEntityList(list))
+    }
 }

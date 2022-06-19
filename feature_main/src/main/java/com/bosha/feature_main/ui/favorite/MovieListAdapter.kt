@@ -10,6 +10,10 @@ import coil.load
 import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_main.R
 import com.bosha.feature_main.databinding.MovieItemBinding
+import kotlinx.coroutines.awaitCancellation
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 class MovieListAdapter(private val onClick: (card: View) -> Unit) :

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
@@ -19,6 +20,7 @@ import com.bosha.core.navigation.navigate
 import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_search.databinding.FragmentSearchBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 
@@ -41,6 +43,11 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         waitPreDraw()
 
+
+//        binding.etSearching.addFocusChangeListeners { text.append("1") }
+//        binding.etSearching.addFocusChangeListeners { text.append("2") }
+//        binding.etSearching.addFocusChangeListeners { text.append("3") }
+
         setUpRecycler(view)
         initSearchListener()
 
@@ -55,6 +62,7 @@ class SearchFragment : Fragment() {
         }
     }
 
+    @FlowPreview
     private fun initSearchListener() {
         callbackFlow {
             binding.etSearching.doAfterTextChanged {
@@ -107,4 +115,11 @@ class SearchFragment : Fragment() {
     }
 }
 
-
+fun EditText.addFocusChangeListeners(listener: EditText.(Boolean) -> Unit){
+    val previousListener = onFocusChangeListener
+    onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+        previousListener?.onFocusChange(v, hasFocus)
+        listener(hasFocus)
+    }
+    Result
+}

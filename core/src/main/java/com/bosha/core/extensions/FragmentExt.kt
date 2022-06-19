@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import logcat.logcat
 
@@ -71,4 +72,10 @@ fun <T : Fragment> T.printHierarchyTrace() {
         trace.append(" ")
     }
     logcat("HierarchyTrace") { trace.toString() }
+}
+
+fun Fragment.launch(block: suspend CoroutineScope.() -> Unit) {
+    lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED, block)
+    }
 }

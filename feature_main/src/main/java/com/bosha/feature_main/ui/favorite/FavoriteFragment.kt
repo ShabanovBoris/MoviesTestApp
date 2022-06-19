@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isGone
+import androidx.lifecycle.asFlow
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bosha.core.extensions.applyInsetsFitsSystemWindows
 import com.bosha.core.extensions.setPaddingTop
@@ -11,7 +12,7 @@ import com.bosha.core.navigation.NavCommand
 import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
 import com.bosha.core.observeInScope
-import com.bosha.core.view.BaseFragment
+import com.bosha.core.view.ScreenFragment
 import com.bosha.core.view.viewcontroller.screen
 import com.bosha.core_domain.entities.Movie
 import com.bosha.feature_main.databinding.FragmentHomeBinding
@@ -19,7 +20,7 @@ import com.bosha.uikit.GridSpacingItemDecoration
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavoriteFragment : BaseFragment<FragmentHomeBinding, FavoriteViewModel>() {
+class FavoriteFragment : ScreenFragment<FragmentHomeBinding, FavoriteViewModel>() {
 
     override val screen by screen<FragmentHomeBinding, FavoriteViewModel>()
 

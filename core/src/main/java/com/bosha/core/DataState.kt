@@ -10,6 +10,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 /**
  * Класс для создания наблюдаемого состояния
@@ -66,5 +70,19 @@ interface DataStateEmitter {
     @WorkerThread
     fun <T> DataState<T>.safeUpdate(promiseValue: () -> (TypedState<T>)) {
         safeUpdate(promiseValue())
+    }
+}
+
+
+class DataStateDelegate<T : Any>(
+    val onReady: (T) -> Unit
+) : ReadOnlyProperty<Fragment, Unit> {
+
+    override fun getValue(thisRef: Fragment, property: KProperty<*>) {
+        val state = property.returnType.classifier as? KClass<DataState<*>>
+        state?.let {
+            thisRef.observeInScope(property.getter.call() as DataState<*>,
+                onReady = { onReady(it as T) })
+        } ?: error("")
     }
 }

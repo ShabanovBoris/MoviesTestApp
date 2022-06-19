@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.bosha.core_data.dto.local.FavoriteMovieEntity
 import com.bosha.core_data.dto.local.MovieEntity
 import kotlinx.coroutines.flow.Flow
@@ -25,6 +26,12 @@ interface MovieDao {
 
     @Query("DELETE FROM ${DbContract.Movie.TABLE_NAME}")
     suspend fun clear()
+
+    @Transaction
+    suspend fun refresh(list: List<MovieEntity>){
+        clear()
+        insertMovies(list)
+    }
 
     @Query("SELECT * FROM ${DbContract.Movie.TABLE_NAME} WHERE ${DbContract.Movie.COLUMN_ID} = :id")
     suspend fun getById(id: String): MovieEntity

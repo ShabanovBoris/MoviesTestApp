@@ -10,8 +10,8 @@ import com.bosha.core.view.viewcontroller.ScreenController
 import com.bosha.core.view.viewcontroller.screenWithoutViewModel
 import com.bosha.uikit.databinding.FragmentCommonErrorBinding
 
-class FragmentErrorScreen : BaseFragment<FragmentCommonErrorBinding, Nothing>() {
-    override val screen: ScreenController<FragmentCommonErrorBinding, Nothing> by screenWithoutViewModel()
+class FragmentErrorScreen : ScreenFragment<FragmentCommonErrorBinding, Nothing>() {
+    override val screen by screenWithoutViewModel<FragmentCommonErrorBinding>()
 
     private val config: ErrorConfig by lazy {
         val image = requireNotNull(requireArguments().getString("imageRes")).toInt()
@@ -34,6 +34,4 @@ class FragmentErrorScreen : BaseFragment<FragmentCommonErrorBinding, Nothing>() 
             }
         }
     }
-
-
 }

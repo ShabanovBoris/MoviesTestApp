@@ -1,12 +1,13 @@
 package com.bosha.feature_detail.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.bosha.core.DataState
 import com.bosha.core.TaskScheduler
 import com.bosha.core.TypedState
-import com.bosha.core.view.BaseViewModel
+import com.bosha.core.view.ScreenViewModel
 import com.bosha.core.view.showError
 import com.bosha.core_domain.entities.MovieDetails
 import com.bosha.core_domain.interactors.AddMoviesInteractor
@@ -17,8 +18,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CoroutineExceptionHandler
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import logcat.LogPriority
 import logcat.logcat
@@ -32,12 +32,7 @@ class DetailViewModel @AssistedInject constructor(
     private val deleteMoviesInteractor: DeleteMoviesInteractor,
     private val searchMoviesInteractor: SearchMoviesInteractor,
     private val taskScheduler: Provider<TaskScheduler>
-) : BaseViewModel() {
-    private val handler = CoroutineExceptionHandler { _, throwable ->
-        logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
-        throwable.printStackTrace()
-    }
-
+) : ScreenViewModel() {
     private var movieIsLiked = false
 
     val uiState = DataState<DetailsUISate>()
@@ -46,11 +41,7 @@ class DetailViewModel @AssistedInject constructor(
         load()
     }
 
-    private fun load() = viewModelScope.launch(handler) {
-//        runWithLoading(config){
-//            usecase()
-//        }.onSuccess()
-//            .onFailer()...
+    private fun load() = viewModelScope.launch() {
         combine(
             getMoviesInteractor.getDetailsById(id),
             getMoviesInteractor.getFavoritesMovies()
@@ -59,15 +50,13 @@ class DetailViewModel @AssistedInject constructor(
                 favorites.getOrNull()?.find { it.id.toString() == id }?.isLiked ?: false
             detail
         }
-            .collect {
-                it
-                    .onFailure { error ->
-                        uiState.emit(TypedState.error(error))
-                        showError()
-                    }
-                    .onSuccess {
-                        uiState.emitData(DetailsUISate(it, movieIsLiked))
-                    }
+            .firstOrNull()
+            ?.onFailure { error ->
+                uiState.emit(TypedState.error(error))
+                showError()
+            }
+            ?.onSuccess {
+                uiState.emitData(DetailsUISate(it, movieIsLiked))
             }
     }
 
@@ -76,9 +65,9 @@ class DetailViewModel @AssistedInject constructor(
             deleteMoviesInteractor.deleteFavorite(id)
             return@launch
         }
-        try {
+        runCatching {
             getMoviesInteractor.getCachedMovieById(id)
-        } catch (e: Exception) {
+        }.onFailure {
             searchMoviesInteractor.searchByTitle(title).first {
                 if (it.isSuccess) {
                     addMoviesInteractor.insertMovies(it.getOrThrow())

@@ -1,8 +1,10 @@
 package com.bosha.core_data.repositories
 
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import com.bosha.core_data.datasource.MoviesRemoteMediator
 import com.bosha.core_data.datasource.RemoteMoviesPagingSource
 import com.bosha.core_data.datasource.local.LocalDataSource
 import com.bosha.core_data.datasource.remote.RemoteDataSource
@@ -80,16 +82,19 @@ class RepositoryMovieImpl @Inject constructor(
                 else throw cause
             }
 
+    private val pageSize = 20
+    @OptIn(ExperimentalPagingApi::class)
     override fun fetchMoviesPaging(): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
-                1,
-                enablePlaceholders = true,
-                prefetchDistance = 1,
-                initialLoadSize = 1
+                pageSize = pageSize,
+//                enablePlaceholders = true,
+//                prefetchDistance = 1,
+                initialLoadSize = pageSize
             ),
-            pagingSourceFactory = { RemoteMoviesPagingSource(remoteDataSource) }
+            pagingSourceFactory = { RemoteMoviesPagingSource(remoteDataSource, 20) }
         ).flow
 
-    override fun getMoviesPaging(): Flow<PagingData<Movie>> = localDataSource.getMoviesPaging(remoteDataSource)
+    override fun getMoviesPaging(): Flow<PagingData<Movie>> =
+        localDataSource.getMoviesPaging(remoteDataSource)
 }

@@ -1,5 +1,6 @@
 package com.bosha.core.view
 
+import androidx.core.util.PatternsCompat
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import kotlin.properties.Delegates

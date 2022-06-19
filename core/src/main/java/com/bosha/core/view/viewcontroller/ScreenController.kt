@@ -6,8 +6,9 @@ import android.view.ViewGroup
 import androidx.annotation.MainThread
 import androidx.lifecycle.ViewModel
 import androidx.viewbinding.ViewBinding
+import com.bosha.core.view.ScreenViewModel
 
-interface ScreenController<B : ViewBinding, V : ViewModel> {
+interface ScreenController<B : ViewBinding, V : ScreenViewModel> {
 
     /**
      * Open property for work with binding in outside

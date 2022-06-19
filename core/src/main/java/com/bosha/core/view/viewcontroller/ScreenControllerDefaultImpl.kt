@@ -10,12 +10,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.viewbinding.ViewBinding
 import com.bosha.core.extensions.inflateViewBinding
+import com.bosha.core.view.ScreenViewModel
 import com.bosha.core.view.ViewLifecycleDelegate
 import logcat.logcat
 import kotlin.properties.Delegates
 import kotlin.reflect.KClass
 
-class ScreenControllerDefaultImpl<B : ViewBinding, V : ViewModel> private constructor() :
+class ScreenControllerDefaultImpl<B : ViewBinding, V : ScreenViewModel> private constructor() :
     ScreenController<B, V> {
 
     private var _binding: B? = null
@@ -31,7 +32,7 @@ class ScreenControllerDefaultImpl<B : ViewBinding, V : ViewModel> private constr
 
     override val viewModel by lazy {
         val vmStoreInit =
-            requireNotNull(vmStoreInitializer) { "for using view model, you have to pass initializer" }
+            requireNotNull(vmStoreInitializer) { "you have to pass initializer for using view model" }
         ViewModelProvider(vmStoreInit()).get(viewModelType.java)
     }
 
@@ -82,7 +83,7 @@ class ScreenControllerDefaultImpl<B : ViewBinding, V : ViewModel> private constr
 
     companion object {
         @MainThread
-        fun <B : ViewBinding, V : ViewModel> create(
+        fun <B : ViewBinding, V : ScreenViewModel> create(
             viewModelType: KClass<V>,
             viewBindingType: KClass<B>,
             vmStoreInitializer: () -> ViewModelStoreOwner

@@ -7,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bosha.moviesdemo.R
 import com.bosha.moviesdemo.databinding.OnboardPagerItemBinding
+import javax.annotation.meta.Exhaustive
 
 class OnboardingPagerAdapter(private val onOkClick: (View) -> Unit) : RecyclerView.Adapter<WelcomeViewHolder>() {
 
@@ -20,6 +21,7 @@ class OnboardingPagerAdapter(private val onOkClick: (View) -> Unit) : RecyclerVi
     }
 
     override fun onBindViewHolder(holder: WelcomeViewHolder, position: Int) {
+        @Exhaustive
         when(position){
             0 -> {
                 holder.binding.tvInfo.setText(R.string.search_spalsh_text)

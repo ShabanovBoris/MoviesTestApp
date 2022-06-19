@@ -19,6 +19,6 @@ data class ErrorConfig(
     }
 }
 
-fun BaseViewModel.showError(errorConfig: ErrorConfig = ErrorConfig.commonErrorConfig) {
+fun ScreenViewModel.showError(errorConfig: ErrorConfig = ErrorConfig.commonErrorConfig) {
     errorEvent.emit(errorConfig)
 }

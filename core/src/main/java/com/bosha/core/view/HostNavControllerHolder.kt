@@ -8,6 +8,6 @@ interface HostNavControllerHolder {
     fun getHostNavGraphId(): Int
 }
 
-fun <B: ViewBinding, V: BaseViewModel> BaseFragment<B, V>.getHostNavGraphId(): Int {
+fun <B: ViewBinding, V: ScreenViewModel> ScreenFragment<B, V>.getHostNavGraphId(): Int {
     return (requireActivity() as HostNavControllerHolder).getHostNavGraphId()
 }

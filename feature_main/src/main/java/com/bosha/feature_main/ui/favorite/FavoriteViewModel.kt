@@ -2,7 +2,7 @@ package com.bosha.feature_main.ui.favorite
 
 import androidx.lifecycle.viewModelScope
 import com.bosha.core.DataState
-import com.bosha.core.view.BaseViewModel
+import com.bosha.core.view.ScreenViewModel
 import com.bosha.core_domain.entities.Movie
 import com.bosha.core_domain.interactors.GetMoviesInteractor
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
     private val getMoviesInteractor: GetMoviesInteractor
-) : BaseViewModel() {
+) : ScreenViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
@@ -28,6 +28,7 @@ class FavoriteViewModel @Inject constructor(
 
     init {
         load()
+
     }
 
     private fun load() = viewModelScope.launch(handler) {

@@ -1,10 +1,13 @@
 package com.bosha.feature_main.ui.homelist
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.cachedIn
-import com.bosha.core.view.BaseViewModel
+import com.bosha.core.DataState
+import com.bosha.core.DataStateDelegate
+import com.bosha.core.view.ScreenViewModel
 import com.bosha.core.view.showError
 import com.bosha.core_data.repositories.PagingRepository
 import com.bosha.core_domain.entities.Movie
@@ -22,8 +25,9 @@ import javax.inject.Inject
 class HomeListViewModel @Inject constructor(
     private val getMoviesInteractor: GetMoviesInteractor,
     private val addMoviesInteractor: AddMoviesInteractor,
-    pagingRepository: PagingRepository
-) : BaseViewModel() {
+    pagingRepository: PagingRepository,
+    private val savedStateHandle: SavedStateHandle
+) : ScreenViewModel() {
 
     private val handler = CoroutineExceptionHandler { _, throwable ->
         logcat(LogPriority.ERROR) { throwable.localizedMessage!! }
@@ -37,13 +41,14 @@ class HomeListViewModel @Inject constructor(
         MutableStateFlow(SideEffects.Loading)
     val sideEffectFlow get() = _sideEffectFlow.asStateFlow()
 
-    val pagingFlow = pagingRepository.fetchMoviesPaging()
+    val pagingFlow = pagingRepository.getMoviesPaging()
         .onEach {
-//                it.filter {
-//                    logcat(LogPriority.ERROR){ it.toString() }
-//                    true
-//                }
+            _sideEffectFlow.value = SideEffects.Loaded
+        }
+        .cachedIn(viewModelScope)
 
+    val pagingDbFlow = pagingRepository.fetchMoviesPaging()
+        .onEach {
             _sideEffectFlow.value = SideEffects.Loaded
         }
         .cachedIn(viewModelScope)

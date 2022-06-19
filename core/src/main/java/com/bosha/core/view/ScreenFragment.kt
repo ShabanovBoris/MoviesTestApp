@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.viewbinding.ViewBinding
 import com.bosha.core.extensions.printHierarchyTrace
 import com.bosha.core.navigation.NavCommand
@@ -15,16 +13,16 @@ import com.bosha.core.navigation.Screens
 import com.bosha.core.navigation.navigate
 import com.bosha.core.observeEvent
 import com.bosha.core.view.viewcontroller.ScreenController
-import kotlinx.coroutines.CoroutineScope
 import logcat.LogPriority
 import logcat.logcat
 
-abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
+abstract class ScreenFragment<VB : ViewBinding, VM : ScreenViewModel> : Fragment() {
 
     abstract val screen: ScreenController<VB, VM>
     val binding get() = screen.binding
     val viewModel get() = screen.viewModel
 
+    @CallSuper
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -34,7 +32,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
             logcat(
                 priority = LogPriority.INFO,
                 OPEN_SCREEN_LOG_TAG
-            ) { this@BaseFragment::class.java.name }
+            ) { this@ScreenFragment::class.java.name }
         }
         inflateView(inflater, container)
     }
@@ -52,7 +50,6 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
 
                 }
             }
-
         }
     }
 
@@ -61,13 +58,7 @@ abstract class BaseFragment<VB : ViewBinding, VM : BaseViewModel> : Fragment() {
         logcat(
             priority = LogPriority.INFO,
             CLOSE_SCREEN_LOG_TAG
-        ) { this@BaseFragment::class.java.name }
-    }
-
-    fun doInScope(block: suspend CoroutineScope.() -> Unit) {
-        lifecycleScope.launchWhenCreated {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED, block)
-        }
+        ) { this@ScreenFragment::class.java.name }
     }
 
     companion object {

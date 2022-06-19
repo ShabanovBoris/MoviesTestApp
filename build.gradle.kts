@@ -13,7 +13,7 @@ buildscript {
         classpath(libs.hiltClasspath)
         classpath("externalComposite:buildExt")
     }
-//    repositories { moved in dependency resolution management
+//    repositories { todo moved in dependency resolution management
 //        google()
 //        mavenCentral()
 //        gradlePluginPortal()
@@ -32,7 +32,7 @@ allprojects {
         }
     }
     plugins.withId("kotlin-kapt") {
-        extensions.configure(KaptExtension::class.java){
+        extensions.configure(KaptExtension::class.java) {
             correctErrorTypes = true
         }
     }
@@ -46,7 +46,6 @@ plugins {
 //    kotlin("android") version "1.6.20" apply false
     alias(libs.plugins.kotlinGradlePlugon) apply false
 }
-
 
 tasks.register("clean", Delete::class).configure {
     group = "build"

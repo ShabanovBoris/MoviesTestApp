@@ -1,6 +1,5 @@
 package com.bosha.core_data.datasource
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -8,50 +7,52 @@ import androidx.paging.RemoteMediator
 import com.bosha.core_data.datasource.local.LocalDataSource
 import com.bosha.core_data.datasource.remote.RemoteDataSource
 import com.bosha.core_data.dto.local.MovieEntity
-import retrofit2.HttpException
 import java.io.IOException
+import retrofit2.HttpException
 
 @ExperimentalPagingApi
-@Deprecated("Доработать или удалить")
 class MoviesRemoteMediator(
     private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
+    private val localDataSource: LocalDataSource,
+//        filter: SomeFilterType(Int,String) pass a filter if need
 ) : RemoteMediator<Int, MovieEntity>() {
 
+  private var pageIndex = 0
 
-    override suspend fun load(
-        loadType: LoadType,
-        state: PagingState<Int, MovieEntity>
-    ): MediatorResult {
+  override suspend fun load(
+      loadType: LoadType,
+      state: PagingState<Int, MovieEntity>
+  ): MediatorResult {
 
-        val nextPage = when (loadType) {
-            LoadType.REFRESH -> 1
-            // prepend not needed
-            LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true) // not needed
-            LoadType.APPEND -> {
-                val lastItem = state.lastItemOrNull()
-                    ?: return MediatorResult.Success(endOfPaginationReached = true)
-                lastItem.page ?: 0 + 1
-            }
+    pageIndex =
+        when (loadType) {
+          LoadType.REFRESH -> 1
+          // prepend not needed
+          LoadType.PREPEND ->
+              return MediatorResult.Success(endOfPaginationReached = true) // not needed
+          LoadType.APPEND -> ++pageIndex
+        //            LoadType.APPEND -> {
+        //                val lastItem = state.lastItemOrNull()
+        //                    ?: return MediatorResult.Success(endOfPaginationReached = true)
+        //                lastItem.page ?: 0 + 1
+        //            }
         }
 
-        return try {
+    return try {
 
-            val response = remoteDataSource.rawQuery(nextPage)
+      val response = remoteDataSource.rawQuery(pageIndex)
 
-            if (loadType == LoadType.REFRESH) {
-                localDataSource.clearData()
-                Log.e("TAG", "load: clearData")
-            }
+      if (loadType == LoadType.REFRESH) {
+        localDataSource.refresh(response)
+      } else {
+        localDataSource.insertMovies(response)
+      }
 
-            localDataSource.insertMovies(response)
-
-            MediatorResult.Success(endOfPaginationReached = response.isEmpty())
-        } catch (e: IOException) {
-            MediatorResult.Error(e)
-        } catch (e: HttpException) {
-            MediatorResult.Error(e)
-        }
+      MediatorResult.Success(endOfPaginationReached = response.size < state.config.pageSize)
+    } catch (e: IOException) {
+      MediatorResult.Error(e)
+    } catch (e: HttpException) {
+      MediatorResult.Error(e)
     }
+  }
 }
-

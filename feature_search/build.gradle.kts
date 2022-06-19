@@ -26,6 +26,7 @@ dependencies {
     kapt(libs.hiltCompiler)
     //coil
     implementation(libs.coil)
+//    implementation("dev.icerock.moko:fields:0.9.0")
 
     testImplementation(libs.junit)
 }

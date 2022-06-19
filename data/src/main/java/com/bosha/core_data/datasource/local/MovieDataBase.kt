@@ -9,7 +9,7 @@ import com.bosha.core_data.dto.local.MovieEntity
 
 @Database(
     entities = [MovieEntity::class, MovieDetailsEntity::class, ActorEntity::class, FavoriteMovieEntity::class],
-    version = 1
+    version = 2
 )
 abstract class MovieDataBase : RoomDatabase() {
 
